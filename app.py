@@ -1,6 +1,6 @@
 import os
 
-from HanziLevelUp.views import app
+from webapp.views import app
 
 if __name__ == '__main__':
     if 'DYNO' in os.environ:

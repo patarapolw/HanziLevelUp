@@ -6,6 +6,11 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
+wordfreq = "*"
+requests = "*"
+"bs4" = "*"
+regex = "*"
+jieba = "*"
 
 [dev-packages]
 

@@ -1,0 +1,57 @@
+<div class="container mt-3">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Input Hanzi or sentence"
+    id="sentence">
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <div class="big-character">
+        <div class="loading-container">
+          <div class="loading">
+            <!-- We make this div spin -->
+            <div class="spinner">
+              <!-- Mask of the quarter of circle -->
+              <div class="mask">
+                <!-- Inner masked circle -->
+                <div class="maskedCircle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="character"></div>
+      </div>
+      <div style="text-align: center;">
+        <div class="btn-group col-auto" role="group" aria-label="switchChar">
+          <button class="btn btn-secondary btn-default" id="previousChar" style="width: 100px;"
+          disabled onclick="previousChar()">Previous</button>
+          <button class="btn btn-secondary btn-default" id="nextChar" style="width: 100px;"
+          disabled onclick="nextChar()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-8" style="margin: 20px;">
+      <div class="row">
+        <h4>Compositions: </h4>
+      </div>
+      <div id="compositions" class="row content"></div>
+      <div class="row">
+        <h4>Supercompositions: </h4>
+      </div>
+      <div id="supercompositions" class="row content"></div>
+      <div class="row">
+        <h4>Variants: </h4>
+      </div>
+      <div id="variants" class="row content"></div>
+      <div class="row">
+        <h4>Vocabularies: </h4>
+      </div>
+      <div id="vocab" class="row content"></div>
+      <div class="row">
+        <h4>Sentences: </h4>
+      </div>
+      <div id="sentences" class="row content"></div>
+    </div>
+  </div>
+</div>
