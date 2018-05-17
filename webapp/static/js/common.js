@@ -18,3 +18,8 @@ if(!String.prototype.addSlashes) {
        return this.replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
     }
 }
+
+function stripHtml(html){
+   var doc = new DOMParser().parseFromString(html, 'text/html');
+   return doc.body.textContent || "";
+}

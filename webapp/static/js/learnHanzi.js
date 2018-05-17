@@ -52,7 +52,7 @@
     } else {
       $('#previousChar').attr('disabled', true);
     }
-    if(charNumber < charList.length-1){
+    if(charNumber + 1 < charList.length - 1){
       $('#nextChar').removeAttr('disabled');
     } else {
       $('#nextChar').attr('disabled', true);
@@ -64,32 +64,23 @@
       renderContent('#variants', content.variants);
 
       $('#vocab').text('');
-      if(content.vocab.constructor === [].constructor)
-        for(var i=0; i<content.vocab.length; i++){
-          $('#vocab').append(
-            "<div class='entry'><a href='#' onclick='speak(\"{0}\", \"zh-CN\"); return false;' title='{1}'>{0}</a> {2}</div>"
-            .format(content.vocab[i][1],
-              content.vocab[i][2],
-              content.vocab[i][3]));
-      } else {
-        for(var i=0; i<content.vocab.data.length; i++){
-          $('#vocab').append(
-            "<div class='entry'><a href='#' onclick='speak(\"{0}\", \"ja\"); return false;'>{0}</a>（{1}） {2}</div>"
-            .format(content.vocab.data[i].japanese[0].word,
-              content.vocab.data[i].japanese[0].reading,
-              content.vocab.data[i].senses[0].english_definitions.join(", ")));
+      for(var i=0; i<content.vocab.length; i++){
+        $('#vocab').append(
+          "<div class='entry container'><a href='#' onclick='speak(\"{3}\"); return false;' title='{1}'>{0}</a> {2}</div>"
+          .format(content.vocab[i][1],
+            content.vocab[i][2],
+            content.vocab[i][3],
+            content.vocab[i][1].addSlashes()));
         }
-      }
 
       $('#sentences').text('');
       for(var i=0; i<content.sentences.length; i++){
         var speakerLang = (content.language == 'zh') ? 'zh-CN' : 'ja';
         $('#sentences').append(
-          "<div class='entry'><a href='#' onclick='speak(\"{0}\", \"{2}\"); return false;'>{0}</a> {1}</div>"
+          "<div class='entry container'><a href='#' onclick='speak(\"{2}\"); return false;'>{0}</a> {1}</div>"
           .format(content.sentences[i][0],
             content.sentences[i][1],
-            speakerLang)
-          );
+            stripHtml(content.sentences[i][0]).addSlashes()));
       }
     });
   }
