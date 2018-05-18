@@ -4,3 +4,4 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 
 <img src="https://i.imgur.com/GSmLEEg.png">
 <img src="https://i.imgur.com/BSHGONP.png">
+<img src="https://i.imgur.com/qhVTA5i.png">
