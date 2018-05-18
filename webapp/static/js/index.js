@@ -1,5 +1,5 @@
 var sentenceHTMLTemplate = '<div id="{0}">'
-+ '<a class="float-right deleteSentence" href="#">x</a>'
++ '<a class="float-left deleteSentence" href="#">x</a> '
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
@@ -12,6 +12,7 @@ $(document).ready(function() {
         all_sentences[i][1].addSlashes(),
         all_sentences[i][1]));
     }
+    setDeleteSentenceListener();
   });
 
 
@@ -21,17 +22,16 @@ $(document).ready(function() {
       $.post('/addSentence', { sentence: sentence }, function(sentence_id){
         $('#contents').prepend(sentenceHTMLTemplate.format(sentence_id, sentence.addSlashes(), sentence));
       });
+      setDeleteSentenceListener();
     }
   });
+});
 
+function setDeleteSentenceListener(){
   $('.deleteSentence').click(function(){
     $.post('/deleteSentence', { sentence_id: $(this).parent().attr('id') });
     $(this).parent().remove();
 
     return false;
   });
-});
-
-function speak(sentence){
-  $.post('/speak', { sentence: sentence });
 }

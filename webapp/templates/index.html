@@ -1,8 +1,18 @@
-<div class="container mt-3">
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+{% endblock %}
+
+{% block content %}
   <div class="row">
     <input type="text" id="sentenceInput" class="form-control" placeholder="Type your sentence here." />
   </div>
   <div class="row mt-3">
     <div id="contents" class="container"></div>
   </div>
-</div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/index.js' ) }}"></script>
+{% endblock %}

@@ -23,3 +23,7 @@ function stripHtml(html){
    var doc = new DOMParser().parseFromString(html, 'text/html');
    return doc.body.textContent || "";
 }
+
+function speak(sentence){
+  $.post('/speak', { sentence: sentence });
+}

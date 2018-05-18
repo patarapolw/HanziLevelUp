@@ -1,4 +1,10 @@
-<div class="container mt-3">
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/learnHanzi.css') }}"/>
+{% endblock %}
+
+{% block content %}
   <div class="input-group">
     <input type="text" class="form-control" placeholder="Input Hanzi or sentence"
     id="sentence">
@@ -54,4 +60,8 @@
       <div id="sentences" class="row content"></div>
     </div>
   </div>
-</div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/learnHanzi.js' ) }}"></script>
+{% endblock %}
