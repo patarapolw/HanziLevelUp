@@ -1,4 +1,4 @@
-from flask import request, send_from_directory
+from flask import request
 
 from webapp import app
 from webapp.utils import do_speak
@@ -20,9 +20,3 @@ def speak():
         return '1'
 
     return '0'
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory('static',
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')

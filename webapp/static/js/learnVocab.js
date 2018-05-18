@@ -1,4 +1,4 @@
-var vocabBaseHTMLTemplate = '<div id="{0}">'
+var vocabFloatingHTMLTemplate = '<div id="{0}" class="vocabFloating">'
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
@@ -12,11 +12,20 @@ $(document).ready(function() {
     var all_vocab = data;
     var usedCoordinate = [];
     var failedObject = [];
+    var $contents = $('#contents');
+    var $showcase = $('#showcase');
+    var $showcaseWidth = $showcase.width() - 20;
+    var $showcaseHeight = $showcase.height() - 20;
+    var showcaseCoordinate = {
+      offset: $showcase.offset(),
+      height: $showcase.height(),
+      width: $showcase.width()
+    };
 
     for(var i=all_vocab.length-1, n=0; i>=0; i--, n++){
 
       if(n<10){
-        $('#contents').append(vocabHTMLTemplate.format(
+        $contents.append(vocabHTMLTemplate.format(
           all_vocab[i][0],
           all_vocab[i][1].addSlashes(),
           all_vocab[i][1]));
@@ -25,7 +34,7 @@ $(document).ready(function() {
           break;
         }
 
-        $('#showcase').append(vocabBaseHTMLTemplate.format(
+        $showcase.append(vocabFloatingHTMLTemplate.format(
           all_vocab[i][0],
           all_vocab[i][1].addSlashes(),
           all_vocab[i][1]));
@@ -33,8 +42,8 @@ $(document).ready(function() {
         var currentVocab = $('#' + all_vocab[i][0]);
         currentVocab.css({
           'position': 'absolute',
-          'left': 100*Math.random() + '%',
-          'top': 100*Math.random() + '%'
+          'left': Math.random()*$showcaseWidth + 10,
+          'top': Math.random()*$showcaseHeight + 10
         });
 
         var currentCoordinate = {
@@ -47,7 +56,9 @@ $(document).ready(function() {
           return isOverlap(currentCoordinate, el1);
         }
 
-        if(usedCoordinate.some(isOverlap_current)){
+        if(usedCoordinate.some(isOverlap_current) ||
+            currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
+            currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
           currentVocab.remove();
           failedObject.push(currentVocab.text());
         } else {

@@ -4,7 +4,7 @@ from random import shuffle
 from flask import request, jsonify
 
 from webapp import app
-from webapp.databases import Sentence
+from webapp.databases import Sentence, Vocab
 
 from CJKhyperradicals.decompose import Decompose
 from CJKhyperradicals.dict import Cedict
@@ -41,11 +41,12 @@ def get_hyperradicals():
 @app.route('/getHanzi', methods=['POST'])
 def get_hanzi():
     if request.method == 'POST':
-        all_sentences = Sentence.query[-10:]
+        all_entries = ([sentence.sentence for sentence in Sentence.query[-10:]] +
+                       [vocab.vocab for vocab in Vocab.query[-10:]])
         all_hanzi = list(set([char for char in
                               regex.sub(r'[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]',
                                         '',
-                                        ''.join([sentence.sentence for sentence in all_sentences]))]))
+                                        ''.join(all_entries))]))
         shuffle(all_hanzi)
         return ''.join(all_hanzi)
 
