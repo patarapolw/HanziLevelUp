@@ -1,17 +1,18 @@
 # Hanzi LevelUp
 
-A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzilevelproject.blogspot.com), i.e. another attempt to clone [WaniKani.com](https://www.wanikani.com) for Chinese.
+A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzilevelproject.blogspot.com), aka. another attempt to clone [WaniKani.com](https://www.wanikani.com) for Chinese.
 
 ## Features
 
 - Speak sentences and vocabularies when clicked on. (Tested on Mac OSX)
-    - May need to be modified to [google_speech](https://pypi.org/project/google_speech/) (with [sox](http://sox.sourceforge.net)) if you want it to be spoken on non-mac.
+    - May need to be modified to [google_speech](https://pypi.org/project/google_speech/) if you want it spoken on non-mac.
 - Show Hanzi decomposition and super-decomposition (powered by [CJKhyperradicals](http://cjkhyperradicals.herokuapp.com/)).
 
 ## Installation and Get-it-running
 
+- Powered by [Python](https://www.python.org/downloads/) and [Flask framework](http://flask.pocoo.org). So, install Python first, if you don't have one.
 - Clone the project from GitHub.
-- Change the directory to the project folder.
+- Change the directory to the project folder, in the terminal.
 - `pip install pipenv`, `pipenv --three`, `pipenv shell` and `pipenv install`.
 - Run `app.py`.
 - Go to `http://localhost:8080` on your browser.
