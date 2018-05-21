@@ -4,10 +4,9 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 
 ## Features
 
-Tested on Mac:
-
-- Speak sentences and vocabularies when clicked on.
+- Speak sentences and vocabularies when clicked on. (Tested on Mac OSX)
     - May need to be modified to [google_speech](https://pypi.org/project/google_speech/) (with [sox](http://sox.sourceforge.net)) if you want it to be spoken on non-mac.
+- Show Hanzi decomposition and super-decomposition (powered by [CJKhyperradicals](http://cjkhyperradicals.herokuapp.com/)).
 
 ## Installation and Get-it-running
 
