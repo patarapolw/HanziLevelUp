@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}"/>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <table class="hanziShowcase" border="1">
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/progress.js' ) }}"></script>
+{% endblock %}

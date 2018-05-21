@@ -22,7 +22,7 @@
     renderChar();
   }
 
-  $.post('/getHanzi', function(data) {
+  $.post('/getHanzi', {limit: 10}, function(data) {
     charList = data;
     charNumber = 0;
     renderChar();

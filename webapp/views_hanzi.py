@@ -41,8 +41,12 @@ def get_hyperradicals():
 @app.route('/getHanzi', methods=['POST'])
 def get_hanzi():
     if request.method == 'POST':
-        all_entries = ([sentence.sentence for sentence in Sentence.query[-10:]] +
-                       [vocab.vocab for vocab in Vocab.query[-10:]])
+        if 'limit' in request.form:
+            limit = int(request.form.get('limit'))
+        else:
+            limit = 0
+        all_entries = ([sentence.sentence for sentence in Sentence.query[-limit:]] +
+                       [vocab.vocab for vocab in Vocab.query[-limit:]])
         all_hanzi = list(set([char for char in
                               regex.sub(r'[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]',
                                         '',
