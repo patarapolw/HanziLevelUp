@@ -1,0 +1,27 @@
+#showcase {
+  height: 500px;
+}
+
+.floating {
+  font-size: 1em;
+  background-color: white;
+  z-index: 0;
+}
+
+.floating:hover {
+  font-size: 2.5em;
+  background-color: white;
+  z-index: 100;
+}
+
+.entry {
+  background-color: transparent;
+}
+
+.entry:hover {
+  background-color: lightblue;
+}
+
+.deleter {
+  margin-right: 10px;
+}

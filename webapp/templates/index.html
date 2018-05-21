@@ -6,10 +6,19 @@
 
 {% block content %}
   <div class="row">
-    <input type="text" id="sentenceInput" class="form-control" placeholder="Type your sentence here." />
-  </div>
-  <div class="row mt-3">
-    <div id="contents" class="container"></div>
+    <div class="col-sm-3">
+      <div class="row">
+        <input type="text" id="sentenceInput" class="form-control" placeholder="Type your sentence here." />
+      </div>
+      <div class="row mt-3">
+        <div id="contents" class="container"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="container border border-success" id="showcase">
+      </div>
+    </div>
   </div>
 {% endblock %}
 

@@ -7,8 +7,8 @@ from webapp.databases import Sentence
 @app.route('/getSentence', methods=['POST'])
 def get_sentence():
     if request.method == 'POST':
-        all_sentences = Sentence.query[-10:]
-        return jsonify([[sentence.id, sentence.sentence] for sentence in all_sentences])
+        all_sentences = [[sentence.id, sentence.sentence] for sentence in Sentence.query]
+        return jsonify(all_sentences)
 
     return '0'
 

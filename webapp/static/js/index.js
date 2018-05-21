@@ -1,17 +1,72 @@
-var sentenceHTMLTemplate = '<div id="{0}">'
-+ '<a class="float-left deleteSentence" href="#">x</a> '
+var sentenceFloatingHTMLTemplate = '<div id="{0}" class="floating">'
++ '<div onclick="speak(\'{1}\')">{2}</div>'
++ '</div>';
+
+var sentenceHTMLTemplate = '<div id="{0}" class="entry">'
++ '<a class="float-left deleter" href="#">x</a> '
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
 $(document).ready(function() {
   $.post('/getSentence', function(data) {
     var all_sentences = data;
-    for(var i=0; i<all_sentences.length; i++){
-      $('#contents').prepend(sentenceHTMLTemplate.format(
-        all_sentences[i][0],
-        all_sentences[i][1].addSlashes(),
-        all_sentences[i][1]));
+    var usedCoordinate = [];
+    var failedObject = [];
+    var $contents = $('#contents');
+    var $showcase = $('#showcase');
+    var $showcaseWidth = $showcase.width() - 20;
+    var $showcaseHeight = $showcase.height() - 20;
+    var showcaseCoordinate = {
+      offset: $showcase.offset(),
+      height: $showcase.height(),
+      width: $showcase.width()
+    };
+
+    for(var i=all_sentences.length-1, n=0; i>=0; i--, n++){
+
+      if(n<10){
+        $contents.append(sentenceHTMLTemplate.format(
+          all_sentences[i][0],
+          all_sentences[i][1].addSlashes(),
+          all_sentences[i][1]));
+      } else {
+        if(failedObject.length > 10){
+          break;
+        }
+
+        $showcase.append(sentenceFloatingHTMLTemplate.format(
+          all_sentences[i][0],
+          all_sentences[i][1].addSlashes(),
+          all_sentences[i][1]));
+
+        var currentSentence = $('#' + all_sentences[i][0]);
+        currentSentence.css({
+          'position': 'absolute',
+          'left': Math.random()*$showcaseWidth + 10,
+          'top': Math.random()*$showcaseHeight + 10
+        });
+
+        var currentCoordinate = {
+          offset: currentSentence.offset(),
+          height: currentSentence.height(),
+          width: currentSentence.width()
+        };
+
+        function isOverlap_current(el1){
+          return isOverlap(currentCoordinate, el1);
+        }
+
+        if(usedCoordinate.some(isOverlap_current) ||
+            currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
+            currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
+          currentSentence.remove();
+          failedObject.push(currentSentence.text());
+        } else {
+          usedCoordinate.push(currentCoordinate);
+        }
+      }
     }
+
     setDeleteSentenceListener();
   });
 
@@ -21,14 +76,14 @@ $(document).ready(function() {
       var sentence = $(this).val();
       $.post('/addSentence', { sentence: sentence }, function(sentence_id){
         $('#contents').prepend(sentenceHTMLTemplate.format(sentence_id, sentence.addSlashes(), sentence));
+        setDeleteSentenceListener();
       });
-      setDeleteSentenceListener();
     }
   });
 });
 
 function setDeleteSentenceListener(){
-  $('.deleteSentence').click(function(){
+  $('.deleter').click(function(){
     $.post('/deleteSentence', { sentence_id: $(this).parent().attr('id') });
     $(this).parent().remove();
 

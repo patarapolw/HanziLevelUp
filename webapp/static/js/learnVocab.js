@@ -1,9 +1,9 @@
-var vocabFloatingHTMLTemplate = '<div id="{0}" class="vocabFloating">'
+var vocabFloatingHTMLTemplate = '<div id="{0}" class="floating">'
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
-var vocabHTMLTemplate = '<div id="{0}">'
-+ '<a class="float-left deleteVocab" href="#">x</a> '
+var vocabHTMLTemplate = '<div id="{0}" class="entry">'
++ '<a class="float-left deleter" href="#">x</a> '
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
@@ -76,29 +76,17 @@ $(document).ready(function() {
       var vocab = $(this).val();
       $.post('/addVocab', { vocab: vocab }, function(vocab_id){
         $('#contents').prepend(vocabHTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
+        setDeleteVocabListener();
       });
-      setDeleteVocabListener();
     }
   });
 });
 
 function setDeleteVocabListener(){
-  $('.deleteVocab').click(function(){
+  $('.deleter').click(function(){
     $.post('/deleteVocab', { vocab_id: $(this).parent().attr('id') });
     $(this).parent().remove();
 
     return false;
   });
-}
-
-function isOverlap(el0, el1) {
-  var elY0 = (el0.offset.top < el1.offset.top)? el0 : el1;
-  var elY1 = (el0 != elY0)? el0 : el1;
-  var yInstersection = (elY0.offset.top + elY0.height) - elY1.offset.top > 0;
-
-  var elX0 = (el0.offset.left < el1.offset.left)? el0 : el1;
-  var elX1 = (el0 != elX0)? el0 : el1;
-  var xInstersection = (elX0.offset.left + elX0.width) - elX1.offset.left > 0;
-
-  return (yInstersection && xInstersection);
 }
