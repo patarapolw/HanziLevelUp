@@ -1,4 +1,4 @@
-import os
+#!/usr/bin/env python
 
 from webapp.views import app
 

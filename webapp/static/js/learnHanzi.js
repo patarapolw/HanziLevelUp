@@ -22,11 +22,9 @@
     renderChar();
   }
 
-  $.post('/getHanzi', {limit: 10}, function(data) {
-    charList = data;
-    charNumber = 0;
-    renderChar();
-  });
+  charList = Cookies.get('allHanzi') || "";
+  charNumber = 0;
+  renderChar();
 
   $("#sentence").keypress(function(event) {
     if (event.which == 13) {

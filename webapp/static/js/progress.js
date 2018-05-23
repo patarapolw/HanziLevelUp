@@ -20,6 +20,7 @@ $(document).ready(function() {
             td.append('<div class="hanzi {1}">{0}</div>'.format(hanziInLevel[j], hanziClass));
           }
           element.append(td);
+          element.addClass('entry');
         } else {
           element.append('<td style="padding-left: 50px;" colspan="2">{0}</td>'.format(hanziLevels[i]));
         }
@@ -27,4 +28,42 @@ $(document).ready(function() {
       }
     });
   });
+
+  $.contextMenu({
+    selector: ".entry",
+    items: {
+      learnNewHanzi: {
+        name: "Learn new Hanzi",
+        callback: function(key, opt){
+          if(!loadHanzi('.notKnownHanzi', this)){
+            alert('All Hanzi in this level are learnt.');
+          }
+        }
+      },
+      reviewHanzi: {
+        name: "Review Hanzi",
+        callback: function(key, opt){
+          if(!loadHanzi('.knownHanzi', this)){
+            alert('Please learn new Hanzi first.');
+          }
+        }
+      }
+    }
+  });
 });
+
+function loadHanzi(selector, context) {
+  var allHanzi = "";
+  $(selector, context).each(function(index, el) {
+    allHanzi += $(el).text();
+  });
+
+  if(allHanzi !== ""){
+    Cookies.set('allHanzi', allHanzi);
+    window.location.href = "/learnHanzi";
+  } else {
+    return false;
+  }
+
+  return true;
+}

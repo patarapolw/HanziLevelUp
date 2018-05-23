@@ -58,7 +58,9 @@ $(document).ready(function() {
 
         if(usedCoordinate.some(isOverlap_current) ||
             currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
-            currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
+            currentCoordinate.offset.top + currentCoordinate.height >
+            showcaseCoordinate.offset.top + showcaseCoordinate.height ||
+            currentCoordinate.offset.left + currentCoordinate.width > showcaseCoordinate.offset.left + showcaseCoordinate.width){
           currentSentence.remove();
           failedObject.push(currentSentence.text());
         } else {
@@ -69,7 +71,6 @@ $(document).ready(function() {
 
     setDeleteSentenceListener();
   });
-
 
   $('#sentenceInput').keydown(function(event) {
     if (event.which == 13 || event.keyCode == 13) {
@@ -88,5 +89,12 @@ function setDeleteSentenceListener(){
     $(this).parent().remove();
 
     return false;
+  });
+}
+
+function loadHanzi(){
+  $.post('/sentenceToHanzi', function(data, textStatus, xhr) {
+    Cookies.set('allHanzi', data);
+    window.location.href = '/learnHanzi';
   });
 }

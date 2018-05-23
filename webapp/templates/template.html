@@ -23,12 +23,30 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/learnHanzi">Learn Hanzi</a>
-        <a class="nav-link" href="/learnVocab">Learn Vocab</a>
-        <a class="nav-link disabled" href="/learnSentences">Learn Sentences</a>
-        <a class="nav-link" href="/progress">Progress</a>
-        <a class="nav-link disabled" href="settings">Settings</a>
+        <a class="nav-item nav-link" href="/">Home</a>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="hanziDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hanzi</a>
+          <div class="dropdown-menu" aria-labelledby="hanziDropdownLink">
+            <a class="dropdown-item" href="/learnHanzi">Learn Hanzi</a>
+            <a class="dropdown-item disabled" href="#">Explore Hanzi</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="vocabDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vocab</a>
+          <div class="dropdown-menu" aria-labelledby="vocabDropdownLink">
+            <a class="dropdown-item" href="/learnVocab">Learn Vocab</a>
+            <a class="dropdown-item" href="/exploreVocab">Explore Vocab</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="sentenceDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sentences</a>
+          <div class="dropdown-menu" aria-labelledby="sentenceDropdownLink">
+            <a class="dropdown-item" href="/learnSentences">Learn Sentences</a>
+            <a class="dropdown-item" href="/exploreSentences">Explore Sentences</a>
+          </div>
+        </div>
+        <a class="nav-item nav-link" href="/progress">Progress</a>
+        <a class="nav-item nav-link disabled" href="#">Settings</a>
       </div>
     </div>
   </header>
@@ -42,6 +60,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.0/src/js.cookie.min.js"></script>
 
   <script src="{{ url_for('static', filename='js/common.js') }}"></script>
   {% block javascript %}{% endblock %}

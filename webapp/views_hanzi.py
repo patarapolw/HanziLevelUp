@@ -1,5 +1,5 @@
 import regex
-from random import shuffle
+from datetime import datetime, timedelta
 
 from flask import request, jsonify
 
@@ -41,17 +41,55 @@ def get_hyperradicals():
 @app.route('/getHanzi', methods=['POST'])
 def get_hanzi():
     if request.method == 'POST':
-        if 'limit' in request.form:
-            limit = int(request.form.get('limit'))
-        else:
-            limit = 0
-        all_entries = ([sentence.sentence for sentence in Sentence.query[-limit:]] +
-                       [vocab.vocab for vocab in Vocab.query[-limit:]])
+        all_entries = ([sentence.sentence for sentence in Sentence.query] +
+                       [vocab.vocab for vocab in Vocab.query])
         all_hanzi = list(set([char for char in
                               regex.sub(r'[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]',
                                         '',
                                         ''.join(all_entries))]))
-        shuffle(all_hanzi)
+        return ''.join(all_hanzi)
+
+    return '0'
+
+
+@app.route('/sentenceToHanzi', methods=['POST'])
+def sentence_to_hanzi():
+    def last_days_entries():
+        for sentence in Sentence.query[::-1]:
+            if datetime.utcnow() - sentence.modified < timedelta(days=1):
+                yield sentence.sentence
+
+    if request.method == 'POST':
+        entries = list(last_days_entries())
+        print(len(entries))
+        if len(entries) < 10:
+            entries = reversed([sentence.sentence for sentence in Sentence.query[-10:]])
+
+        all_hanzi = list(set([char for char in
+                              regex.sub(r'[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]',
+                                        '',
+                                        ''.join(entries))]))
+        return ''.join(all_hanzi)
+
+    return '0'
+
+
+@app.route('/vocabToHanzi', methods=['POST'])
+def vocab_to_hanzi():
+    def last_days_entries():
+        for vocab in Vocab.query[::-1]:
+            if datetime.utcnow() - vocab.modified < timedelta(days=1):
+                yield vocab.vocab
+
+    if request.method == 'POST':
+        entries = list(last_days_entries())
+        if len(entries) < 10:
+            entries = reversed([vocab.vocab for vocab in Vocab.query[-10:]])
+
+        all_hanzi = list(set([char for char in
+                              regex.sub(r'[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]',
+                                        '',
+                                        ''.join(entries))]))
         return ''.join(all_hanzi)
 
     return '0'

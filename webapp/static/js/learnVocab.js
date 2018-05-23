@@ -90,3 +90,10 @@ function setDeleteVocabListener(){
     return false;
   });
 }
+
+function loadHanzi(){
+  $.post('/vocabToHanzi', function(data, textStatus, xhr) {
+    Cookies.set('allHanzi', data);
+    window.location.href = '/learnHanzi';
+  });
+}
