@@ -106,4 +106,86 @@
       $('.loading-container').hide();
     }
   })
+
+  $('#vocab').contextMenu({
+    selector: ".entry",
+    build: function($trigger, e) {
+      async function loadMenu(){
+        const vocab = $trigger.children('a').text();
+        const vocabInLearning = await $.post('/vocabInLearning', { vocab: vocab });
+        const isLearnt = (parseInt(vocabInLearning) > 0);
+        return {
+          addVocabToLearning: {
+            name: "Add to learning",
+            visible: function(key, opt){
+              return !isLearnt;
+            },
+            callback: function(key, opt){
+              $.post('/addVocabToLearning', { vocab: vocab });
+            }
+          },
+          removeVocabFromLearning: {
+            name: "Remove from learning",
+            visible: function(key, opt){
+              return isLearnt;
+            },
+            callback: function(key, opt){
+              $.post('/removeVocabFromLearning', { vocab: vocab });
+            }
+          }
+        }
+
+      }
+
+      return {
+        items: {
+          vocabulary: {
+            name: 'Options',
+            items: loadMenu()
+          }
+        }
+      };
+    }
+  });
+
+  $('#sentences').contextMenu({
+    selector: ".entry",
+    build: function($trigger, e) {
+      async function loadMenu(){
+        const sentence = $trigger.children('a').text();
+        const sentenceInLearning = await $.post('/sentenceInLearning', { sentence: sentence });
+        const isLearnt = (parseInt(sentenceInLearning) > 0);
+        return {
+          addToLearning: {
+            name: "Add to learning",
+            visible: function(key, opt){
+              return !isLearnt;
+            },
+            callback: function(key, opt){
+              $.post('/addSentenceToLearning', { sentence: sentence });
+            }
+          },
+          removeFromLearning: {
+            name: "Remove from learning",
+            visible: function(key, opt){
+              return isLearnt;
+            },
+            callback: function(key, opt){
+              $.post('/removeVocabFromLearning', { sentence: sentence });
+            }
+          }
+        }
+
+      }
+
+      return {
+        items: {
+          sentence: {
+            name: 'Options',
+            items: loadMenu()
+          }
+        }
+      };
+    }
+  });
 // });

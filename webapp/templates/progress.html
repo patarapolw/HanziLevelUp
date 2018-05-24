@@ -1,7 +1,6 @@
 {% extends 'template.html' %}
 
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.contextMenu.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/progress.css') }}"/>
 {% endblock %}
 
@@ -14,7 +13,5 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="{{ url_for('static', filename='js/jquery.ui.position.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/jquery.contextMenu.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/progress.js' ) }}"></script>
 {% endblock %}
