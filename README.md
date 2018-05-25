@@ -7,6 +7,7 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 - Speak sentences and vocabularies when clicked on. (Tested on Mac OSX)
     - May need to be modified to [google_speech](https://pypi.org/project/google_speech/) if you want it spoken on non-mac.
 - Show Hanzi decomposition and super-decomposition (powered by [CJKhyperradicals](http://cjkhyperradicals.herokuapp.com/)).
+- 60 major Hanzi levels -- learn or review in each levels, based on [Hanzi Level Project](https://hanzilevelproject.blogspot.com).
 
 ## Installation and Get-it-running
 
