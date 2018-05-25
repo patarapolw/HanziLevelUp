@@ -10,7 +10,7 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 
 ## Installation and Get-it-running
 
-- Powered by [Python](https://www.python.org/downloads/) and [Flask framework](http://flask.pocoo.org). So, install Python first, if you don't have one.
+- Install [Python](https://www.python.org/downloads/) first, if you don't have one.
 - Clone the project from GitHub.
 - Change the directory to the project folder, in the terminal.
 - `pip install pipenv`, `pipenv --three`, `pipenv shell` and `pipenv install`.

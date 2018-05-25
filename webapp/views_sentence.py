@@ -12,7 +12,7 @@ def get_all_sentences():
     if request.method == 'POST':
         all_sentences = [[sentence.id, sentence.sentence] for sentence in Sentence.query]
         shuffle(all_sentences)
-        
+
         return jsonify(all_sentences)
 
     return '0'
