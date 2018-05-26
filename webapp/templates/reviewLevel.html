@@ -1,0 +1,26 @@
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reviewLevel.css') }}"/>
+{% endblock %}
+
+{% block content %}
+  <div class="center-block">
+    <div id="showpanel"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="container border border-success showcase" id="showcase-vocab">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="container border border-success showcase" id="showcase-sentence">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/reviewLevel.js' ) }}"></script>
+{% endblock %}

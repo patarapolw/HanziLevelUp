@@ -1,9 +1,7 @@
-var charList = '';
-var charNumber = 0;
+let charList = Cookies.get('allHanzi') || "";
+let charNumber = 0;
 
 $(document).ready(function() {
-  charList = Cookies.get('allHanzi') || "";
-  charNumber = 0;
   renderChar();
 
   $("#sentence").keypress(function(event) {
@@ -15,11 +13,11 @@ $(document).ready(function() {
   });
 
   $(document).ajaxSend(function( event, xhr, settings ){
-    if ( settings.url === "/getHyperradicals" ){
+    if ( settings.url === "/post/hanzi/getHyperradicals" ){
       $('.loading-container').show();
     }
   }).ajaxComplete(function( event, xhr, settings ){
-    if ( settings.url === "/getHyperradicals" ){
+    if ( settings.url === "/post/hanzi/getHyperradicals" ){
       $('.loading-container').hide();
     }
   })
@@ -27,112 +25,14 @@ $(document).ready(function() {
   $('#vocab').contextMenu({
     selector: ".entry",
     build: function($trigger, e) {
-      const vocab = $trigger.children('a').text();
-
-      async function loadMenu(){
-        const vocabInLearning = await $.post('/vocabInLearning', { vocab: vocab });
-        const isLearnt = (parseInt(vocabInLearning) > 0);
-
-        $('.context-menu-item > span').each(function(index, el) {
-          var $this = $(this);
-          switch($this.text()){
-            case 'Loading':
-              $this.parent().hide();
-              break;
-            case 'Add to learning':
-              if(isLearnt <= 0){
-                $this.parent().show();
-              }
-              break;
-            case 'Remove from learning':
-              if(isLearnt > 0){
-                $this.parent().show();
-              }
-              break;
-          }
-        });
-      }
-
-      loadMenu();
-
-      return {
-        items: {
-          loading: {
-            name: 'Loading',
-            visible: true
-          },
-          addToLearning: {
-            name: "Add to learning",
-            visible: false,
-            callback: function(key, opt){
-              $.post('/addVocabToLearning', { vocab: vocab });
-            }
-          },
-          removeFromLearning: {
-            name: "Remove from learning",
-            visible: false,
-            callback: function(key, opt){
-              $.post('/removeVocabFromLearning', { vocab: vocab });
-            }
-          }
-        }
-      };
+      return contextMenuBuilder($trigger, e, 'vocab', 'a')
     }
   });
 
   $('#sentences').contextMenu({
     selector: ".entry",
     build: function($trigger, e) {
-      const sentence = $trigger.children('a').text();
-
-      async function loadMenu(){
-        const sentenceInLearning = await $.post('/sentenceInLearning', { sentence: sentence });
-        const isLearnt = (parseInt(sentenceInLearning) > 0);
-
-        $('.context-menu-item > span').each(function(index, el) {
-          var $this = $(this);
-          switch($this.text()){
-            case 'Loading':
-              $this.parent().hide();
-              break;
-            case 'Add to learning':
-              if(isLearnt <= 0){
-                $this.parent().show();
-              }
-              break;
-            case 'Remove from learning':
-              if(isLearnt > 0){
-                $this.parent().show();
-              }
-              break;
-          }
-        });
-      }
-
-      loadMenu();
-
-      return {
-        items: {
-          loading: {
-            name: 'Loading',
-            visible: true
-          },
-          addToLearning: {
-            name: "Add to learning",
-            visible: false,
-            callback: function(key, opt){
-              $.post('/addSentenceToLearning', { sentence: sentence });
-            }
-          },
-          removeFromLearning: {
-            name: "Remove from learning",
-            visible: false,
-            callback: function(key, opt){
-              $.post('/removeSentenceFromLearning', { sentence: sentence });
-            }
-          }
-        }
-      };
+      return contextMenuBuilder($trigger, e, 'sentence', 'a')
     }
   });
 });
@@ -158,8 +58,8 @@ function postChar(character){
 }
 
 function renderChar(){
-  var currentChar = charList[charNumber];
-  var charToPost = currentChar;
+  const currentChar = charList[charNumber];
+  const charToPost = currentChar;
 
   if(!isNaN(parseInt(charList))){
     $('#character').html('<div class="number">' + charList + '</div>');
@@ -179,13 +79,13 @@ function renderChar(){
     $('#nextChar').attr('disabled', true);
   }
 
-  $.post('/getHyperradicals', {character: charToPost}, function(content) {
+  $.post('/post/hanzi/getHyperradicals', {character: charToPost}, function(content) {
     renderContent('#compositions', content.compositions);
     renderContent('#supercompositions', content.supercompositions);
     renderContent('#variants', content.variants);
 
     $('#vocab').text('');
-    for(var i=0; i<content.vocab.length; i++){
+    for(let i=0; i<content.vocab.length; i++){
       $('#vocab').append(
         "<div class='entry container'><a href='#' onclick='speak(\"{3}\"); return false;' title='{1}'>{0}</a> {2}</div>"
         .format(content.vocab[i][1],
@@ -195,8 +95,7 @@ function renderChar(){
       }
 
     $('#sentences').text('');
-    for(var i=0; i<content.sentences.length; i++){
-      var speakerLang = (content.language == 'zh') ? 'zh-CN' : 'ja';
+    for(let i=0; i<content.sentences.length; i++){
       $('#sentences').append(
         "<div class='entry container'><a href='#' onclick='speak(\"{2}\"); return false;'>{0}</a> {1}</div>"
         .format(content.sentences[i][0],
@@ -206,14 +105,10 @@ function renderChar(){
   });
 }
 
-function speak(vocab){
-  $.post('/speak', {sentence: vocab});
-}
-
 function renderContent(selector, contentList){
   $(selector).text('');
-  for(var i=0; i<contentList.length; i++){
-    var class_name = isNaN(parseInt(contentList[i])) ? 'character' : 'number';
+  for(let i=0; i<contentList.length; i++){
+    const class_name = isNaN(parseInt(contentList[i])) ? 'character' : 'number';
     $(selector).append(
       "<div class='{0}' onclick='postChar(\"{1}\")'>{1}</div> "
         .format(class_name, contentList[i]));

@@ -1,34 +1,21 @@
-var vocabFloatingHTMLTemplate = '<div id="{0}" class="floating">'
-+ '<div onclick="speak(\'{1}\')">{2}</div>'
-+ '</div>';
-
-var vocabHTMLTemplate = '<div id="{0}" class="entry">'
+const HTMLTemplate = '<div id="{0}" class="entry">'
 + '<a class="float-left deleter" href="#">x</a> '
 + '<div onclick="speak(\'{1}\')">{2}</div>'
 + '</div>';
 
 $(document).ready(function() {
   itemLoader();
-
-  $('#vocabInput').keydown(function(event) {
-    if (event.which == 13 || event.keyCode == 13) {
-      var vocab = $(this).val();
-      $.post('/addVocab', { vocab: vocab }, function(vocab_id){
-        $('#contents').prepend(vocabHTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
-        setDeleteVocabListener();
-      });
-    }
-  });
+  setInputBoxListener();
 });
 
 async function itemLoader(){
   var recentVocabId = [];
 
-  await $.post('/getRecentVocab', function(recent_vocab) {
+  await $.post('/post/vocab/getRecent', function(recent_vocab) {
     var $contents = $('#contents');
 
     for(var i=0; i<recent_vocab.length; i++){
-      $contents.append(vocabHTMLTemplate.format(
+      $contents.append(HTMLTemplate.format(
         recent_vocab[i][0],
         recent_vocab[i][1].addSlashes(),
         recent_vocab[i][1]));
@@ -38,64 +25,34 @@ async function itemLoader(){
     setDeleteVocabListener();
   });
 
-  await $.post('/getAllVocab', function(all_vocab) {
-    var usedCoordinate = [];
-    var failedObject = [];
-    var $showcase = $('#showcase');
-    var $showcaseWidth = $showcase.width() - 20;
-    var $showcaseHeight = $showcase.height() - 20;
-    var showcaseCoordinate = {
-      offset: $showcase.offset(),
-      height: $showcase.height(),
-      width: $showcase.width()
-    };
+  await $.post('/post/vocab/getAll', function(all_vocab) {
+    let validVocab = [];
 
-    for(var i=0; i<all_vocab.length; i++){
-      if(recentVocabId.indexOf(all_vocab[i][0]) !== -1){
-        continue;
+    for(let i=0; i<all_vocab.length; i++){
+      if(recentVocabId.indexOf(all_vocab[i][0]) === -1){
+        validVocab.push(all_vocab[i]);
       }
+    }
 
-      if(failedObject.length > 10){
-        break;
-      }
+    createAquarium('vocab', validVocab);
+  });
+}
 
-      $showcase.append(vocabFloatingHTMLTemplate.format(
-        all_vocab[i][0],
-        all_vocab[i][1].addSlashes(),
-        all_vocab[i][1]));
-
-      var currentVocab = $('#' + all_vocab[i][0]);
-      currentVocab.css({
-        'position': 'absolute',
-        'left': Math.random()*$showcaseWidth + 10,
-        'top': Math.random()*$showcaseHeight + 10
+function setInputBoxListener(){
+  $('#vocabInput').keydown(function(event) {
+    if (event.which == 13 || event.keyCode == 13) {
+      var item = $(this).val();
+      $.post('/post/vocab/add', { item: item }, function(vocab_id){
+        $('#contents').prepend(HTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
+        setDeleteVocabListener();
       });
-
-      var currentCoordinate = {
-        offset: currentVocab.offset(),
-        height: currentVocab.height(),
-        width: currentVocab.width()
-      };
-
-      function isOverlap_current(el1){
-        return isOverlap(currentCoordinate, el1);
-      }
-
-      if(usedCoordinate.some(isOverlap_current) ||
-          currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
-          currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
-        currentVocab.remove();
-        failedObject.push(currentVocab.text());
-      } else {
-        usedCoordinate.push(currentCoordinate);
-      }
     }
   });
 }
 
 function setDeleteVocabListener(){
   $('.deleter').click(function(){
-    $.post('/deleteVocab', { vocab_id: $(this).parent().attr('id') });
+    $.post('/post/vocab/delete', { id: $(this).parent().attr('id') });
     $(this).parent().remove();
 
     return false;
@@ -103,7 +60,7 @@ function setDeleteVocabListener(){
 }
 
 function loadHanzi(){
-  $.post('/vocabToHanzi', function(data, textStatus, xhr) {
+  $.post('/post/hanzi/fromVocab', function(data, textStatus, xhr) {
     Cookies.set('allHanzi', data);
     window.location.href = '/learnHanzi';
   });

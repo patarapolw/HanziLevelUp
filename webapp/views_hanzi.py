@@ -19,7 +19,7 @@ sorter = ChineseFrequency()
 spoonfed = SpoonFed()
 
 
-@app.route('/getHyperradicals', methods=['POST'])
+@app.route('/post/hanzi/getHyperradicals', methods=['POST'])
 def get_hyperradicals():
     if request.method == 'POST':
         current_char = request.form.get('character')
@@ -38,7 +38,7 @@ def get_hyperradicals():
     return '0'
 
 
-@app.route('/getHanzi', methods=['POST'])
+@app.route('/post/hanzi/getAll', methods=['POST'])
 def get_hanzi():
     if request.method == 'POST':
         all_entries = ([sentence.sentence for sentence in Sentence.query] +
@@ -52,7 +52,7 @@ def get_hanzi():
     return '0'
 
 
-@app.route('/sentenceToHanzi', methods=['POST'])
+@app.route('/post/hanzi/fromSentence', methods=['POST'])
 def sentence_to_hanzi():
     def last_days_entries():
         for sentence in Sentence.query[::-1]:
@@ -74,7 +74,7 @@ def sentence_to_hanzi():
     return '0'
 
 
-@app.route('/vocabToHanzi', methods=['POST'])
+@app.route('/post/hanzi/fromVocab', methods=['POST'])
 def vocab_to_hanzi():
     def last_days_entries():
         for vocab in Vocab.query[::-1]:

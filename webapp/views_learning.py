@@ -4,19 +4,28 @@ from webapp import app, db
 from webapp.databases import Vocab, Sentence
 
 
-@app.route('/vocabInLearning', methods=['POST'])
-def vocab_in_learning():
+@app.route('/post/<item>/inLearning', methods=['POST'])
+def in_learning(item):
     if request.method == 'POST':
-        return str(Vocab.query.filter(Vocab.vocab == request.form.get('vocab')).count())
+        if item == 'vocab':
+            return str(Vocab.query.filter(Vocab.vocab == request.form.get('item')).count())
+        elif item == 'sentence':
+            return str(Sentence.query.filter(Sentence.sentence == request.form.get('item')).count())
 
     return '-1'
 
 
-@app.route('/addVocabToLearning', methods=['POST'])
-def add_vocab_to_learning():
+@app.route('/post/<item>/addToLearning', methods=['POST'])
+def add_to_learning(item):
     if request.method == 'POST':
-        new_vocab = Vocab(vocab=request.form.get('vocab'))
-        db.session.add(new_vocab)
+        if item == 'vocab':
+            new_item = Vocab(vocab=request.form.get('item'))
+        elif item == 'sentence':
+            new_item = Sentence(sentence=request.form.get('item'))
+        else:
+            return '0'
+
+        db.session.add(new_item)
         db.session.commit()
 
         return '1'
@@ -24,41 +33,16 @@ def add_vocab_to_learning():
     return '0'
 
 
-@app.route('/removeVocabFromLearning', methods=['POST'])
-def remove_vocab_from_learning():
+@app.route('/post/<item>/removeVocabFromLearning', methods=['POST'])
+def remove_from_learning(item):
     if request.method == 'POST':
-        Vocab.query.filter_by(vocab=request.form.get('vocab')).delete()
-        db.session.commit()
+        if item == 'vocab':
+            Vocab.query.filter_by(vocab=request.form.get('item')).delete()
+        elif item == 'sentence':
+            Sentence.query.filter_by(sentence=request.form.get('item')).delete()
+        else:
+            return '0'
 
-        return '1'
-
-    return '0'
-
-
-@app.route('/sentenceInLearning', methods=['POST'])
-def sentence_in_learning():
-    if request.method == 'POST':
-        return str(Sentence.query.filter(Sentence.sentence == request.form.get('sentence')).count())
-
-    return '-1'
-
-
-@app.route('/addSentenceToLearning', methods=['POST'])
-def add_sentence_to_learning():
-    if request.method == 'POST':
-        new_sentence = Sentence(sentence=request.form.get('sentence'))
-        db.session.add(new_sentence)
-        db.session.commit()
-
-        return '1'
-
-    return '0'
-
-
-@app.route('/removeSentenceFromLearning', methods=['POST'])
-def remove_sentence_from_learning():
-    if request.method == 'POST':
-        Sentence.query.filter_by(sentence=request.form.get('sentence')).delete()
         db.session.commit()
 
         return '1'

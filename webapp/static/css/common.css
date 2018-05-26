@@ -1,6 +1,15 @@
-#showcase {
+[id^="showcase"], .showcase {
   height: 500px;
   position: relative;
+}
+
+.showcase {
+  height: 400px;
+}
+
+.floating.context-menu-active {
+  font-size: 2.5em;
+  z-index: 100;
 }
 
 .floating {
@@ -30,4 +39,22 @@
 .deleter {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.character {
+    font-size: 30px;
+    display: inline-block;
+}
+.character:hover {
+    font-size: 150px;
+}
+
+.number {
+    font-size: 20px;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    display: inline-block;
+}
+.number:hover {
+    font-size: 40px;
 }

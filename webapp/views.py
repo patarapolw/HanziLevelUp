@@ -6,7 +6,7 @@ from webapp.utils import do_speak
 speak_processes = []
 
 
-@app.route('/speak', methods=['POST'])
+@app.route('/post/speak', methods=['POST'])
 def speak():
     if request.method == 'POST':
         global speak_processes
@@ -14,8 +14,8 @@ def speak():
         for process in speak_processes:
             process.kill()
         speak_processes = list()
-        sentence = request.form.get('sentence')
-        speak_processes.append(do_speak(sentence))
+        item = request.form.get('item')
+        speak_processes.append(do_speak(item))
 
         return '1'
 

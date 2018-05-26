@@ -1,35 +1,16 @@
 .content {
     min-height: 50px;
 }
+
 .big-character {
     font-size: 200px;
     height: 1.5em;
     width: 1em;
     margin: 0 auto;
 }
+
 .loading-container {
     display: none;
-}
-.character {
-    font-size: 30px;
-    display: inline-block;
-}
-.character:hover {
-    font-size: 150px;
-}
-
-.number {
-    font-size: 20px;
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    display: inline-block;
-}
-.number:hover {
-    font-size: 40px;
-}
-
-.entry {
-    display: block;
 }
 
 /* Animation keyframes - you need to add prefixes */
