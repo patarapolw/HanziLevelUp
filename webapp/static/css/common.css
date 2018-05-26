@@ -1,8 +1,10 @@
 #showcase {
   height: 500px;
+  position: relative;
 }
 
 .floating {
+  position: absolute;
   font-size: 1em;
   background-color: white;
   z-index: 0;
@@ -10,7 +12,6 @@
 
 .floating:hover {
   font-size: 2.5em;
-  background-color: white;
   z-index: 100;
 }
 

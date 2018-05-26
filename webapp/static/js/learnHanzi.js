@@ -145,7 +145,7 @@ function previousChar(){
 }
 
 function nextChar(){
-  if(charNumber + 1 < charList.length - 1){
+  if(charNumber < charList.length - 1){
     charNumber++;
     renderChar();
   }
@@ -173,7 +173,7 @@ function renderChar(){
   } else {
     $('#previousChar').attr('disabled', true);
   }
-  if(charNumber + 1 < charList.length - 1){
+  if(charNumber < charList.length - 1){
     $('#nextChar').removeAttr('disabled');
   } else {
     $('#nextChar').attr('disabled', true);

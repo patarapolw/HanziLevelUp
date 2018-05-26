@@ -66,7 +66,6 @@ async function itemLoader(){
 
       var currentSentence = $('#' + all_sentences[i][0]);
       currentSentence.css({
-        'position': 'absolute',
         'left': Math.random()*$showcaseWidth + 10,
         'top': Math.random()*$showcaseHeight + 10
       });
