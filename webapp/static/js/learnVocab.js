@@ -19,7 +19,7 @@ async function itemLoader(){
         recent_vocab[i][0],
         recent_vocab[i][1].addSlashes(),
         recent_vocab[i][1]));
-      $recent.push(recent_vocab[i][0]);
+      recentVocabId.push(recent_vocab[i][0]);
     }
 
     setDeleteVocabListener();
