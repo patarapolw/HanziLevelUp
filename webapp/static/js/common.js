@@ -24,14 +24,6 @@ function stripHtml(html){
    return doc.body.textContent || "";
 }
 
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 function isOverlap(el0, el1) {
   var elY0 = (el0.offset.top < el1.offset.top)? el0 : el1;
   var elY1 = (el0 != elY0)? el0 : el1;
@@ -45,8 +37,6 @@ function isOverlap(el0, el1) {
 }
 
 function createAquarium(itemType, allItems){
-  shuffle(allItems);
-
   const floatingHTMLTemplate = '<div id="{0}" class="floating">'
   + '<div onclick="speak(\'{1}\')">{2}</div>'
   + '</div>';
@@ -88,6 +78,10 @@ function createAquarium(itemType, allItems){
     }
 
     currentItem.data('offset', currentItem.offset());
+    currentItem.data('dimension', {
+      height: currentItem.height(),
+      width: preferredWidth
+    })
 
     let currentCoordinate = {
       offset: currentItem.data('offset'),
@@ -109,26 +103,51 @@ function createAquarium(itemType, allItems){
     }
   }
 
-  $('.floating').mouseover(function(){
+  $('.floating').mouseenter(function(){
     const $this = $(this);
-    const actualWidth = $this.width();
+    const dimension = $this.data('dimension');
+    const ratioEnlarged = 2;
 
-    $('body').append('<div class="floating context-menu-active" id="temp">');
-    const $temp = $('#temp');
-    $temp.text($this.text());
+    const tempElement = $this.clone();
+    tempElement.appendTo('body');
+    tempElement.css({
+      width: dimension.width,
+      height: dimension.height
+    });
 
-    const preferredWidth = $temp.width();
-    $temp.remove();
-
-    if(actualWidth < preferredWidth){
-      $this.css('left', parseInt($this.css('left')) + actualWidth - preferredWidth);
+    if(tempElement.is(':offscreen')){
+      // Change this to animate if you want it animated.
+      $this.css({
+        'margin-left': -dimension.width * ratioEnlarged/2,
+        'margin-top': -dimension.height * ratioEnlarged/4,
+        'font-size': ratioEnlarged + 'em',
+        width: dimension.width * ratioEnlarged,
+        height: dimension.height * ratioEnlarged
+      });
+    } else {
+      $this.css({
+        'margin-left': -dimension.width * ratioEnlarged/4,
+        'margin-top': -dimension.height * ratioEnlarged/4,
+        'font-size': ratioEnlarged + 'em',
+        width: dimension.width * ratioEnlarged,
+        height: dimension.height * ratioEnlarged
+      });
     }
+
+    tempElement.remove();
   });
 
-  $('.floating').mouseout(function(event) {
+  $('.floating').mouseleave(function(event) {
     const $this = $(this);
+    const dimension = $this.data('dimension');
+
     if(!$this.hasClass('context-menu-active')){
-      $this.offset($this.data('offset'));
+      $this.css({
+        margin: 0,
+        'font-size': '1em',
+        width: dimension.width,
+        height: dimension.height
+      });
     }
   });
 
@@ -140,7 +159,14 @@ function createAquarium(itemType, allItems){
     events: {
       hide: function(options){
         const $this = $(this);
-        $this.offset($this.data('offset'));
+        const dimension = $this.data('dimension');
+
+        $this.css({
+          margin: 0,
+          'font-size': '1em',
+          width: dimension.width,
+          height: dimension.height
+        });
         return true;
       }
     }
@@ -212,6 +238,66 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
   };
 }
 
+function setCharacterHoverListener(){
+  $('.character, .number').mouseenter(function(){
+    const $this = $(this);
+    const hoverElement = $('<div class="hoverElement">');
+
+    hoverElement.appendTo('#showpanel');
+    hoverElement.append($this.clone());
+    hoverElement.position({
+      my: 'center',
+      at: 'center',
+      of: $this
+    });
+
+    hoverElement.mouseleave(function(event) {
+      if(!hoverElement.hasClass('context-menu-active')){
+        hoverElement.remove();
+      }
+    });
+  });
+
+  $('.hoverElement').mouseleave(function(event) {
+    const hoverElement = $(this);
+
+    if(!hoverElement.hasClass('context-menu-active')){
+      hoverElement.remove();
+    }
+  });
+
+  $('#showpanel').contextMenu({
+    selector: '.hoverElement',
+    items: {
+      viewHyperradicals: {
+        name: 'View Hyperradicals',
+        callback: function(key, opt){
+          Cookies.set('allHanzi', $(this).text());
+          const win = window.open('/learnHanzi', '_blank');
+          win.focus();
+        }
+      }
+    },
+    events: {
+      hide: function(options){
+        $('.hoverElement').remove();
+        return true;
+      }
+    }
+  });
+}
+
 function speak(item){
   $.post('/post/speak', { item: item });
 }
+
+$(document).ready(function() {
+  jQuery.expr.filters.offscreen = function(el) {
+    var rect = el.getBoundingClientRect();
+    return (
+             (rect.x + rect.width) < 0
+               || (rect.y + rect.height) < 0
+               || (rect.x > window.innerWidth || rect.y > window.innerHeight)
+           );
+  };
+});

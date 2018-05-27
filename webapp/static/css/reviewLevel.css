@@ -3,19 +3,3 @@
   line-height: 60px;
   text-align: center;
 }
-
-.levelHanzi.context-menu-active {
-  font-size: 50px;
-  z-index: 100;
-}
-
-.levelHanzi {
-  display: inline-block;
-  font-size: 30px;
-  z-index: 0;
-}
-
-.levelHanzi:hover {
-  font-size: 50px;
-  z-index: 100;
-}

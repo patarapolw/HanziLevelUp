@@ -25,24 +25,10 @@ function loadHanziView(contentList){
 
   $showpanel.text('');
   for(let i=0; i<contentList.length; i++){
-    const class_name = isNaN(parseInt(contentList[i])) ? 'character' : 'number';
-
     $showpanel.append(
-      "<div class='{0} levelHanzi'>{1}</div> "
-        .format(class_name, contentList[i]));
+      "<div class='character'>{0}</div> "
+        .format(contentList[i]));
   }
 
-  $showpanel.contextMenu({
-    selector: '.levelHanzi',
-    items: {
-      viewHyperradicals: {
-        name: 'View Hyperradicals',
-        callback: function(key, opt){
-          Cookies.set('allHanzi', $(this).text());
-          const win = window.open('/learnHanzi', '_blank');
-          win.focus();
-        }
-      }
-    }
-  });
+  setCharacterHoverListener();
 }

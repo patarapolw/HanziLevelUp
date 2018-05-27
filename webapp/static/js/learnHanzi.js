@@ -102,6 +102,8 @@ function renderChar(){
           content.sentences[i][1],
           stripHtml(content.sentences[i][0]).addSlashes()));
     }
+
+    setCharacterHoverListener();
   });
 }
 
