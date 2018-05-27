@@ -41,7 +41,7 @@ $(document).ready(function() {
             alert('All Hanzi in this level are learnt.');
           } else {
             Cookies.set('allHanzi', allHanzi);
-            window.location.href = "/learnHanzi";
+            window.location.href = "/viewHanzi";
           }
         }
       },
@@ -54,7 +54,7 @@ $(document).ready(function() {
             alert('Please learn new Hanzi first.');
           } else {
             Cookies.set('allHanzi', allHanzi);
-            window.location.href = "/learnHanzi";
+            window.location.href = "/viewHanzi";
           }
         }
       },
@@ -69,7 +69,7 @@ $(document).ready(function() {
           } else {
             Cookies.set('currentLevelHanzi', currentLevelHanzi);
             Cookies.set('previousLevelsHanzi', previousLevelsHanzi);
-            window.location.href = "/reviewLevel";
+            window.location.href = "/viewLevel";
           }
         }
       }

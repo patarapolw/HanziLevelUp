@@ -1,8 +1,10 @@
+import jieba
 from datetime import datetime, timedelta
+import json
 
 from flask import request, jsonify
 
-from HanziLevelUp.vocab import get_all_vocab_plus
+from HanziLevelUp.vocab import get_all_vocab_plus, get_vocab_array_info, vocab_to_sentences
 from webapp import app, db
 from webapp.databases import Vocab
 
@@ -50,5 +52,29 @@ def delete_vocab():
         Vocab.query.filter_by(id=int(request.form.get('id'))).delete()
         db.session.commit()
         return '1'
+
+    return '0'
+
+
+@app.route('/post/vocab/getListInfo', methods=['POST'])
+def get_array_info():
+    if request.method == 'POST':
+        return jsonify(list(get_vocab_array_info(json.loads(request.form.get('list')))))
+
+    return '0'
+
+
+@app.route('/post/vocab/getSentences', methods=['POST'])
+def get_sentences():
+    if request.method == 'POST':
+        return jsonify(list(vocab_to_sentences(request.form.get('vocab'))))
+
+    return '0'
+
+
+@app.route('/post/vocab/fromSentence', methods=['POST'])
+def from_sentence():
+    if request.method == 'POST':
+        return jsonify(list(jieba.cut_for_search(request.form.get('sentence'))))
 
     return '0'

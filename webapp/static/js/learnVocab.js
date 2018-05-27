@@ -69,6 +69,6 @@ function setDeleteVocabListener(){
 function loadHanzi(){
   $.post('/post/hanzi/fromVocab', function(data, textStatus, xhr) {
     Cookies.set('allHanzi', data);
-    window.location.href = '/learnHanzi';
+    window.location.href = '/viewHanzi';
   });
 }

@@ -69,6 +69,6 @@ function setDeleteSentenceListener(){
 function loadHanzi(){
   $.post('/post/hanzi/fromSentence', function(data, textStatus, xhr) {
     Cookies.set('allHanzi', data);
-    window.location.href = '/learnHanzi';
+    window.location.href = '/viewHanzi';
   });
 }

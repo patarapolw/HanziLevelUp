@@ -182,9 +182,6 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
       const $this = $(this);
 
       switch($this.text()){
-        case 'Loading':
-          $this.parent().hide();
-          break;
         case 'Add to learning':
           if(inLearningCount <= 0 && itemId > 0){
             $this.parent().show();
@@ -201,16 +198,14 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         //   }
       }
     });
+
+    loadVocabFromItem();
   }
 
   loadMenu();
 
   return {
     items: {
-      loading: {
-        name: 'Loading',
-        visible: true
-      },
       addToLearning: {
         name: "Add to learning",
         visible: false,
@@ -230,12 +225,35 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         visible: true,
         callback: function(key, opt){
           Cookies.set('allHanzi', $trigger.children(childrenType).text());
-          const win = window.open('/learnHanzi', '_blank');
+          const win = window.open('/viewHanzi', '_blank');
           win.focus();
+        }
+      },
+      learnVocab: {
+        name: "Learn vocab in this item",
+        visible: true,
+        callback: function(key, opt){
+          const win = window.open('about:blank', '_blank');
+          loadVocabFromItem(itemType, $trigger.children(childrenType).text()).then(function(){
+            win.location.href = '/viewVocab';
+            win.focus();
+          });
         }
       }
     }
   };
+}
+
+async function loadVocabFromItem(itemType, item){
+  let allVocab;
+
+  if(itemType === 'vocab'){
+    allVocab = [item];
+  } else {
+    allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
+  }
+
+  Cookies.set('allVocab', allVocab);
 }
 
 function setCharacterHoverListener(){
@@ -273,7 +291,7 @@ function setCharacterHoverListener(){
         name: 'View Hyperradicals',
         callback: function(key, opt){
           Cookies.set('allHanzi', $(this).text());
-          const win = window.open('/learnHanzi', '_blank');
+          const win = window.open('/viewHanzi', '_blank');
           win.focus();
         }
       }

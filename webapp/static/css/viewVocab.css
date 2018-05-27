@@ -1,0 +1,26 @@
+.switch-button-container {
+  text-align: center;
+}
+
+.switch-button {
+  width: 100px;
+}
+
+#showpanel {
+  margin: 20px;
+}
+
+#simplified {
+  text-align: center;
+  font-size: 80px;
+  line-height: 80px;
+  height: 80px;
+  width: 6em;
+}
+
+#traditional {
+  text-align: left;
+  font-size: 40px;
+  line-height: 40px;
+  height: 40px;
+}

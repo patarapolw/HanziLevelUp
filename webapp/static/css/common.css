@@ -68,3 +68,7 @@
   max-height: 400px;
   overflow-y: scroll;
 }
+
+.content {
+    min-height: 50px;
+}
