@@ -63,3 +63,8 @@
 .hoverElement > .number {
   font-size: 50px;
 }
+
+.recent {
+  max-height: 400px;
+  overflow-y: scroll;
+}

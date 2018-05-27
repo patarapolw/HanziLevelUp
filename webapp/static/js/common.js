@@ -1,4 +1,3 @@
-// First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
@@ -89,11 +88,7 @@ function createAquarium(itemType, allItems){
       width: currentItem.width()
     };
 
-    function isOverlap_current(el1){
-      return isOverlap(currentCoordinate, el1);
-    }
-
-    if(usedCoordinate.some(isOverlap_current) ||
+    if(usedCoordinate.some(el => isOverlap(currentCoordinate, el)) ||
         currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
         currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
       failedObject.push(currentItem.attr('id'));
@@ -200,10 +195,10 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
             $this.parent().show();
           }
           break;
-        case 'Generated from sentences':
-          if(itemId <= 0){
-            $this.parent().show();
-          }
+        // case 'Generated from sentences':
+        //   if(itemId <= 0){
+        //     $this.parent().show();
+        //   }
       }
     });
   }
@@ -230,9 +225,14 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
           $.post('/post/{0}/removeFromLearning'.format(itemType), postJson);
         }
       },
-      generatedFromSentences: {
-        name: "Generated from sentences",
-        visible: false
+      learnHanzi: {
+        name: "Learn Hanzi in this item",
+        visible: true,
+        callback: function(key, opt){
+          Cookies.set('allHanzi', $trigger.children(childrenType).text());
+          const win = window.open('/learnHanzi', '_blank');
+          win.focus();
+        }
       }
     }
   };

@@ -12,10 +12,10 @@ async function itemLoader(){
   let recentSentencesId = [];
 
   await $.post('/post/sentence/getRecent', function(recent_sentences) {
-    const $contents = $('#contents');
+    const $recent = $('#recent-sentences');
 
     for(let i=0; i<recent_sentences.length; i++){
-      $contents.append(HTMLTemplate.format(
+      $recent.append(HTMLTemplate.format(
         recent_sentences[i][0],
         recent_sentences[i][1].addSlashes(),
         recent_sentences[i][1]));
@@ -23,6 +23,13 @@ async function itemLoader(){
     }
 
     setDeleteSentenceListener();
+
+    $recent.contextMenu({
+      selector: ".entry",
+      build: function($trigger, e) {
+        return contextMenuBuilder($trigger, e, 'sentence', 'div')
+      }
+    });
   });
 
   await $.post('/post/sentence/getAll', function(all_sentences) {

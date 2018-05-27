@@ -51,32 +51,28 @@ function nextChar(){
   }
 }
 
-function postChar(character){
-  charList = character;
-  charNumber = 0;
-  renderChar();
-}
-
 function renderChar(){
   const currentChar = charList[charNumber];
-  const charToPost = currentChar;
+  let charToPost = currentChar;
 
   if(!isNaN(parseInt(charList))){
     $('#character').html('<div class="number">' + charList + '</div>');
     charToPost = charList;
   } else {
+    charList = charList.replace(/[^\p{UIdeo}]/u, '');
+    
     $('#character').text(currentChar);
-  }
 
-  if(charNumber > 0){
-    $('#previousChar').removeAttr('disabled');
-  } else {
-    $('#previousChar').attr('disabled', true);
-  }
-  if(charNumber < charList.length - 1){
-    $('#nextChar').removeAttr('disabled');
-  } else {
-    $('#nextChar').attr('disabled', true);
+    if(charNumber > 0){
+      $('#previousChar').removeAttr('disabled');
+    } else {
+      $('#previousChar').attr('disabled', true);
+    }
+    if(charNumber < charList.length - 1){
+      $('#nextChar').removeAttr('disabled');
+    } else {
+      $('#nextChar').attr('disabled', true);
+    }
   }
 
   $.post('/post/hanzi/getHyperradicals', {character: charToPost}, function(content) {
@@ -84,19 +80,21 @@ function renderChar(){
     renderContent('#supercompositions', content.supercompositions);
     renderContent('#variants', content.variants);
 
-    $('#vocab').text('');
+    const $vocab = $('#vocab');
+    $vocab.text('');
     for(let i=0; i<content.vocab.length; i++){
-      $('#vocab').append(
+      $vocab.append(
         "<div class='entry container'><a href='#' onclick='speak(\"{3}\"); return false;' title='{1}'>{0}</a> {2}</div>"
         .format(content.vocab[i][1],
           content.vocab[i][2],
           content.vocab[i][3],
           content.vocab[i][1].addSlashes()));
-      }
+    }
 
-    $('#sentences').text('');
+    const $sentences = $('#sentences');
+    $sentences.text('');
     for(let i=0; i<content.sentences.length; i++){
-      $('#sentences').append(
+      $sentences.append(
         "<div class='entry container'><a href='#' onclick='speak(\"{2}\"); return false;'>{0}</a> {1}</div>"
         .format(content.sentences[i][0],
           content.sentences[i][1],
@@ -112,7 +110,7 @@ function renderContent(selector, contentList){
   for(let i=0; i<contentList.length; i++){
     const class_name = isNaN(parseInt(contentList[i])) ? 'character' : 'number';
     $(selector).append(
-      "<div class='{0}' onclick='postChar(\"{1}\")'>{1}</div> "
+      "<div class='{0}'>{1}</div> "
         .format(class_name, contentList[i]));
   }
 }

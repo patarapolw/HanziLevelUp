@@ -9,20 +9,27 @@ $(document).ready(function() {
 });
 
 async function itemLoader(){
-  var recentVocabId = [];
+  let recentVocabId = [];
 
   await $.post('/post/vocab/getRecent', function(recent_vocab) {
-    var $contents = $('#contents');
+    const $recent = $('#recent-vocab');
 
-    for(var i=0; i<recent_vocab.length; i++){
-      $contents.append(HTMLTemplate.format(
+    for(let i=0; i<recent_vocab.length; i++){
+      $recent.append(HTMLTemplate.format(
         recent_vocab[i][0],
         recent_vocab[i][1].addSlashes(),
         recent_vocab[i][1]));
-      recentVocabId.push(recent_vocab[i][0]);
+      $recent.push(recent_vocab[i][0]);
     }
 
     setDeleteVocabListener();
+
+    $recent.contextMenu({
+      selector: ".entry",
+      build: function($trigger, e) {
+        return contextMenuBuilder($trigger, e, 'vocab', 'div')
+      }
+    });
   });
 
   await $.post('/post/vocab/getAll', function(all_vocab) {

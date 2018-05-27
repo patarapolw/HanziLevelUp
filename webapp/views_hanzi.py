@@ -23,9 +23,13 @@ spoonfed = SpoonFed()
 def get_hyperradicals():
     if request.method == 'POST':
         current_char = request.form.get('character')
-        sentences = list(spoonfed.get_sentence(current_char))[:10]
-        if len(sentences) == 0:
-            sentences = list(jukuu(current_char))
+
+        if not current_char.isdigit():
+            sentences = list(spoonfed.get_sentence(current_char))[:10]
+            if len(sentences) == 0:
+                sentences = list(jukuu(current_char))
+        else:
+            sentences = []
 
         return jsonify({
             'compositions': decompose.get_sub(current_char),
