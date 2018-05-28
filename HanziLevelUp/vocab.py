@@ -34,7 +34,7 @@ def get_vocab_array_info(vocab_list):
 
 
 def vocab_to_sentences(vocab):
-    sentences = list(spoon_fed.get_sentence(vocab))
+    sentences = list(spoon_fed.get_sentence(vocab))[:10]
     if len(sentences) == 0:
         sentences = list(jukuu(vocab))
 

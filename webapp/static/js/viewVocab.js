@@ -27,8 +27,8 @@ async function initVocab(){
 async function loadVocabInfo(){
   const currentVocab = vocabInfoArray[vocabNumber];
 
-  $('#traditional').text(currentVocab[0]);
-  $('#simplified').text(currentVocab[1]);
+  $('#traditional > div').text(currentVocab[0]);
+  $('#simplified > div').text(currentVocab[1]);
   $('#reading').text(currentVocab[2]);
   $('#meaning').text(currentVocab[3]);
 
@@ -58,11 +58,25 @@ async function loadVocabInfo(){
       $('#sentences').contextMenu({
         selector: ".entry",
         build: function($trigger, e) {
-          return contextMenuBuilder($trigger, e, 'sentence', 'a')
+          return contextMenuBuilder($trigger, e, 'sentence', 'div')
         }
       });
     });
   }
+
+  $('#simplified-container').contextMenu({
+    selector: '.vocab',
+    build: function($trigger, e) {
+      return contextMenuBuilder($trigger, e, 'vocab', 'div')
+    }
+  });
+
+  $('#traditional-container').contextMenu({
+    selector: '.vocab',
+    build: function($trigger, e) {
+      return contextMenuBuilder($trigger, e, 'vocab', 'div')
+    }
+  });
 
   previousVocab = currentVocab[0];
 }

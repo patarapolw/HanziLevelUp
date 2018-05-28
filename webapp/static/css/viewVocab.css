@@ -11,11 +11,15 @@
 }
 
 #simplified {
-  text-align: center;
   font-size: 80px;
   line-height: 80px;
-  height: 80px;
-  width: 6em;
+  height: 100px;
+  width: 200px;
+  margin: 0 auto;
+}
+
+#simplified > div, .switch-button-container > div {
+  margin: 0 auto;
 }
 
 #traditional {

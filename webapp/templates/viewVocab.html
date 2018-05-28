@@ -11,8 +11,9 @@
   </div>
 
   <div class="row">
-    <div class="col-md">
-      <div id="simplified" class="row">
+    <div class="col-md mt-3" id="simplified-container">
+      <div id="simplified" class="row vocab">
+        <div></div>
       </div>
       <div class="row switch-button-container">
         <div class="btn-group col-auto" role="group" aria-label="switch-button">
@@ -22,16 +23,20 @@
       </div>
     </div>
 
-    <div class="col-6" id="showpanel">
-      <div id="traditional" class="row"></div>
-      <div id="reading" class="row"></div>
+    <div class="col-8" id="showpanel">
+      <div id="traditional-container" class="ml-3">
+        <div id="traditional" class="row vocab">
+          <div></div>
+        </div>
+      </div>
+      <div id="reading" class="row ml-3"></div>
 
-      <div class="row">
+      <div class="row mt-3">
         <h4>Meaning: </h4>
       </div>
       <div id="meaning" class="row content"></div>
 
-      <div class="row">
+      <div class="row mt-3">
         <h4>Sentences: </h4>
       </div>
       <div id="sentences" class="row content"></div>
