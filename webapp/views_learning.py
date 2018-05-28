@@ -33,7 +33,7 @@ def add_to_learning(item):
     return '0'
 
 
-@app.route('/post/<item>/removeVocabFromLearning', methods=['POST'])
+@app.route('/post/<item>/removeFromLearning', methods=['POST'])
 def remove_from_learning(item):
     if request.method == 'POST':
         if item == 'vocab':
