@@ -198,8 +198,6 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         //   }
       }
     });
-
-    loadVocabFromItem();
   }
 
   loadMenu();

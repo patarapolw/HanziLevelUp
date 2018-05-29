@@ -58,7 +58,7 @@ async function loadVocabInfo(){
       $('#sentences').contextMenu({
         selector: ".entry",
         build: function($trigger, e) {
-          return contextMenuBuilder($trigger, e, 'sentence', 'div')
+          return contextMenuBuilder($trigger, e, 'sentence', 'a')
         }
       });
     });
