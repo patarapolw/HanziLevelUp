@@ -10,7 +10,6 @@ from CJKhyperradicals.decompose import Decompose
 from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.frequency import ChineseFrequency
 from CJKhyperradicals.variant import Variant
-from CJKhyperradicals.sentence import jukuu, SpoonFed
 
 from HanziLevelUp.vocab import vocab_to_sentences
 
@@ -18,7 +17,6 @@ decompose = Decompose()
 variant = Variant()
 cedict = Cedict()
 sorter = ChineseFrequency()
-spoonfed = SpoonFed()
 
 
 @app.route('/post/hanzi/getInfo', methods=['POST'])

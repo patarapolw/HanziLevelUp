@@ -14,7 +14,8 @@ def get_extra_vocab():
     extra_vocab = set()
     for vocab in pre_extra_vocab:
         if regex.match(r'[\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]', vocab):
-            extra_vocab.add(vocab)
+            if Vocab.query.filter(Vocab.vocab == vocab).count() == 0:
+                extra_vocab.add(vocab)
 
     return extra_vocab
 
