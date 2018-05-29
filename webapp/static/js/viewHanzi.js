@@ -60,7 +60,7 @@ function renderChar(){
     charToPost = charList;
   } else {
     charList = charList.replace(/[^\p{UIdeo}]/u, '');
-    
+
     $('#character').text(currentChar);
 
     if(charNumber > 0){
@@ -75,7 +75,7 @@ function renderChar(){
     }
   }
 
-  $.post('/post/hanzi/getHyperradicals', {character: charToPost}, function(content) {
+  $.post('/post/hanzi/getInfo', {character: charToPost}, function(content) {
     renderContent('#compositions', content.compositions);
     renderContent('#supercompositions', content.supercompositions);
     renderContent('#variants', content.variants);
@@ -91,6 +91,10 @@ function renderChar(){
           content.vocab[i][1].addSlashes()));
     }
 
+    setCharacterHoverListener();
+  });
+
+  $.post('/post/hanzi/getSentences', {character: charToPost}, function(content) {
     const $sentences = $('#sentences');
     $sentences.text('');
     for(let i=0; i<content.sentences.length; i++){

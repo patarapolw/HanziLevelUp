@@ -285,8 +285,8 @@ function setCharacterHoverListener(){
   $('#showpanel').contextMenu({
     selector: '.hoverElement',
     items: {
-      viewHyperradicals: {
-        name: 'View Hyperradicals',
+      viewHanzi: {
+        name: 'View Hanzi info',
         callback: function(key, opt){
           Cookies.set('allHanzi', $(this).text());
           const win = window.open('/viewHanzi', '_blank');
