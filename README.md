@@ -17,7 +17,7 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 - Change the directory to the project folder, in the terminal.
 - `pip install pipenv`, `pipenv --three`, `pipenv shell` and `pipenv install`.
 - Run `app.py`.
-- Go to `http://localhost:8080` on your browser.
+- Go to `https://localhost:8080` on your browser.
 
 ## Screenshots
 

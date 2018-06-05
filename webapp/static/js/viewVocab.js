@@ -62,6 +62,13 @@ async function loadVocabInfo(){
         }
       });
     });
+
+    $('#more-sentences').off('click').click(function(event) {
+      event.preventDefault();
+      console.log(currentVocab);
+      const win = window.open('https://tatoeba.org/eng/sentences/search?from=cmn&to=eng&query=' + currentVocab[1], '_blank');
+      win.focus();
+    });
   }
 
   $('#simplified-container').contextMenu({
@@ -76,6 +83,14 @@ async function loadVocabInfo(){
     build: function($trigger, e) {
       return contextMenuBuilder($trigger, e, 'vocab', 'div')
     }
+  });
+
+  $('#simplified > div').click(function(event) {
+    speak($(this).text());
+  });
+
+  $('#traditional > div').click(function(event) {
+    speak($(this).text());
   });
 
   previousVocab = currentVocab[0];

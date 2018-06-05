@@ -23,5 +23,5 @@ class Cedict:
 
     def search_vocab(self, vocab):
         for entry in self.entries:
-            if vocab in (entry[0], entry[1]):
+            if vocab in (entry[0], entry[1]) or vocab in entry[3].split(' '):
                 yield entry

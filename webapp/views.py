@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, make_response
 
 from webapp import app
 from webapp.utils import do_speak
@@ -8,6 +8,9 @@ speak_processes = []
 
 @app.route('/post/speak', methods=['POST'])
 def speak():
+    resp = make_response()
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+
     if request.method == 'POST':
         global speak_processes
 
@@ -17,6 +20,4 @@ def speak():
         item = request.form.get('item')
         speak_processes.append(do_speak(item))
 
-        return '1'
-
-    return '0'
+    return resp

@@ -107,6 +107,12 @@ function renderChar(){
 
     setCharacterHoverListener();
   });
+
+  $('#more-sentences').off('click').click(function(event) {
+    event.preventDefault();
+    const win = window.open('https://tatoeba.org/eng/sentences/search?from=cmn&to=eng&query=' + charToPost, '_blank');
+    win.focus();
+  });
 }
 
 function renderContent(selector, contentList){

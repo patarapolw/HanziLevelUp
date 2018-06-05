@@ -70,5 +70,11 @@
 }
 
 .content {
-    min-height: 50px;
+  min-height: 50px;
+}
+
+#dialog {
+  width: 800px;
+  display: block;
+  position: sticky;
 }
