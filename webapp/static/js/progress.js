@@ -1,33 +1,5 @@
 $(document).ready(function() {
-  $.post('/post/hanzi/getAll', function(knownHanzi) {
-    $.post('/post/file/getLevels', function(hanziLevelsRaw) {
-      const hanziLevels = hanziLevelsRaw.trim().split('\n');
-      let level = 0;
-      for(let i=0; i<hanziLevels.length; i++){
-        const element = $('<tr></tr>');
-        if(hanziLevels[i].match(/\p{UIdeo}/u) !== null){
-          level++;
-          element.append('<td style="text-align: right;">{0}</td>'.format(level));
-          const td = $('<td></td>');
-          const hanziInLevel = hanziLevels[i].split("");
-          for(let j=0; j<hanziInLevel.length; j++){
-            let hanziClass;
-            if(knownHanzi.indexOf(hanziInLevel[j]) !== -1){
-              hanziClass = "knownHanzi";
-            } else {
-              hanziClass = "notKnownHanzi";
-            }
-            td.append('<div class="hanzi {1}">{0}</div>'.format(hanziInLevel[j], hanziClass));
-          }
-          element.append(td);
-          element.addClass('entry');
-        } else {
-          element.append('<td style="padding-left: 50px;" colspan="2">{0}</td>'.format(hanziLevels[i]));
-        }
-        $('.hanziShowcase').append(element);
-      }
-    });
-  });
+  loader();
 
   $.contextMenu({
     selector: ".entry",
@@ -93,4 +65,65 @@ function getPreviousLevelsHanzi(context) {
   });
 
   return hanzi;
+}
+
+function getRemainingHanzi(knownHanzi){
+  let allHanzi = "";
+  $('.entry').each(function(index, el) {
+    allHanzi += $('.knownHanzi, .notKnownHanzi', el).text();
+  });
+
+  let remainingHanzi = [];
+  for(let i=0; i<knownHanzi.length; i++){
+    if(allHanzi.indexOf(knownHanzi[i]) === -1){
+      remainingHanzi.push(knownHanzi[i]);
+    }
+  }
+  return remainingHanzi;
+}
+
+async function loader(){
+  $.post('/post/hanzi/getAll', function(knownHanzi) {
+    $.post('/post/file/getLevels', function(hanziLevelsRaw) {
+      const hanziLevels = hanziLevelsRaw.trim().split('\n');
+
+      let level = 0;
+      for(let i=0; i<hanziLevels.length; i++){
+        const element = $('<tr></tr>');
+
+        if(hanziLevels[i].match(/\p{UIdeo}/u) !== null){
+          level++;
+          element.append('<td>{0}</td>'.format(level));
+          const td = $('<td></td>');
+          const hanziInLevel = hanziLevels[i].split("");
+          for(let j=0; j<hanziInLevel.length; j++){
+            let hanziClass;
+            if(knownHanzi.indexOf(hanziInLevel[j]) !== -1){
+              hanziClass = "knownHanzi";
+            } else {
+              hanziClass = "notKnownHanzi";
+            }
+            td.append('<div class="hanzi {1}">{0}</div>'.format(hanziInLevel[j], hanziClass));
+          }
+          element.append(td);
+          element.addClass('entry');
+        } else {
+          element.append('<th colspan="2">{0}</th>'.format(hanziLevels[i]));
+        }
+        $('.hanziShowcase').append(element);
+      }
+
+      const element = $('<tr></tr>');
+      element.append('<td class="levelColumn">{0}</td>'.format('Extra'));
+      const td = $('<td class="hanziColumn"></td>');
+      const hanziInLevel = getRemainingHanzi(knownHanzi);
+      const hanziClass = "knownHanzi";
+      for(let j=0; j<hanziInLevel.length; j++){
+        td.append('<div class="hanzi {1}">{0}</div>'.format(hanziInLevel[j], hanziClass));
+      }
+      element.append(td);
+      element.addClass('entry');
+      $('.hanziShowcase').append(element);
+    });
+  });
 }
