@@ -88,13 +88,17 @@ async function loader(){
       const hanziLevels = hanziLevelsRaw.trim().split('\n');
 
       let level = 0;
+      const maxLevelDisplayed = 60;
       for(let i=0; i<hanziLevels.length; i++){
+        if(level >= maxLevelDisplayed - 1){
+          break;
+        }
         const element = $('<tr></tr>');
 
         if(hanziLevels[i].match(/\p{UIdeo}/u) !== null){
           level++;
-          element.append('<td>{0}</td>'.format(level));
-          const td = $('<td></td>');
+          element.append('<td class="levelColumn">{0}</td>'.format(level));
+          const td = $('<td class="hanziColumn"></td>');
           const hanziInLevel = hanziLevels[i].split("");
           for(let j=0; j<hanziInLevel.length; j++){
             let hanziClass;
@@ -113,9 +117,10 @@ async function loader(){
         $('.hanziShowcase').append(element);
       }
 
+      $('.hanziShowcase').append('<th colspan="2">{0}</th>'.format('Extra'));
+
       const element = $('<tr></tr>');
-      element.append('<td class="levelColumn">{0}</td>'.format('Extra'));
-      const td = $('<td class="hanziColumn"></td>');
+      const td = $('<td class="hanziColumn extraHanzi" colspan="2"></td>');
       const hanziInLevel = getRemainingHanzi(knownHanzi);
       const hanziClass = "knownHanzi";
       for(let j=0; j<hanziInLevel.length; j++){

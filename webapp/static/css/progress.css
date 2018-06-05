@@ -10,6 +10,10 @@
   display: inline;
 }
 
+.extraHanzi {
+  padding-left: 50px;
+}
+
 .hanziShowcase {
   width: 100%;
   table-layout: fixed;
@@ -26,7 +30,7 @@
   vertical-align: top;
 }
 
-.hanziShowcase td:first-child {
+.hanziShowcase .levelColumn {
   text-align: right;
 }
 
