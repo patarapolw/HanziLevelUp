@@ -40,3 +40,9 @@ def vocab_to_sentences(vocab):
         sentences = list(jukuu(vocab))
 
     return sentences
+
+
+def sentence_to_vocab(sentence):
+    for vocab in jieba.cut_for_search(sentence):
+        if regex.match(r'[\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]', vocab):
+            yield vocab

@@ -68,7 +68,7 @@ function setDeleteSentenceListener(){
 
 function loadHanzi(){
   $.post('/post/hanzi/fromSentence', function(data, textStatus, xhr) {
-    Cookies.set('allHanzi', data);
+    sessionStorage.setItem('allHanzi', data);
     window.location.href = '/viewHanzi';
   });
 }

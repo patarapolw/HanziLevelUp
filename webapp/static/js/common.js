@@ -23,6 +23,15 @@ function stripHtml(html){
    return doc.body.textContent || "";
 }
 
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
+
 function isOverlap(el0, el1) {
   var elY0 = (el0.offset.top < el1.offset.top)? el0 : el1;
   var elY1 = (el0 != elY0)? el0 : el1;
@@ -64,39 +73,52 @@ function createAquarium(itemType, allItems){
 
     let currentItem = $('#' + allItems[i][0]);
     let preferredWidth = currentItem.width();
+    let currentCoordinate;
+    let doLoop = true;
 
-    currentItem.css({
-      'left': Math.random()*$showcaseWidth,
-      'top': Math.random()*$showcaseHeight
-    });
+    while (doLoop) {
+      doLoop = false;
+      // console.log('Placing item:', allItems[i][1]);
 
-    if(currentItem.width() < preferredWidth){
-      failedObject.push(currentItem.attr('id'));
-      currentItem.remove();
-      continue;
+      currentItem.css({
+        'left': Math.random()*$showcaseWidth,
+        'top': Math.random()*$showcaseHeight
+      });
+
+      if(currentItem.width() < preferredWidth){
+        console.log(currentItem.width(), preferredWidth);
+        doLoop = true;
+        continue;
+      }
+
+      currentItem.data('offset', currentItem.offset());
+      currentItem.data('dimension', {
+        height: currentItem.height(),
+        width: preferredWidth
+      })
+
+      currentCoordinate = {
+        offset: currentItem.data('offset'),
+        height: currentItem.height(),
+        width: currentItem.width()
+      };
+
+      if(currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
+          currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
+        doLoop = true;
+        continue;
+      }
     }
 
-    currentItem.data('offset', currentItem.offset());
-    currentItem.data('dimension', {
-      height: currentItem.height(),
-      width: preferredWidth
-    })
-
-    let currentCoordinate = {
-      offset: currentItem.data('offset'),
-      height: currentItem.height(),
-      width: currentItem.width()
-    };
-
-    if(usedCoordinate.some(el => isOverlap(currentCoordinate, el)) ||
-        currentCoordinate.offset.left < showcaseCoordinate.offset.left ||
-        currentCoordinate.offset.top + currentCoordinate.height > showcaseCoordinate.offset.top + showcaseCoordinate.height){
+    if(usedCoordinate.some(el => isOverlap(currentCoordinate, el))){
       failedObject.push(currentItem.attr('id'));
       currentItem.remove();
     } else {
       usedCoordinate.push(currentCoordinate);
     }
   }
+
+  console.log('Items not shown:', failedObject);
 
   $('.floating').mouseenter(function(){
     const $this = $(this);
@@ -222,7 +244,7 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         name: "Learn Hanzi in this item",
         visible: true,
         callback: function(key, opt){
-          Cookies.set('allHanzi', $trigger.children(childrenType).text());
+          sessionStorage.setItem('allHanzi', $trigger.children(childrenType).text());
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
         }
@@ -251,7 +273,7 @@ async function loadVocabFromItem(itemType, item){
     allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
   }
 
-  Cookies.set('allVocab', allVocab);
+  sessionStorage.setObject('allVocab', allVocab);
 }
 
 function setCharacterHoverListener(){
@@ -288,7 +310,7 @@ function setCharacterHoverListener(){
       viewHanzi: {
         name: 'View Hanzi info',
         callback: function(key, opt){
-          Cookies.set('allHanzi', $(this).text());
+          sessionStorage.setItem('allHanzi', $(this).text());
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
         }

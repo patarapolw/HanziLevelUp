@@ -1,7 +1,9 @@
-let vocabList = JSON.parse(Cookies.get('allVocab') || "[]");
+let vocabList = sessionStorage.getObject('allVocab') || [];
 let vocabNumber = 0;
 let vocabInfoArray;
 let previousVocab = "";
+
+console.log(vocabList);
 
 $(document).ready(function() {
   initVocab();

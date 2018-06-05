@@ -12,7 +12,7 @@ $(document).ready(function() {
           if(allHanzi === ""){
             alert('All Hanzi in this level are learnt.');
           } else {
-            Cookies.set('allHanzi', allHanzi);
+            sessionStorage.setItem('allHanzi', allHanzi);
             window.location.href = "/viewHanzi";
           }
         }
@@ -25,7 +25,7 @@ $(document).ready(function() {
           if(allHanzi === ""){
             alert('Please learn new Hanzi first.');
           } else {
-            Cookies.set('allHanzi', allHanzi);
+            sessionStorage.setItem('allHanzi', allHanzi);
             window.location.href = "/viewHanzi";
           }
         }
@@ -39,8 +39,8 @@ $(document).ready(function() {
           if(currentLevelHanzi === ""){
             alert('Please learn new Hanzi first.');
           } else {
-            Cookies.set('currentLevelHanzi', currentLevelHanzi);
-            Cookies.set('previousLevelsHanzi', previousLevelsHanzi);
+            sessionStorage.setItem('currentLevelHanzi', currentLevelHanzi);
+            sessionStorage.setItem('previousLevelsHanzi', previousLevelsHanzi);
             window.location.href = "/viewLevel";
           }
         }

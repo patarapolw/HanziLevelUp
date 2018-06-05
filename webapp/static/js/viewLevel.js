@@ -3,8 +3,8 @@ $(document).ready(function() {
 });
 
 async function itemLoader(){
-  const currentLevelHanzi = Cookies.get('currentLevelHanzi') || "";
-  const previousLevelsHanzi = Cookies.get('previousLevelsHanzi') || "";
+  const currentLevelHanzi = sessionStorage.getItem('currentLevelHanzi') || "";
+  const previousLevelsHanzi = sessionStorage.getItem('previousLevelsHanzi') || "";
   const hanziJson = {
     currentLevelHanzi: currentLevelHanzi,
     previousLevelsHanzi: previousLevelsHanzi

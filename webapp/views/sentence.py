@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import requests
 
 from flask import request, jsonify
 

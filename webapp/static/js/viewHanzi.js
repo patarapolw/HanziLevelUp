@@ -1,4 +1,4 @@
-let charList = Cookies.get('allHanzi') || "";
+let charList = sessionStorage.getItem('allHanzi') || "";
 let charNumber = 0;
 
 $(document).ready(function() {
