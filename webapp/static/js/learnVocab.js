@@ -58,7 +58,7 @@ function setInputBoxListener(){
 }
 
 function setDeleteVocabListener(){
-  $('.deleter').click(function(){
+  $('.deleter').off('click').click(function(){
     $.post('/post/vocab/delete', { id: $(this).parent().attr('id') });
     $(this).parent().remove();
 

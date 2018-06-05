@@ -85,11 +85,11 @@ async function loadVocabInfo(){
     }
   });
 
-  $('#simplified > div').click(function(event) {
+  $('#simplified > div').off('click').click(function(event) {
     speak($(this).text());
   });
 
-  $('#traditional > div').click(function(event) {
+  $('#traditional > div').off('click').click(function(event) {
     speak($(this).text());
   });
 

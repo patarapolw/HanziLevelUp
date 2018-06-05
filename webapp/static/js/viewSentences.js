@@ -58,7 +58,7 @@ function setInputBoxListener(){
 }
 
 function setDeleteSentenceListener(){
-  $('.deleter').click(function(){
+  $('.deleter').off('click').click(function(){
     $.post('/post/sentence/delete', { id: $(this).parent().attr('id') });
     $(this).parent().remove();
 
