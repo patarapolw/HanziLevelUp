@@ -13,6 +13,7 @@ $(document).ready(function() {
             alert('All Hanzi in this level are learnt.');
           } else {
             sessionStorage.setItem('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanziNumber', 0);
             window.location.href = "/viewHanzi";
           }
         }
@@ -26,6 +27,7 @@ $(document).ready(function() {
             alert('Please learn new Hanzi first.');
           } else {
             sessionStorage.setItem('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanziNumber', 0);
             window.location.href = "/viewHanzi";
           }
         }
