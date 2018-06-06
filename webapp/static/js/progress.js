@@ -12,7 +12,7 @@ $(document).ready(function() {
           if(allHanzi === ""){
             alert('All Hanzi in this level are learnt.');
           } else {
-            sessionStorage.setItem('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanzi', allHanzi);
             sessionStorage.setObject('allHanziNumber', 0);
             window.location.href = "/viewHanzi";
           }
@@ -26,7 +26,7 @@ $(document).ready(function() {
           if(allHanzi === ""){
             alert('Please learn new Hanzi first.');
           } else {
-            sessionStorage.setItem('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanzi', allHanzi);
             sessionStorage.setObject('allHanziNumber', 0);
             window.location.href = "/viewHanzi";
           }
@@ -41,8 +41,8 @@ $(document).ready(function() {
           if(currentLevelHanzi === ""){
             alert('Please learn new Hanzi first.');
           } else {
-            sessionStorage.setItem('currentLevelHanzi', currentLevelHanzi);
-            sessionStorage.setItem('previousLevelsHanzi', previousLevelsHanzi);
+            sessionStorage.setObject('currentLevelHanzi', currentLevelHanzi);
+            sessionStorage.setObject('previousLevelsHanzi', previousLevelsHanzi);
             window.location.href = "/viewLevel";
           }
         }
@@ -57,7 +57,7 @@ function getCurrentLevelHanzi(selector, context) {
     hanzi += $(el).text();
   });
 
-  return hanzi;
+  return hanzi.split('');
 }
 
 function getPreviousLevelsHanzi(context) {
@@ -66,7 +66,7 @@ function getPreviousLevelsHanzi(context) {
     hanzi += $('.knownHanzi', el).text();
   });
 
-  return hanzi;
+  return hanzi.split('');
 }
 
 function getRemainingHanzi(knownHanzi){

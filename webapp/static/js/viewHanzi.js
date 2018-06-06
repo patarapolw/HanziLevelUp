@@ -1,4 +1,4 @@
-let charList = sessionStorage.getItem('allHanzi') || "";
+let charList = sessionStorage.getObject('allHanzi') || [];
 let charNumber = sessionStorage.getObject('allHanziNumber') || 0;
 
 $(document).ready(function() {
@@ -6,21 +6,11 @@ $(document).ready(function() {
 
   $("#sentence").keypress(function(event) {
     if (event.which == 13) {
-      charList = $('#sentence').val();
+      charList = $('#sentence').val().match(/[^\d]|(\d+)/g);
       charNumber = 0;
       renderChar();
     }
   });
-
-  $(document).ajaxSend(function( event, xhr, settings ){
-    if ( settings.url === "/post/hanzi/getHyperradicals" ){
-      $('.loading-container').show();
-    }
-  }).ajaxComplete(function( event, xhr, settings ){
-    if ( settings.url === "/post/hanzi/getHyperradicals" ){
-      $('.loading-container').hide();
-    }
-  })
 
   $('#vocab').contextMenu({
     selector: ".entry",
@@ -35,6 +25,10 @@ $(document).ready(function() {
       return contextMenuBuilder($trigger, e, 'sentence', 'a')
     }
   });
+
+  setCharacterHoverListener($('#compositions'));
+  setCharacterHoverListener($('#supercompositions'));
+  setCharacterHoverListener($('#variants'));
 });
 
 function previousChar(){
@@ -53,29 +47,30 @@ function nextChar(){
 
 function renderChar(){
   const currentChar = charList[charNumber];
-  let charToPost = currentChar;
 
-  if(!isNaN(parseInt(charList))){
-    $('#character').html('<div class="number">' + charList + '</div>');
-    charToPost = charList;
+  if(isNaN(parseInt(currentChar))){
+    $('#character').html(currentChar)
   } else {
-    charList = charList.replace(/[^\p{UIdeo}]/u, '');
-
-    $('#character').text(currentChar);
-
-    if(charNumber > 0){
-      $('#previousChar').removeAttr('disabled');
-    } else {
-      $('#previousChar').attr('disabled', true);
-    }
-    if(charNumber < charList.length - 1){
-      $('#nextChar').removeAttr('disabled');
-    } else {
-      $('#nextChar').attr('disabled', true);
-    }
+    $('#character').html('<div class="big-number">{0}</div>'.format(currentChar));
+    $('.big-number').position({
+      my: 'center bottom',
+      at: 'center bottom-30',
+      of: '.big-character'
+    });
   }
 
-  $.post('/post/hanzi/getInfo', {character: charToPost}, function(content) {
+  if(charNumber > 0){
+    $('#previousChar').removeAttr('disabled');
+  } else {
+    $('#previousChar').attr('disabled', true);
+  }
+  if(charNumber < charList.length - 1){
+    $('#nextChar').removeAttr('disabled');
+  } else {
+    $('#nextChar').attr('disabled', true);
+  }
+
+  $.post('/post/hanzi/getInfo', {character: currentChar}, function(content) {
     renderContent('#compositions', content.compositions);
     renderContent('#supercompositions', content.supercompositions);
     renderContent('#variants', content.variants);
@@ -90,11 +85,9 @@ function renderChar(){
           content.vocab[i][3],
           content.vocab[i][1].addSlashes()));
     }
-
-    setCharacterHoverListener();
   });
 
-  $.post('/post/hanzi/getSentences', {character: charToPost}, function(content) {
+  $.post('/post/hanzi/getSentences', {character: currentChar}, function(content) {
     const $sentences = $('#sentences');
     $sentences.text('');
     for(let i=0; i<content.sentences.length; i++){
@@ -104,8 +97,6 @@ function renderChar(){
           content.sentences[i][1],
           stripHtml(content.sentences[i][0]).addSlashes()));
     }
-
-    setCharacterHoverListener();
   });
 
   $('#more-sentences').off('click').click(function(event) {

@@ -126,24 +126,29 @@ async function createAquarium(itemType, allItems){
 
       $this.stop(true);
       if(offShowcase($this, $showcase)){
+        console.log('removing');
+        $this.addClass('remove');
         $this.remove();
+        console.log($this, 'removed');
       }
     });
 
-    const $this = $(this);
-    const hoverElement = $('<div class="hoverElement">');
+    if($('.hoverElement').length === 0){
+      const $this = $(this);
+      const hoverElement = $('<div class="hoverElement">');
 
-    hoverElement.appendTo('body');
-    hoverElement.append($this.clone());
+      hoverElement.appendTo('body');
+      hoverElement.append($this.clone());
 
-    const $hoverFloating = hoverElement.children('.floating');
+      const $hoverFloating = hoverElement.children('.floating');
 
-    $hoverFloating.position({
-      my: 'center',
-      at: 'center',
-      of: $this,
-      collision: 'fit'
-    });
+      $hoverFloating.position({
+        my: 'center',
+        at: 'center',
+        of: $this,
+        collision: 'fit'
+      });
+    }
   });
 
   $('body').on('mouseleave', '.hoverElement', function(event) {
@@ -263,35 +268,43 @@ async function loadVocabFromItem(itemType, item){
   localStorage.setObject('allVocab', allVocab);
 }
 
-function setCharacterHoverListener(){
-  $('.character, .number').mouseenter(function(){
-    const $this = $(this);
-    const hoverElement = $('<div class="hoverElement">');
+function setCharacterHoverListener($showPanel){
+  $showPanel.on('mouseenter', '.character, .number', function(){
+    if($('.hoverElement').length === 0){
+      const $this = $(this);
+      const hoverElement = $('<div class="hoverElement">');
 
-    hoverElement.appendTo('#showpanel');
-    hoverElement.append($this.clone());
-    hoverElement.position({
-      my: 'center',
-      at: 'center',
-      of: $this
-    });
-
-    hoverElement.mouseleave(function(event) {
-      if(!hoverElement.hasClass('context-menu-active')){
-        hoverElement.remove();
-      }
-    });
+      hoverElement.appendTo($showPanel);
+      hoverElement.append($this.clone());
+      hoverElement.position({
+        my: 'center',
+        at: 'center',
+        of: $this
+      });
+    }
   });
 
-  $('#showpanel').contextMenu({
+  $showPanel.on('mouseleave', '.hoverElement', function() {
+    const hoverElement = $(this);
+
+    if(!hoverElement.hasClass('context-menu-active')){
+      hoverElement.remove();
+    }
+  });
+
+  $showPanel.contextMenu({
     selector: '.hoverElement',
     items: {
       viewHanzi: {
         name: 'View Hanzi info',
         callback: function(key, opt){
-          const allHanzi = $('#showpanel').text();
+          let allHanzi = [];
+          $showPanel.children('div').each(function(index, el) {
+            allHanzi.push($(el).text());
+          });
+          allHanzi.pop();
 
-          sessionStorage.setItem('allHanzi', allHanzi);
+          sessionStorage.setObject('allHanzi', allHanzi);
           sessionStorage.setObject('allHanziNumber', allHanzi.indexOf($(this).text()));
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
@@ -300,7 +313,7 @@ function setCharacterHoverListener(){
     },
     events: {
       hide: function(options){
-        $('.hoverElement').remove();
+        $(this).remove();
         return true;
       }
     }
@@ -311,32 +324,49 @@ function doMarquee($item, $container){
   $item.addClass('marquee');
 
   const marqueeDistance = $container.width();
-  const speed = marqueeDistance / 1280 * 10000 * 5;
+  const speed = 50000;
   const marqueeStart = $item.position().left;
+  const itemWidth = $item.width();
 
-  const $clone = $item.clone();
-  $container.append($clone);
-  $clone
-    // .addClass('clone')
-    .css('left', marqueeStart + marqueeDistance);
-
-  function scroll($obj, start){
-    const marqueeEnd = start - marqueeDistance;
-
-    if($obj.position().left <= marqueeEnd){
-      $obj.css('left', start);
-      scroll($obj, start);
-    } else {
-      $obj.animate({
-        left: marqueeEnd
-      }, speed, 'linear', function(){
-        scroll($obj, start);
-      });
-    }
+  function scroll($obj){
+    $obj.animate({
+      left: marqueeStart - marqueeDistance - itemWidth
+    }, speed, 'linear', function(){
+      $obj.css('left', marqueeStart + marqueeDistance);
+      scroll($obj);
+    });
   }
 
-  scroll($item, marqueeStart);
-  scroll($clone, marqueeStart + marqueeDistance);
+  $item.animate({
+    left: marqueeStart - marqueeDistance - itemWidth
+  }, speed * (marqueeDistance + itemWidth) / (2 * marqueeDistance + itemWidth), 'linear', function(){
+    $item.css('left', marqueeStart + marqueeDistance);
+    scroll($item);
+  });
+
+  if(!marqueeCloned($item)){
+    const $clone = $item.clone().data('itemId', $item.data('itemId'));
+    $container.append($clone);
+    $clone.css('left', marqueeStart + marqueeDistance);
+    scroll($clone);
+  }
+}
+
+function marqueeCloned($item){
+  let clones = [];
+  const itemId = $item.data('itemId');
+
+  $('.marquee').each(function(index, el) {
+    if($(this).data('itemId') === itemId){
+      clones.push(this);
+    }
+  });
+
+  if(clones.length >= 2){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function speak(item){

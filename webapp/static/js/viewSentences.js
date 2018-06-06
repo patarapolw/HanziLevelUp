@@ -63,7 +63,8 @@ function setInputBoxListener(){
 
 function loadHanzi(){
   $.post('/post/hanzi/fromSentence', function(data, textStatus, xhr) {
-    sessionStorage.setItem('allHanzi', data);
+    sessionStorage.setObject('allHanzi', data.split());
+    sessionStorage.setObject('allHanziNumber', 0);
     window.location.href = '/viewHanzi';
   });
 }

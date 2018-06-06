@@ -3,13 +3,14 @@ $(document).ready(function() {
 });
 
 async function itemLoader(){
-  const currentLevelHanzi = sessionStorage.getItem('currentLevelHanzi') || "";
-  const previousLevelsHanzi = sessionStorage.getItem('previousLevelsHanzi') || "";
+  const currentLevelHanzi = sessionStorage.getObject('currentLevelHanzi') || [];
+  const previousLevelsHanzi = sessionStorage.getObject('previousLevelsHanzi') || [];
   const hanziJson = {
-    currentLevelHanzi: currentLevelHanzi,
-    previousLevelsHanzi: previousLevelsHanzi
+    currentLevelHanzi: currentLevelHanzi.join(''),
+    previousLevelsHanzi: previousLevelsHanzi.join('')
   };
 
+  console.log(currentLevelHanzi, previousLevelsHanzi)
   loadHanziView(currentLevelHanzi);
 
   $.post('/post/vocab/getLevel', hanziJson, function(levelVocab) {
@@ -21,14 +22,14 @@ async function itemLoader(){
 }
 
 function loadHanziView(contentList){
-  const $showpanel = $("#showpanel");
+  const $showPanel = $("#showpanel");
 
-  $showpanel.text('');
+  $showPanel.text('');
   for(let i=0; i<contentList.length; i++){
-    $showpanel.append(
+    $showPanel.append(
       "<div class='character'>{0}</div> "
         .format(contentList[i]));
   }
 
-  setCharacterHoverListener();
+  setCharacterHoverListener($showPanel);
 }
