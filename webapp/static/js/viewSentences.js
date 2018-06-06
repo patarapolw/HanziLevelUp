@@ -6,6 +6,13 @@ const HTMLTemplate = '<div id="{0}" class="entry">'
 $(document).ready(function() {
   itemLoader();
   setInputBoxListener();
+
+  $('#recent-sentences').on('click', '.deleter', function(){
+    $.post('/post/sentence/delete', { id: $(this).parent().attr('id') });
+    $(this).parent().remove();
+
+    return false;
+  });
 });
 
 async function itemLoader(){
@@ -21,8 +28,6 @@ async function itemLoader(){
         recent_sentences[i][1]));
       recentSentencesId.push(recent_sentences[i][0]);
     }
-
-    setDeleteSentenceListener();
 
     $recent.contextMenu({
       selector: ".entry",
@@ -50,19 +55,9 @@ function setInputBoxListener(){
     if (event.which == 13 || event.keyCode == 13) {
       const sentence = $(this).val();
       $.post('/post/sentence/add', { item: sentence }, function(sentence_id){
-        $('#contents').prepend(HTMLTemplate.format(sentence_id, sentence.addSlashes(), sentence));
-        setDeleteSentenceListener();
+        $('#recent-sentences').prepend(HTMLTemplate.format(sentence_id, sentence.addSlashes(), sentence));
       });
     }
-  });
-}
-
-function setDeleteSentenceListener(){
-  $('.deleter').off('click').click(function(){
-    $.post('/post/sentence/delete', { id: $(this).parent().attr('id') });
-    $(this).parent().remove();
-
-    return false;
   });
 }
 

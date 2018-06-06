@@ -239,8 +239,10 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         name: "Learn vocab in this item",
         visible: true,
         callback: function(key, opt){
+          const win = window.open('about:blank', '_blank');
+
           loadVocabFromItem(itemType, $trigger.children(childrenType).text()).then(function(){
-            const win = window.open('/viewVocab', '_blank');
+            win.location.href = '/viewVocab';
             win.focus();
           });
         }
@@ -258,7 +260,7 @@ async function loadVocabFromItem(itemType, item){
     allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
   }
 
-  sessionStorage.setObject('allVocab', allVocab);
+  localStorage.setObject('allVocab', allVocab);
 }
 
 function setCharacterHoverListener(){

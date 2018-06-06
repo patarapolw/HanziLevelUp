@@ -6,6 +6,13 @@ const HTMLTemplate = '<div id="{0}" class="entry">'
 $(document).ready(function() {
   itemLoader();
   setInputBoxListener();
+
+  $('#recent-vocab').on('click', '.deleter', function(){
+    $.post('/post/vocab/delete', { id: $(this).parent().attr('id') });
+    $(this).parent().remove();
+
+    return false;
+  });
 });
 
 async function itemLoader(){
@@ -21,8 +28,6 @@ async function itemLoader(){
         recent_vocab[i][1]));
       recentVocabId.push(recent_vocab[i][0]);
     }
-
-    setDeleteVocabListener();
 
     $recent.contextMenu({
       selector: ".entry",
@@ -50,19 +55,9 @@ function setInputBoxListener(){
     if (event.which == 13 || event.keyCode == 13) {
       var item = $(this).val();
       $.post('/post/vocab/add', { item: item }, function(vocab_id){
-        $('#contents').prepend(HTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
-        setDeleteVocabListener();
+        $('#recent-vocab').prepend(HTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
       });
     }
-  });
-}
-
-function setDeleteVocabListener(){
-  $('.deleter').off('click').click(function(){
-    $.post('/post/vocab/delete', { id: $(this).parent().attr('id') });
-    $(this).parent().remove();
-
-    return false;
   });
 }
 

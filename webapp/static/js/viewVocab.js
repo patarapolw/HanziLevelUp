@@ -1,4 +1,4 @@
-let vocabList = sessionStorage.getObject('allVocab') || [];
+let vocabList = localStorage.getObject('allVocab') || [];
 let vocabNumber = 0;
 let vocabInfoArray;
 let previousVocab = "";
