@@ -1,5 +1,5 @@
 let charList = sessionStorage.getItem('allHanzi') || "";
-let charNumber = 0;
+let charNumber = sessionStorage.getObject('allHanziNumber') || 0;
 
 $(document).ready(function() {
   renderChar();

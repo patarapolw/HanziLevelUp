@@ -44,8 +44,8 @@ function isOverlap(el0, el1) {
   return (yInstersection && xInstersection);
 }
 
-function createAquarium(itemType, allItems){
-  const floatingHTMLTemplate = '<div id="{0}" class="floating">'
+async function createAquarium(itemType, allItems){
+  const floatingHTMLTemplate = '<div class="floating id-{0}">'
   + '<div onclick="speak(\'{1}\')">{2}</div>'
   + '</div>';
 
@@ -66,13 +66,15 @@ function createAquarium(itemType, allItems){
       break;
     }
 
-    $showcase.append(floatingHTMLTemplate.format(
-      allItems[i][0],
-      allItems[i][1].addSlashes(),
-      allItems[i][1]));
+    const currentItem = $(floatingHTMLTemplate.format(
+                            allItems[i][0],
+                            allItems[i][1].addSlashes(),
+                            allItems[i][1]))
+                          .data('itemId', allItems[i][0]);
 
-    let currentItem = $('#' + allItems[i][0]);
-    let preferredWidth = currentItem.width();
+    $showcase.append(currentItem);
+
+    const preferredWidth = currentItem.width();
     let currentCoordinate;
     let doLoop = true;
 
@@ -91,14 +93,8 @@ function createAquarium(itemType, allItems){
         continue;
       }
 
-      currentItem.data('offset', currentItem.offset());
-      currentItem.data('dimension', {
-        height: currentItem.height(),
-        width: preferredWidth
-      })
-
       currentCoordinate = {
-        offset: currentItem.data('offset'),
+        offset: currentItem.offset(),
         height: currentItem.height(),
         width: currentItem.width()
       };
@@ -111,7 +107,7 @@ function createAquarium(itemType, allItems){
     }
 
     if(usedCoordinate.some(el => isOverlap(currentCoordinate, el))){
-      failedObject.push(currentItem.attr('id'));
+      failedObject.push(currentItem.text());
       currentItem.remove();
     } else {
       usedCoordinate.push(currentCoordinate);
@@ -120,78 +116,67 @@ function createAquarium(itemType, allItems){
 
   console.log('Items not shown:', failedObject);
 
-  $('.floating').mouseenter(function(){
-    const $this = $(this);
-    const dimension = $this.data('dimension');
-    const ratioEnlarged = 2;
+  $showcase.children('.floating').each(function(index, el) {
+    doMarquee($(el), $showcase);
+  });
 
-    const tempElement = $this.clone();
-    tempElement.appendTo('body');
-    tempElement.css({
-      width: dimension.width,
-      height: dimension.height
+  $showcase.on('mouseenter', '.floating', function(){
+    $showcase.children('.floating').each(function(index, el) {
+      const $this = $(el);
+
+      $this.stop(true);
+      if(offShowcase($this, $showcase)){
+        $this.remove();
+      }
     });
 
-    if(tempElement.is(':offscreen')){
-      // Change this to animate if you want it animated.
-      $this.css({
-        'margin-left': -dimension.width * ratioEnlarged/2,
-        'margin-top': -dimension.height * ratioEnlarged/4,
-        'font-size': ratioEnlarged + 'em',
-        width: dimension.width * ratioEnlarged,
-        height: dimension.height * ratioEnlarged
-      });
-    } else {
-      $this.css({
-        'margin-left': -dimension.width * ratioEnlarged/4,
-        'margin-top': -dimension.height * ratioEnlarged/4,
-        'font-size': ratioEnlarged + 'em',
-        width: dimension.width * ratioEnlarged,
-        height: dimension.height * ratioEnlarged
-      });
-    }
-
-    tempElement.remove();
-  });
-
-  $('.floating').mouseleave(function(event) {
     const $this = $(this);
-    const dimension = $this.data('dimension');
+    const hoverElement = $('<div class="hoverElement">');
 
-    if(!$this.hasClass('context-menu-active')){
-      $this.css({
-        margin: 0,
-        'font-size': '1em',
-        width: dimension.width,
-        height: dimension.height
+    hoverElement.appendTo('body');
+    hoverElement.append($this.clone());
+
+    const $hoverFloating = hoverElement.children('.floating');
+
+    $hoverFloating.position({
+      my: 'center',
+      at: 'center',
+      of: $this,
+      collision: 'fit'
+    });
+  });
+
+  $('body').on('mouseleave', '.hoverElement', function(event) {
+    const hoverElement = $(this);
+
+    if(!hoverElement.hasClass('context-menu-active')){
+      hoverElement.remove();
+
+      $showcase.children('.floating').each(function(index, el) {
+        doMarquee($(el), $showcase);
       });
     }
   });
 
-  $showcase.contextMenu({
+  $('body').contextMenu({
     selector: '.floating',
     build: function($trigger, e){
       return contextMenuBuilder($trigger, e, itemType, 'div');
     },
     events: {
       hide: function(options){
-        const $this = $(this);
-        const dimension = $this.data('dimension');
+        $('.hoverElement').remove();
 
-        $this.css({
-          margin: 0,
-          'font-size': '1em',
-          width: dimension.width,
-          height: dimension.height
-        });
-        return true;
+        // $showcase.children('.floating').each(function(index, el) {
+        //   doMarquee($(el), $showcase);
+        // });
       }
     }
   });
 }
 
 function contextMenuBuilder($trigger, e, itemType, childrenType) {
-  const itemId = parseInt($trigger.attr('id')) || 1;
+  const itemId = parseInt($trigger.data('itemId')) || 1;
   const postJson = {
     item: $trigger.children(childrenType).text()
   };
@@ -245,6 +230,7 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         visible: true,
         callback: function(key, opt){
           sessionStorage.setItem('allHanzi', $trigger.children(childrenType).text());
+          sessionStorage.setObject('allHanziNumber', 0)
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
         }
@@ -253,9 +239,8 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         name: "Learn vocab in this item",
         visible: true,
         callback: function(key, opt){
-          const win = window.open('about:blank', '_blank');
           loadVocabFromItem(itemType, $trigger.children(childrenType).text()).then(function(){
-            win.location.href = '/viewVocab';
+            const win = window.open('/viewVocab', '_blank');
             win.focus();
           });
         }
@@ -296,21 +281,16 @@ function setCharacterHoverListener(){
     });
   });
 
-  $('.hoverElement').mouseleave(function(event) {
-    const hoverElement = $(this);
-
-    if(!hoverElement.hasClass('context-menu-active')){
-      hoverElement.remove();
-    }
-  });
-
   $('#showpanel').contextMenu({
     selector: '.hoverElement',
     items: {
       viewHanzi: {
         name: 'View Hanzi info',
         callback: function(key, opt){
-          sessionStorage.setItem('allHanzi', $(this).text());
+          const allHanzi = $('#showpanel').text();
+
+          sessionStorage.setItem('allHanzi', allHanzi);
+          sessionStorage.setObject('allHanziNumber', allHanzi.indexOf($(this).text()));
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
         }
@@ -325,17 +305,57 @@ function setCharacterHoverListener(){
   });
 }
 
+function doMarquee($item, $container){
+  $item.addClass('marquee');
+
+  const marqueeDistance = $container.width();
+  const speed = marqueeDistance / 1280 * 10000 * 5;
+  const marqueeStart = $item.position().left;
+
+  const $clone = $item.clone();
+  $container.append($clone);
+  $clone
+    // .addClass('clone')
+    .css('left', marqueeStart + marqueeDistance);
+
+  function scroll($obj, start){
+    const marqueeEnd = start - marqueeDistance;
+
+    if($obj.position().left <= marqueeEnd){
+      $obj.css('left', start);
+      scroll($obj, start);
+    } else {
+      $obj.animate({
+        left: marqueeEnd
+      }, speed, 'linear', function(){
+        scroll($obj, start);
+      });
+    }
+  }
+
+  scroll($item, marqueeStart);
+  scroll($clone, marqueeStart + marqueeDistance);
+}
+
 function speak(item){
   $.post('/post/speak', { item: item });
 }
 
-$(document).ready(function() {
-  jQuery.expr.filters.offscreen = function(el) {
-    var rect = el.getBoundingClientRect();
-    return (
-             (rect.x + rect.width) < 0
-               || (rect.y + rect.height) < 0
-               || (rect.x > window.innerWidth || rect.y > window.innerHeight)
-           );
-  };
-});
+jQuery.expr.filters.offscreen = function(el) {
+  var rect = el.getBoundingClientRect();
+  return (
+           (rect.x + rect.width) < 0
+             || (rect.y + rect.height) < 0
+             || (rect.x > window.innerWidth || rect.y > window.innerHeight)
+         );
+};
+
+function offShowcase($el, $showcase){
+  if($el.offset().left > $showcase.offset().left + $showcase.width()){
+    return true;
+  } else if ($el.offset().left + $el.width() < $showcase.offset().left) {
+    return true;
+  } else {
+    return false;
+  }
+}

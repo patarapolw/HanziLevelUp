@@ -1,25 +1,28 @@
 [id^="showcase"], .showcase {
   height: 500px;
   position: relative;
+  overflow: hidden;
 }
 
 .showcase {
   height: 400px;
 }
 
-.floating.context-menu-active {
+/* .floating.context-menu-active {
   z-index: 100;
-}
+} */
 
 .floating {
   position: absolute;
   font-size: 16px;
+  white-space: nowrap;
   background-color: white;
   z-index: 0;
 }
 
-.floating:hover {
+.hoverElement > .floating {
   z-index: 100;
+  font-size: 30px;
 }
 
 .entry.context-menu-active {
@@ -52,8 +55,9 @@
 }
 
 .hoverElement {
-  background-color: white;
   position: absolute;
+  z-index: 100;
+  background-color: white;
 }
 
 .hoverElement > .character {
