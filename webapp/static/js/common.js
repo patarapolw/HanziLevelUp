@@ -88,7 +88,6 @@ async function createAquarium(itemType, allItems){
       });
 
       if(currentItem.width() < preferredWidth){
-        console.log(currentItem.width(), preferredWidth);
         doLoop = true;
         continue;
       }
@@ -126,10 +125,7 @@ async function createAquarium(itemType, allItems){
 
       $this.stop(true);
       if(offShowcase($this, $showcase)){
-        console.log('removing');
-        $this.addClass('remove');
         $this.remove();
-        console.log($this, 'removed');
       }
     });
 
@@ -164,20 +160,61 @@ async function createAquarium(itemType, allItems){
   });
 
   $('body').contextMenu({
-    selector: '.floating',
+    selector: '.hoverElement',
     build: function($trigger, e){
       return contextMenuBuilder($trigger, e, itemType, 'div');
     },
     events: {
       hide: function(options){
-        $('.hoverElement').remove();
+        $(this).remove();
 
-        // $showcase.children('.floating').each(function(index, el) {
-        //   doMarquee($(el), $showcase);
-        // });
+        $showcase.children('.floating').each(function(index, el) {
+          doMarquee($(el), $showcase);
+        });
+
+        return true;
       }
     }
   });
+}
+
+function doMarquee($item, $container){
+  $item.addClass('marquee');
+
+  const marqueeDistance = $container.width();
+  const duration = 50000;
+  const marqueeStart = $item.position().left;
+  const itemWidth = $item.width();
+
+  function scroll($obj){
+    $obj.css('left', marqueeStart + (marqueeDistance + itemWidth));
+
+    $obj.animate({
+      left: marqueeStart - (marqueeDistance + itemWidth)
+    }, {
+      duration: duration,
+      easing: 'linear',
+      queue: false,
+      complete: function(){
+        scroll($obj);
+      }
+    });
+  }
+
+  $item.animate({
+    left: marqueeStart - (marqueeDistance + itemWidth)
+  }, {
+    duration: duration / 2,
+    easing: 'linear'
+  });
+
+  const $clone = $item.clone().data('itemId', $item.data('itemId'));
+  $container.append($clone);
+  scroll($clone);
+
+  setTimeout(function(){
+    scroll($item)
+  }, duration / 2);
 }
 
 function contextMenuBuilder($trigger, e, itemType, childrenType) {
@@ -318,55 +355,6 @@ function setCharacterHoverListener($showPanel){
       }
     }
   });
-}
-
-function doMarquee($item, $container){
-  $item.addClass('marquee');
-
-  const marqueeDistance = $container.width();
-  const speed = 50000;
-  const marqueeStart = $item.position().left;
-  const itemWidth = $item.width();
-
-  function scroll($obj){
-    $obj.animate({
-      left: marqueeStart - marqueeDistance - itemWidth
-    }, speed, 'linear', function(){
-      $obj.css('left', marqueeStart + marqueeDistance);
-      scroll($obj);
-    });
-  }
-
-  $item.animate({
-    left: marqueeStart - marqueeDistance - itemWidth
-  }, speed * (marqueeDistance + itemWidth) / (2 * marqueeDistance + itemWidth), 'linear', function(){
-    $item.css('left', marqueeStart + marqueeDistance);
-    scroll($item);
-  });
-
-  if(!marqueeCloned($item)){
-    const $clone = $item.clone().data('itemId', $item.data('itemId'));
-    $container.append($clone);
-    $clone.css('left', marqueeStart + marqueeDistance);
-    scroll($clone);
-  }
-}
-
-function marqueeCloned($item){
-  let clones = [];
-  const itemId = $item.data('itemId');
-
-  $('.marquee').each(function(index, el) {
-    if($(this).data('itemId') === itemId){
-      clones.push(this);
-    }
-  });
-
-  if(clones.length >= 2){
-    return true;
-  } else {
-    return false;
-  }
 }
 
 function speak(item){
