@@ -271,7 +271,7 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         name: "Learn Hanzi in this item",
         visible: true,
         callback: function(key, opt){
-          sessionStorage.setItem('allHanzi', $trigger.children(childrenType).text());
+          sessionStorage.setObject('allHanzi', $trigger.children(childrenType).text().split(''));
           sessionStorage.setObject('allHanziNumber', 0)
           const win = window.open('/viewHanzi', '_blank');
           win.focus();

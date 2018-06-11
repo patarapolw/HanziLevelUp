@@ -29,8 +29,8 @@ async function initVocab(){
 async function loadVocabInfo(){
   const currentVocab = vocabInfoArray[vocabNumber];
 
-  $('#traditional > div').text(currentVocab[0]);
-  $('#simplified > div').text(currentVocab[1]);
+  $('#traditional > div').first().text(currentVocab[0]);
+  $('#simplified > div').first().text(currentVocab[1]);
   $('#reading').text(currentVocab[2]);
   $('#meaning').text(currentVocab[3]);
 
@@ -111,3 +111,9 @@ function loadNext(){
     loadVocabInfo();
   }
 }
+
+$(document).ajaxSend(function( event, xhr, settings ){
+  $('.loading-container').show();
+}).ajaxComplete(function( event, xhr, settings ){
+  $('.loading-container').hide();
+});
