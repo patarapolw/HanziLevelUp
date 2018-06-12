@@ -55,15 +55,8 @@ function setInputBoxListener(){
     if (event.which == 13 || event.keyCode == 13) {
       var item = $(this).val();
       $.post('/post/vocab/add', { item: item }, function(vocab_id){
-        $('#recent-vocab').prepend(HTMLTemplate.format(vocab_id, vocab.addSlashes(), vocab));
+        $('#recent-vocab').prepend(HTMLTemplate.format(vocab_id, item.addSlashes(), item));
       });
     }
-  });
-}
-
-function loadHanzi(){
-  $.post('/post/hanzi/fromVocab', function(data, textStatus, xhr) {
-    sessionStorage.setItem('allHanzi', data);
-    window.location.href = '/viewHanzi';
   });
 }
