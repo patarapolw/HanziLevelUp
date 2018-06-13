@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}"/>
   {% block css %}{% endblock %}
 
-  <title>HanziLevelUp</title>
+  <title>{% block title %}{% endblock %} - HanziLevelUp</title>
 </head>
 <body>
 

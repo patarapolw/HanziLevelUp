@@ -92,7 +92,7 @@ async function loader(){
       let level = 0;
       const maxLevelDisplayed = 60;
       for(let i=0; i<hanziLevels.length; i++){
-        if(level >= maxLevelDisplayed - 1){
+        if(level >= maxLevelDisplayed){
           break;
         }
         const element = $('<tr></tr>');
