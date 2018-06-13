@@ -120,6 +120,7 @@ async function createAquarium(itemType, allItems){
   });
 
   $showcase.on('mouseenter', '.floating', function(){
+    let floatings = [];
     $showcase.children('.floating').each(function(index, el) {
       const $this = $(el);
 
@@ -128,6 +129,27 @@ async function createAquarium(itemType, allItems){
         $this.remove();
       }
     });
+
+    floatings = floatings.sort(function($a, $b){
+      const primary = parseInt($a.data('itemId')) - parseInt($b.data('itemId'));
+      if(primary !== 0){
+        return primary;
+      }
+      return secondary = $a.offset().left - $b.offset().left;
+    });
+
+    let toRemove = [];
+
+    for(let i=floatings.length-1; i>1; i--){
+      if(floatings[i].data('itemId') === floatings[i-1].data('itemId')){
+        toRemove.push(i);
+      }
+    }
+
+    for(let i=0; i<toRemove.length; i++){
+      floatings[i].remove();
+      floatings.splice(i);
+    }
 
     if($('.hoverElement').length === 0){
       const $this = $(this);
@@ -154,7 +176,10 @@ async function createAquarium(itemType, allItems){
       hoverElement.remove();
 
       $showcase.children('.floating').each(function(index, el) {
-        doMarquee($(el), $showcase);
+        const $this = $(el);
+        if(!$this.is(':animated')){
+          doMarquee($this, $showcase);
+        }
       });
     }
   });
@@ -267,8 +292,8 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
           $.post('/post/{0}/removeFromLearning'.format(itemType), postJson);
         }
       },
-      learnHanzi: {
-        name: "Learn Hanzi in this item",
+      viewHanzi: {
+        name: "View Hanzi in this item",
         visible: true,
         callback: function(key, opt){
           sessionStorage.setObject('allHanzi', $trigger.children(childrenType).text().split(''));
@@ -277,8 +302,8 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
           win.focus();
         }
       },
-      learnVocab: {
-        name: "Learn vocab in this item",
+      viewVocab: {
+        name: "View vocab in this item",
         visible: true,
         callback: function(key, opt){
           const win = window.open('about:blank', '_blank');
