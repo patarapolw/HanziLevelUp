@@ -1,7 +1,6 @@
-from datetime import datetime, timedelta
-
 from flask import request, jsonify
 
+from HanziLevelUp.sentence import get_last_day_sentences
 from webapp import app, db
 from webapp.databases import Sentence
 
@@ -17,13 +16,8 @@ def get_all_sentences():
 
 @app.route('/post/sentence/getRecent', methods=['POST'])
 def get_recent_sentences():
-    def last_days_entries():
-        for sentence in Sentence.query[::-1]:
-            if datetime.utcnow() - sentence.modified < timedelta(days=1):
-                yield [sentence.id, sentence.sentence]
-
     if request.method == 'POST':
-        entries = list(last_days_entries())
+        entries = list(get_last_day_sentences())
         if len(entries) < 10:
             entries = list(reversed([[sentence.id, sentence.sentence] for sentence in Sentence.query[-10:]]))
 

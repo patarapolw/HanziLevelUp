@@ -1,0 +1,34 @@
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+{% endblock %}
+
+{% block title %}Let's learn Chinese!{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <textarea type="text" id="itemInput" class="form-control" placeholder="Type or copy-and-paste your text here."></textarea>
+      </div>
+      <div class="row mt-3">
+        <button type="button" class="btn btn-success" name="type" value="sentence">Add to sentences</button>
+        <button type="button" class="btn btn-warning" name="type" value="vocab">Add to vocab</button>
+        <button type="button" class="btn btn-secondary" name="type" value="view">View only</button>
+      </div>
+      <div class="row mt-3">
+        <div id="recent-items" class="container recent"></div>
+      </div>
+    </div>
+
+    <div class="col showareaContainer">
+      <div class="container" id="itemShowarea">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/index.js' ) }}"></script>
+{% endblock %}

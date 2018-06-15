@@ -22,11 +22,12 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 ## Screenshots
 
 <img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/home.png">
-<img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/learnHanzi.png">
+<img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/learnSentence.png">
+<img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/viewHanzi.png">
 <img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/learnVocab.png">
+<img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/viewVocab.png">
 <img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/progress.png">
 <img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/reviewLevel.png">
-<img src="https://raw.githubusercontent.com/patarapolw/HanziLevelUp/master/screenshots/viewVocab.png">
 
 ## Related Projects
 

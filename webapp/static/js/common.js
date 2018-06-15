@@ -242,10 +242,20 @@ function doMarquee($item, $container){
   }, duration / 2);
 }
 
-function contextMenuBuilder($trigger, e, itemType, childrenType) {
+function contextMenuBuilder($trigger, e, itemType, dataOrSelector) {
   const itemId = parseInt($trigger.data('itemId')) || 1;
+  let data, childrenType;
+
+  if(typeof dataOrSelector == 'string' || dataOrSelector instanceof String){
+    data = $trigger.children(dataOrSelector).text();
+    childrenType = dataOrSelector
+  } else {
+    data = dataOrSelector.data;
+    childrenType = dataOrSelector.selector;
+  }
+
   const postJson = {
-    item: $trigger.children(childrenType).text()
+    item: data
   };
 
   async function loadMenu(){
@@ -278,6 +288,13 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
 
   return {
     items: {
+      speak: {
+        name: "Speak",
+        callback: function(key, opt){
+          $.post('/post/speak', { item: removeAscii(data) });
+          // return false;
+        }
+      },
       addToLearning: {
         name: "Add to learning",
         visible: false,
@@ -296,7 +313,7 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         name: "View Hanzi in this item",
         visible: true,
         callback: function(key, opt){
-          sessionStorage.setObject('allHanzi', $trigger.children(childrenType).text().split(''));
+          sessionStorage.setObject('allHanzi', data.replace(/\d/g, '').split(''));
           sessionStorage.setObject('allHanziNumber', 0)
           const win = window.open('/viewHanzi', '_blank');
           win.focus();
@@ -308,7 +325,7 @@ function contextMenuBuilder($trigger, e, itemType, childrenType) {
         callback: function(key, opt){
           const win = window.open('about:blank', '_blank');
 
-          loadVocabFromItem(itemType, $trigger.children(childrenType).text()).then(function(){
+          loadVocabFromItem(itemType, data).then(function(){
             win.location.href = '/viewVocab';
             win.focus();
           });
@@ -403,4 +420,30 @@ function offShowcase($el, $showcase){
   } else {
     return false;
   }
+}
+
+function hasHanzi(item){
+  return item.search(/[\u4E00-\u9FCC\u3400-\u4DB5\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\ud840-\ud868][\udc00-\udfff]|\ud869[\udc00-\uded6\udf00-\udfff]|[\ud86a-\ud86c][\udc00-\udfff]|\ud86d[\udc00-\udf34\udf40-\udfff]|\ud86e[\udc00-\udc1d]/) !== -1;
+}
+
+function removeAscii(item){
+  return item.replace(/[0-9A-Za-zāáǎàēéěèōóǒòīíǐìūúǔùǖǘǚǜ.]/g, '');
+}
+
+function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+}
+
+function clearSelection() {
+    if ( document.selection ) {
+        document.selection.empty();
+    } else if ( window.getSelection ) {
+        window.getSelection().removeAllRanges();
+    }
 }

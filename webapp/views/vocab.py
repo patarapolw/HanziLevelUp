@@ -1,10 +1,9 @@
-import jieba
-from datetime import datetime, timedelta
 import json
 
 from flask import request, jsonify
 
-from HanziLevelUp.vocab import get_all_vocab_plus, get_vocab_array_info, vocab_to_sentences, sentence_to_vocab
+from HanziLevelUp.vocab import (get_all_vocab_plus, get_vocab_array_info, vocab_to_sentences, sentence_to_vocab,
+                                get_last_day_vocab)
 from webapp import app, db
 from webapp.databases import Vocab
 
@@ -19,13 +18,8 @@ def get_all_vocab():
 
 @app.route('/post/vocab/getRecent', methods=['POST'])
 def get_recent_vocab():
-    def last_days_entries():
-        for vocab in Vocab.query[::-1]:
-            if datetime.utcnow() - vocab.modified < timedelta(days=1):
-                yield [vocab.id, vocab.vocab]
-
     if request.method == 'POST':
-        entries = list(last_days_entries())
+        entries = list(get_last_day_vocab())
         if len(entries) < 10:
             entries = list(reversed([[vocab.id, vocab.vocab] for vocab in Vocab.query[-10:]]))
 

@@ -1,5 +1,6 @@
 import jieba
 import regex
+from datetime import datetime, timedelta
 
 from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.sentence import SpoonFed, jukuu
@@ -46,3 +47,9 @@ def sentence_to_vocab(sentence):
     for vocab in jieba.cut_for_search(sentence):
         if regex.match(r'[\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]', vocab):
             yield vocab
+
+
+def get_last_day_vocab():
+    for vocab in Vocab.query[::-1]:
+        if datetime.utcnow() - vocab.modified < timedelta(days=1):
+            yield [vocab.id, vocab.vocab, vocab.modified, 'vocab']

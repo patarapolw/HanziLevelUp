@@ -33,6 +33,10 @@
   background-color: transparent;
 }
 
+.entry > div {
+  display: inline-block;
+}
+
 .entry:hover {
   background-color: lightblue;
 }
