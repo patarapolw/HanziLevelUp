@@ -247,7 +247,7 @@ function contextMenuBuilder($trigger, e, itemType, dataOrSelector) {
   let data, childrenType;
 
   if(typeof dataOrSelector == 'string' || dataOrSelector instanceof String){
-    data = $trigger.children(dataOrSelector).text();
+    data = $trigger.children(dataOrSelector).first().text();
     childrenType = dataOrSelector
   } else {
     data = dataOrSelector.data;
@@ -427,7 +427,7 @@ function hasHanzi(item){
 }
 
 function removeAscii(item){
-  return item.replace(/[0-9A-Za-zāáǎàēéěèōóǒòīíǐìūúǔùǖǘǚǜ.]/g, '');
+  return item.replace(/[0-9A-Za-zāáǎàēéěèōóǒòīíǐìūúǔùǖǘǚǜ. \n]/g, '');
 }
 
 function getSelectionText() {
@@ -445,5 +445,12 @@ function clearSelection() {
         document.selection.empty();
     } else if ( window.getSelection ) {
         window.getSelection().removeAllRanges();
+    }
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // eslint-disable-line no-param-reassign
     }
 }

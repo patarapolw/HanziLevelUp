@@ -1,10 +1,10 @@
 {% extends 'template.html' %}
 
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/clipboard.css') }}"/>
 {% endblock %}
 
-{% block title %}Let's learn Chinese!{% endblock %}
+{% block title %}Clipboard viewer{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -30,5 +30,5 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="{{ url_for('static', filename='js/index.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='js/clipboard.js' ) }}"></script>
 {% endblock %}

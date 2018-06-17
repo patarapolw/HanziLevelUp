@@ -66,6 +66,10 @@ $(document).ready(function() {
 async function itemLoader(){
   $.post('/post/item/getRecent', function(items) {
     const $recent = $('#recent-items');
+    let recent = {
+      vocab: [],
+      sentence: []
+    };
 
     for(let i=0; i<items.length; i++){
       const $item = $(HTMLTemplate.format(
@@ -76,7 +80,12 @@ async function itemLoader(){
       $item.append('<div class="flair {0} float-right">{0}</div>'.format(items[i][3]));
       $item.data('type', items[i][3]);
       $recent.append($item);
+
+      console.log(items[i][1]);
+      recent[items[i][3]].push(removeAscii(items[i][1]));
     }
+
+    showareaDefaultLoader(recent);
 
     $recent.contextMenu({
       selector: ".entry",
@@ -118,6 +127,7 @@ function setInputBoxListener(){
 
 async function viewItem(itemValue){
   $.post('/post/item/cut', { item: itemValue }, function(data, textStatus, xhr) {
+    console.log(data);
     const $showarea = $('#itemShowarea');
 
     $showarea.html('');
@@ -136,4 +146,27 @@ async function viewItem(itemValue){
     }
     $showarea.append($line);
   });
+}
+
+function showareaDefaultLoader(recent){
+  shuffleArray(recent.vocab);
+  shuffleArray(recent.sentence);
+
+  let output = 'Vocab: \n';
+  for(let i=0; i<recent.vocab.length; i++){
+    // if(i>=10){
+    //   break;
+    // }
+    output += '* {0}  '.format(recent.vocab[i]);
+  }
+
+  output += '\nSentences: \n';
+  for(let i=0; i<recent.sentence.length; i++){
+    // if(i>=10){
+    //   break;
+    // }
+    output += '* {0} \n'.format(recent.sentence[i]);
+  }
+
+  viewItem(output);
 }

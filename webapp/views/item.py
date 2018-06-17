@@ -1,5 +1,3 @@
-import html
-
 from flask import request, jsonify
 
 from HanziLevelUp.sentence import get_last_day_sentences, cut_sentence
@@ -28,6 +26,8 @@ def get_recent_items():
 @app.route('/post/item/cut', methods=['POST'])
 def cut_item():
     if request.method == 'POST':
-        return jsonify(list(cut_sentence(html.escape(request.form.get('item')))))
+        item = request.form.get('item')
+
+        return jsonify(list(cut_sentence(item)))
 
     return '0'

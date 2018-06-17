@@ -25,9 +25,9 @@ button {
 }
 
 .flair.vocab {
-  background-color: lightgreen;
+  background-color: orange;
 }
 
 .flair.sentence {
-  background-color: orange;
+  background-color: lightgreen;
 }

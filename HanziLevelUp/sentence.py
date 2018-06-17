@@ -16,7 +16,7 @@ def cut_sentence(item):
             yield char
         else:
             sentence += char
-            if char in '。？！.?!':
+            if char in '。？！.?! ':
                 yield sentence
                 sentence = ''
     yield sentence
