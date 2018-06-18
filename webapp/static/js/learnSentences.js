@@ -1,6 +1,6 @@
 const HTMLTemplate = '<div id="{0}" class="entry">'
 + '<a class="float-left deleter" href="#">x</a> '
-+ '<div onclick="speak(\'{1}\')">{2}</div>'
++ '<div class="entry-content">{1}</div>'
 + '</div>';
 
 $(document).ready(function() {
@@ -10,9 +10,9 @@ $(document).ready(function() {
   $('#recent-sentences').on('click', '.deleter', function(){
     $.post('/post/sentence/delete', { id: $(this).parent().attr('id') });
     $(this).parent().remove();
-
-    return false;
-  });
+  }).on('click', '.entry-content', function(){
+    speak($(this).text());
+  })
 });
 
 async function itemLoader(){
@@ -24,7 +24,6 @@ async function itemLoader(){
     for(let i=0; i<recent_sentences.length; i++){
       $recent.append(HTMLTemplate.format(
         recent_sentences[i][0],
-        recent_sentences[i][1].addSlashes(),
         recent_sentences[i][1]));
       recentSentencesId.push(recent_sentences[i][0]);
     }
@@ -55,7 +54,7 @@ function setInputBoxListener(){
     if (event.which == 13 || event.keyCode == 13) {
       const sentence = $(this).val();
       $.post('/post/sentence/add', { item: sentence }, function(sentence_id){
-        $('#recent-sentences').prepend(HTMLTemplate.format(sentence_id, sentence.addSlashes(), sentence));
+        $('#recent-sentences').prepend(HTMLTemplate.format(sentence_id, sentence));
       });
     }
   });

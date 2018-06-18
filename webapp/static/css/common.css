@@ -31,19 +31,25 @@
 
 .entry {
   background-color: transparent;
-}
-
-.entry > div {
-  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .entry:hover {
   background-color: lightblue;
 }
 
+.entry-content {
+  display: inline-block;
+  text-overflow: ellipsis;
+  max-height: 3em;
+  white-space: normal;
+  width: calc(100% - 20px);
+}
+
 .deleter {
-  margin-left: 10px;
-  margin-right: 10px;
+  width: 20px;
+  margin: 0 auto;
 }
 
 .character {

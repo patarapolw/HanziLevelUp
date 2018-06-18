@@ -1,6 +1,6 @@
 const HTMLTemplate = '<div id="{0}" class="entry">'
 + '<a class="float-left deleter" href="#">x</a> '
-+ '<div class="speak">{1}</div>'
++ '<div class="entry-content">{1}</div>'
 + '</div>';
 
 $(document).ready(function() {
@@ -10,11 +10,7 @@ $(document).ready(function() {
   $('#recent-vocab').on('click', '.deleter', function(){
     $.post('/post/vocab/delete', { id: $(this).parent().attr('id') });
     $(this).parent().remove();
-
-    return false;
-  });
-
-  $('#recent-vocab').on('click', '.speak', function(){
+  }).on('click', '.entry-content', function(){
     $.post('/post/speak', { item: $(this).text() });
   })
 });

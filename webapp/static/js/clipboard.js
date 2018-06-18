@@ -1,6 +1,6 @@
 const HTMLTemplate = '<div id="{0}" class="entry {2}">'
 + '<a class="float-left deleter" href="#">x</a> '
-+ '<div class="speak">{1}</div>'
++ '<div class="entry-content">{1}</div>'
 + '</div>';
 
 $(document).ready(function() {
@@ -16,9 +16,7 @@ $(document).ready(function() {
 
     $.post('/post/{0}/delete'.format(params.type), params);
     $item.remove();
-  });
-
-  $('#recent-items').on('click', '.speak', function(){
+  }).on('click', '.entry-content', function(){
     $.post('/post/speak', { item: $(this).text() });
   })
 
@@ -77,11 +75,15 @@ async function itemLoader(){
         items[i][1],
         items[i][3]
       ));
-      $item.append('<div class="flair {0} float-right">{0}</div>'.format(items[i][3]));
+      const $flair = $('<div class="flair {0} float-right">{0}</div>'.format(items[i][3]));
+
+      $item.append($flair);
       $item.data('type', items[i][3]);
       $recent.append($item);
 
-      console.log(items[i][1]);
+      const width = $item.children('.entry-content').width() - $flair.width();
+      $item.children('.entry-content').width(width);
+      
       recent[items[i][3]].push(removeAscii(items[i][1]));
     }
 
