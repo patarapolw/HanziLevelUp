@@ -1,4 +1,4 @@
-import re
+import regex
 
 from CJKhyperradicals.dir import chinese_path
 
@@ -8,7 +8,7 @@ class Cedict:
         self.entries = set()
         with open(chinese_path('cedict_ts.u8')) as f:
             for row in f:
-                _ = re.match(r'([^ ]+) ([^ ]+) \[(.+)\] /(.+)/', row)
+                _ = regex.match(r'([^ ]+) ([^ ]+) \[(.+)\] /(.+)/', row)
                 if _ is not None:
                     # trad, simp, pinyin, english = _.groups()
                     self.entries.add(_.groups())
@@ -23,5 +23,7 @@ class Cedict:
 
     def search_vocab(self, vocab):
         for entry in self.entries:
-            if vocab in (entry[0], entry[1]):
+            if (vocab in (entry[0], entry[1])
+                    or vocab in regex.findall('[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}\W]+',
+                                              entry[3])):
                 yield entry

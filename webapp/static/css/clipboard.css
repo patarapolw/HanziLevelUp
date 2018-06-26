@@ -1,0 +1,32 @@
+.inline {
+  display: inline-block;
+}
+
+.showareaContainer {
+  height: 500px;
+  overflow-y: scroll;
+}
+
+#recent-items {
+  height: 350px;
+  overflow-y: scroll;
+}
+
+button {
+  margin-right: 10px;
+}
+
+.flair {
+  font-size: 10px;
+  vertical-align: middle;
+  margin-top: 3px;
+  border-radius: 2px;
+}
+
+.flair.vocab {
+  background-color: orange;
+}
+
+.flair.sentence {
+  background-color: lightgreen;
+}

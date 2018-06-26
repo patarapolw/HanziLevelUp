@@ -1,8 +1,10 @@
 {% extends 'template.html' %}
 
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/learnHanzi.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/viewHanzi.css') }}"/>
 {% endblock %}
+
+{% block title %}View Hanzi info{% endblock %}
 
 {% block content %}
   <div class="input-group">
@@ -29,15 +31,15 @@
       </div>
       <div style="text-align: center;">
         <div class="btn-group col-auto" role="group" aria-label="switchChar">
-          <button class="btn btn-secondary btn-default" id="previousChar" style="width: 100px;"
+          <button class="btn btn-info btn-default" id="previousChar" style="width: 100px;"
           disabled onclick="previousChar()">Previous</button>
-          <button class="btn btn-secondary btn-default" id="nextChar" style="width: 100px;"
+          <button class="btn btn-info btn-default" id="nextChar" style="width: 100px;"
           disabled onclick="nextChar()">Next</button>
         </div>
       </div>
     </div>
 
-    <div class="col-8" style="margin: 20px;">
+    <div class="col-8" style="margin: 20px;" id="showpanel">
       <div class="row">
         <h4>Compositions: </h4>
       </div>
@@ -58,10 +60,12 @@
         <h4>Sentences: </h4>
       </div>
       <div id="sentences" class="row content"></div>
+
+      <a id="more-sentences" href="#" class="float-right">Show more sentences.</a>
     </div>
   </div>
 {% endblock %}
 
 {% block javascript %}
-  <script src="{{ url_for('static', filename='js/learnHanzi.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='js/viewHanzi.js' ) }}"></script>
 {% endblock %}

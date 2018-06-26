@@ -11,6 +11,7 @@ requests = "*"
 "bs4" = "*"
 regex = "*"
 jieba = "*"
+pyopenssl = "*"
 
 [dev-packages]
 

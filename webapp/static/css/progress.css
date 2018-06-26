@@ -10,7 +10,33 @@
   display: inline;
 }
 
+.extraHanzi {
+  padding-left: 50px;
+}
+
+.hanziShowcase {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.hanziShowcase th {
+  padding-left: 50px;
+  text-align: left;
+}
+
 .hanziShowcase td {
   padding-right: 10px;
   padding-left: 10px;
+  vertical-align: top;
+}
+
+.hanziShowcase .levelColumn {
+  text-align: right;
+}
+
+.hanziShowcase .cola {
+  /* width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content; */
+  width: 5em;
 }

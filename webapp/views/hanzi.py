@@ -10,35 +10,46 @@ from CJKhyperradicals.decompose import Decompose
 from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.frequency import ChineseFrequency
 from CJKhyperradicals.variant import Variant
-from CJKhyperradicals.sentence import jukuu, SpoonFed
+
+from HanziLevelUp.vocab import vocab_to_sentences
 
 decompose = Decompose()
 variant = Variant()
 cedict = Cedict()
 sorter = ChineseFrequency()
-spoonfed = SpoonFed()
 
 
-@app.route('/getHyperradicals', methods=['POST'])
-def get_hyperradicals():
+@app.route('/post/hanzi/getInfo', methods=['POST'])
+def get_info():
     if request.method == 'POST':
         current_char = request.form.get('character')
-        sentences = list(spoonfed.get_sentence(current_char))[:10]
-        if len(sentences) == 0:
-            sentences = list(jukuu(current_char))
 
         return jsonify({
             'compositions': decompose.get_sub(current_char),
             'supercompositions': sorter.sort_char(decompose.get_super(current_char)),
             'variants': variant.get(current_char),
-            'vocab': sorter.sort_vocab([list(item) for item in cedict.search_hanzi(current_char)])[:10],
-            'sentences': sentences
+            'vocab': sorter.sort_vocab([list(item) for item in cedict.search_hanzi(current_char)])[:10]
         })
 
     return '0'
 
 
-@app.route('/getHanzi', methods=['POST'])
+@app.route('/post/hanzi/getSentences', methods=['POST'])
+def from_hanzi_get_sentences():
+    if request.method == 'POST':
+        current_char = request.form.get('character')
+
+        if not current_char.isdigit():
+            sentences = list(vocab_to_sentences(current_char))
+        else:
+            sentences = []
+
+        return jsonify({
+            'sentences': sentences
+        })
+
+
+@app.route('/post/hanzi/getAll', methods=['POST'])
 def get_hanzi():
     if request.method == 'POST':
         all_entries = ([sentence.sentence for sentence in Sentence.query] +
@@ -52,7 +63,7 @@ def get_hanzi():
     return '0'
 
 
-@app.route('/sentenceToHanzi', methods=['POST'])
+@app.route('/post/hanzi/fromSentence', methods=['POST'])
 def sentence_to_hanzi():
     def last_days_entries():
         for sentence in Sentence.query[::-1]:
@@ -74,7 +85,7 @@ def sentence_to_hanzi():
     return '0'
 
 
-@app.route('/vocabToHanzi', methods=['POST'])
+@app.route('/post/hanzi/fromVocab', methods=['POST'])
 def vocab_to_hanzi():
     def last_days_entries():
         for vocab in Vocab.query[::-1]:

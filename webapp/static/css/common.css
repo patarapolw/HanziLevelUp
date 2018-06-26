@@ -1,18 +1,28 @@
-#showcase {
+[id^="showcase"], .showcase {
   height: 500px;
   position: relative;
+  overflow: hidden;
 }
+
+.showcase {
+  height: 400px;
+}
+
+/* .floating.context-menu-active {
+  z-index: 100;
+} */
 
 .floating {
   position: absolute;
-  font-size: 1em;
+  font-size: 16px;
+  white-space: nowrap;
   background-color: white;
   z-index: 0;
 }
 
-.floating:hover {
-  font-size: 2.5em;
+.hoverElement > .floating {
   z-index: 100;
+  font-size: 30px;
 }
 
 .entry.context-menu-active {
@@ -21,13 +31,110 @@
 
 .entry {
   background-color: transparent;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .entry:hover {
   background-color: lightblue;
 }
 
+.entry-content {
+  display: inline-block;
+  text-overflow: ellipsis;
+  max-height: 3em;
+  white-space: normal;
+  width: calc(100% - 20px);
+}
+
 .deleter {
-  margin-left: 10px;
-  margin-right: 10px;
+  width: 20px;
+  margin: 0 auto;
+}
+
+.character {
+  font-size: 30px;
+  display: inline-block;
+}
+
+.number {
+  font-size: 20px;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  display: inline-block;
+}
+
+.hoverElement {
+  position: absolute;
+  z-index: 100;
+  background-color: white;
+}
+
+.hoverElement > .character {
+  font-size: 80px;
+}
+
+.hoverElement > .number {
+  font-size: 50px;
+}
+
+.recent {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.content {
+  min-height: 50px;
+}
+
+.loading-container {
+  display: none;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Animation keyframes - you need to add prefixes */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Loading animation container */
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+}
+
+/* Spinning circle (inner circle) */
+.loading .maskedCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 12px;
+  border: 3px solid gray;
+}
+
+/* Spinning circle mask */
+.loading .mask {
+  width: 12px;
+  height: 12px;
+  overflow: hidden;
+}
+
+/* Spinner */
+.loading .spinner {
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 26px;
+  height: 26px;
+  animation: spin 1s infinite linear;
+}
+
+.loading-container {
+  position: relative;
+  top: 1em;
 }

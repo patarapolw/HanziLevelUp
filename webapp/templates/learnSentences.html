@@ -1,8 +1,10 @@
 {% extends 'template.html' %}
 
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/learnSentences.css') }}"/>
 {% endblock %}
+
+{% block title %}Learn new sentences{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -11,20 +13,17 @@
         <input type="text" id="sentenceInput" class="form-control" placeholder="Type your sentence here." />
       </div>
       <div class="row mt-3">
-        <div id="contents" class="container"></div>
-      </div>
-      <div class="container">
-        <a class="float-right" href="#" onclick="loadHanzi()">Learn Hanzi</a>
+        <div id="recent-sentences" class="container recent"></div>
       </div>
     </div>
 
     <div class="col">
-      <div class="container border border-success" id="showcase">
+      <div class="container border border-success" id="showcase-sentence">
       </div>
     </div>
   </div>
 {% endblock %}
 
 {% block javascript %}
-  <script src="{{ url_for('static', filename='js/index.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='js/learnSentences.js' ) }}"></script>
 {% endblock %}

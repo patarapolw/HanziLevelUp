@@ -4,6 +4,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/learnVocab.css') }}"/>
 {% endblock %}
 
+{% block title %}Learn new vocab{% endblock %}
+
 {% block content %}
   <div class="row">
     <div class="col-sm-3">
@@ -11,15 +13,12 @@
         <input type="text" id="vocabInput" class="form-control" placeholder="Type your vocabulary here." />
       </div>
       <div class="row mt-3">
-        <div id="contents" class="container"></div>
-      </div>
-      <div class="container">
-        <a class="float-right" href="#" onclick="loadHanzi()">Learn Hanzi</a>
+        <div id="recent-vocab" class="container recent"></div>
       </div>
     </div>
 
     <div class="col">
-      <div class="container border border-success" id="showcase">
+      <div class="container border border-success" id="showcase-vocab">
       </div>
     </div>
   </div>

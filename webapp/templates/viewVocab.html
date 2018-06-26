@@ -1,0 +1,67 @@
+{% extends 'template.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/viewVocab.css') }}"/>
+{% endblock %}
+
+{% block title %}View vocab info{% endblock %}
+
+{% block content %}
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Type in vocab here."
+    id="input-vocab">
+  </div>
+
+  <div class="row">
+    <div class="col-md mt-3" id="simplified-container">
+      <div class="row">
+        <div id="simplified" class="vocab">
+          <div></div>
+          <div class="loading-container">
+            <div class="loading">
+              <!-- We make this div spin -->
+              <div class="spinner">
+                <!-- Mask of the quarter of circle -->
+                <div class="mask">
+                  <!-- Inner masked circle -->
+                  <div class="maskedCircle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row switch-button-container">
+        <div class="btn-group col-auto" role="group" aria-label="switch-button">
+          <button class="btn btn-info btn-default switch-button" id="previous-button" disabled onclick="loadPrev()">Previous</button>
+          <button class="btn btn-info btn-default switch-button" id="next-button" disabled onclick="loadNext()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-7" id="showpanel">
+      <div id="traditional-container" class="ml-3">
+        <div id="traditional" class="row vocab">
+          <div></div>
+        </div>
+      </div>
+      <div id="reading" class="row ml-3"></div>
+
+      <div class="row mt-3">
+        <h4>Meaning: </h4>
+      </div>
+      <div id="meaning" class="row content"></div>
+
+      <div class="row mt-3">
+        <h4>Sentences: </h4>
+      </div>
+      <div id="sentences" class="row content"></div>
+
+      <a id="more-sentences" href="#" class="float-right">Show more sentences.</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/viewVocab.js' ) }}"></script>
+{% endblock %}

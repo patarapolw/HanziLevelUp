@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.contextMenu.min.css') }}">
 
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}"/>
   {% block css %}{% endblock %}
 
-  <title>HanziLevelUp</title>
+  <title>{% block title %}{% endblock %} - HanziLevelUp</title>
 </head>
 <body>
 
@@ -29,22 +29,27 @@
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="hanziDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hanzi</a>
           <div class="dropdown-menu" aria-labelledby="hanziDropdownLink">
-            <a class="dropdown-item" href="/learnHanzi">Learn Hanzi</a>
-            <a class="dropdown-item disabled" href="#">Explore Hanzi</a>
+            <a class="dropdown-item" href="/viewHanzi">Hanzi viewer</a>
+            <a class="dropdown-item" href="/exploreHanzi" disabled>Explore Hanzi</a>
           </div>
         </div>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="vocabDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vocab</a>
           <div class="dropdown-menu" aria-labelledby="vocabDropdownLink">
-            <a class="dropdown-item" href="/learnVocab">Learn Vocab</a>
-            <a class="dropdown-item" href="/exploreVocab">Explore Vocab</a>
+            <a class="dropdown-item" href="/learnVocab">Learn new vocab</a>
+            <a class="dropdown-item" href="/viewVocab">Vocab viewer</a>
           </div>
         </div>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="sentenceDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sentences</a>
           <div class="dropdown-menu" aria-labelledby="sentenceDropdownLink">
-            <a class="dropdown-item" href="/learnSentences">Learn Sentences</a>
-            <a class="dropdown-item" href="/exploreSentences">Explore Sentences</a>
+            <a class="dropdown-item" href="/learnSentences">Learn new sentences</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="toolsDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tools</a>
+          <div class="dropdown-menu" aria-labelledby="toolsDropdownLink">
+            <a class="dropdown-item" href="/clipboard">Clipboard viewer</a>
           </div>
         </div>
         <a class="nav-item nav-link" href="/progress">Progress</a>
@@ -59,10 +64,9 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.0/src/js.cookie.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery.ui.position.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery.contextMenu.min.js') }}"></script>
 

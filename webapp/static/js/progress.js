@@ -1,17 +1,109 @@
 $(document).ready(function() {
-  $.post('/getHanzi', function(knownHanzi) {
-    $.post('/getLevels', function(hanziLevelsRaw) {
-      var hanziLevels = hanziLevelsRaw.trim().split('\n');
-      var level = 0;
-      for(var i=0; i<hanziLevels.length; i++){
-        var element = $('<tr></tr>');
+  loader();
+
+  $.contextMenu({
+    selector: ".entry",
+    items: {
+      learnNewHanzi: {
+        name: "Learn new Hanzi",
+        callback: function(key, opt){
+          const allHanzi = getCurrentLevelHanzi('.notKnownHanzi', this);
+
+          if(allHanzi === ""){
+            alert('All Hanzi in this level are learnt.');
+          } else {
+            sessionStorage.setObject('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanziNumber', 0);
+            window.location.href = "/viewHanzi";
+          }
+        }
+      },
+      reviewHanzi: {
+        name: "Review Hanzi",
+        callback: function(key, opt){
+          const allHanzi = getCurrentLevelHanzi('.knownHanzi', this);
+
+          if(allHanzi === ""){
+            alert('Please learn new Hanzi first.');
+          } else {
+            sessionStorage.setObject('allHanzi', allHanzi);
+            sessionStorage.setObject('allHanziNumber', 0);
+            window.location.href = "/viewHanzi";
+          }
+        }
+      },
+      reviewLevel: {
+        name: "Review Level",
+        callback: function(key, opt){
+          const currentLevelHanzi = getCurrentLevelHanzi('.knownHanzi', this);
+          const previousLevelsHanzi = getPreviousLevelsHanzi(this);
+
+          if(currentLevelHanzi === ""){
+            alert('Please learn new Hanzi first.');
+          } else {
+            sessionStorage.setObject('currentLevelHanzi', currentLevelHanzi);
+            sessionStorage.setObject('previousLevelsHanzi', previousLevelsHanzi);
+            window.location.href = "/viewLevel";
+          }
+        }
+      }
+    }
+  });
+});
+
+function getCurrentLevelHanzi(selector, context) {
+  let hanzi = "";
+  $(selector, context).each(function(index, el) {
+    hanzi += $(el).text();
+  });
+
+  return hanzi.split('');
+}
+
+function getPreviousLevelsHanzi(context) {
+  let hanzi = "";
+  $(context).prevAll().each(function(index, el) {
+    hanzi += $('.knownHanzi', el).text();
+  });
+
+  return hanzi.split('');
+}
+
+function getRemainingHanzi(knownHanzi){
+  let allHanzi = "";
+  $('.entry').each(function(index, el) {
+    allHanzi += $('.knownHanzi, .notKnownHanzi', el).text();
+  });
+
+  let remainingHanzi = [];
+  for(let i=0; i<knownHanzi.length; i++){
+    if(allHanzi.indexOf(knownHanzi[i]) === -1){
+      remainingHanzi.push(knownHanzi[i]);
+    }
+  }
+  return remainingHanzi;
+}
+
+async function loader(){
+  $.post('/post/hanzi/getAll', function(knownHanzi) {
+    $.post('/post/file/getLevels', function(hanziLevelsRaw) {
+      const hanziLevels = hanziLevelsRaw.trim().split('\n');
+
+      let level = 0;
+      const maxLevelDisplayed = 60;
+      for(let i=0; i<hanziLevels.length; i++){
+        if(level >= maxLevelDisplayed){
+          break;
+        }
+        const element = $('<tr></tr>');
+
         if(hanziLevels[i].match(/\p{UIdeo}/u) !== null){
           level++;
-          element.append('<td style="text-align: right;">{0}</td>'.format(level));
-          var td = $('<td></td>');
-          var hanziInLevel = hanziLevels[i].split("");
-          for(j=0; j<hanziInLevel.length; j++){
-            var hanziClass;
+          element.append('<td class="levelColumn">{0}</td>'.format(level));
+          const td = $('<td class="hanziColumn"></td>');
+          const hanziInLevel = hanziLevels[i].split("");
+          for(let j=0; j<hanziInLevel.length; j++){
+            let hanziClass;
             if(knownHanzi.indexOf(hanziInLevel[j]) !== -1){
               hanziClass = "knownHanzi";
             } else {
@@ -22,48 +114,23 @@ $(document).ready(function() {
           element.append(td);
           element.addClass('entry');
         } else {
-          element.append('<td style="padding-left: 50px;" colspan="2">{0}</td>'.format(hanziLevels[i]));
+          element.append('<th colspan="2">{0}</th>'.format(hanziLevels[i]));
         }
         $('.hanziShowcase').append(element);
       }
+
+      $('.hanziShowcase').append('<th colspan="2">{0}</th>'.format('Extra'));
+
+      const element = $('<tr></tr>');
+      const td = $('<td class="hanziColumn extraHanzi" colspan="2"></td>');
+      const hanziInLevel = getRemainingHanzi(knownHanzi);
+      const hanziClass = "knownHanzi";
+      for(let j=0; j<hanziInLevel.length; j++){
+        td.append('<div class="hanzi {1}">{0}</div>'.format(hanziInLevel[j], hanziClass));
+      }
+      element.append(td);
+      element.addClass('entry');
+      $('.hanziShowcase').append(element);
     });
   });
-
-  $.contextMenu({
-    selector: ".entry",
-    items: {
-      learnNewHanzi: {
-        name: "Learn new Hanzi",
-        callback: function(key, opt){
-          if(!loadHanzi('.notKnownHanzi', this)){
-            alert('All Hanzi in this level are learnt.');
-          }
-        }
-      },
-      reviewHanzi: {
-        name: "Review Hanzi",
-        callback: function(key, opt){
-          if(!loadHanzi('.knownHanzi', this)){
-            alert('Please learn new Hanzi first.');
-          }
-        }
-      }
-    }
-  });
-});
-
-function loadHanzi(selector, context) {
-  var allHanzi = "";
-  $(selector, context).each(function(index, el) {
-    allHanzi += $(el).text();
-  });
-
-  if(allHanzi !== ""){
-    Cookies.set('allHanzi', allHanzi);
-    window.location.href = "/learnHanzi";
-  } else {
-    return false;
-  }
-
-  return true;
 }
