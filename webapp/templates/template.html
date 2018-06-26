@@ -8,6 +8,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.contextMenu.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.all.css') }}">
 
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
@@ -55,6 +56,23 @@
         <a class="nav-item nav-link" href="/progress">Progress</a>
         <a class="nav-item nav-link disabled" href="#">Settings</a>
       </div>
+
+      <div class="navbar-nav ml-auto">
+        <div class="btn-group my-2 my-sm-0 form-inline" role="group" aria-label="Button group for sync/export">
+          <button class="btn btn-outline-success" type="button" id="sync-default">
+            <i class="fas fa-sync-alt inline" id="spinner-sync"></i>
+            <i class="fas fa-spinner fa-pulse inline" id="spinner-export" style="display: none;"></i>
+            <div id="text-sync" class="inline">Sync with Anki</div>
+          </button>
+          <button id="btnGroupDropSync" type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDropSync">
+            <a class="dropdown-item" href="#" id="sync-anki">Sync with Anki</a>
+            <a class="dropdown-item" href="#" id="sync-kitsun">Sync with kitsun.io</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" id="export-csv">Export to CSV</a>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -71,6 +89,7 @@
   <script src="{{ url_for('static', filename='js/jquery.contextMenu.min.js') }}"></script>
 
   <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/template.js') }}"></script>
   {% block javascript %}{% endblock %}
 </body>
 </html>

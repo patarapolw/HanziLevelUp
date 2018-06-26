@@ -8,4 +8,4 @@ app.register_blueprint(blueprint)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'
 db = SQLAlchemy(app)
 
-from webapp.views import hanzi, learning, levels, sentence, utils, vocab, item
+from webapp.views import hanzi, learning, levels, sentence, utils, vocab, item, export

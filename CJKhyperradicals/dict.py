@@ -24,6 +24,7 @@ class Cedict:
     def search_vocab(self, vocab):
         for entry in self.entries:
             if (vocab in (entry[0], entry[1])
-                    or vocab in regex.findall('[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}\W]+',
-                                              entry[3])):
+                    # or vocab in regex.findall('[^\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}\W]+',
+                    #                           entry[3])
+            ):
                 yield entry

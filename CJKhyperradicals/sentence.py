@@ -21,7 +21,7 @@ class SpoonFed:
         with open(chinese_path('SpoonFed.tsv')) as f:
             for row in f:
                 contents = row.split('\t')
-                self.sentences.append((contents[2], contents[0]))
+                self.sentences.append((contents[2], contents[0], contents[1]))
 
     def get_sentence(self, vocab):
         for sentence in self.sentences:

@@ -138,3 +138,7 @@
   position: relative;
   top: 1em;
 }
+
+.inline {
+  display: inline-block;
+}
