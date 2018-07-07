@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "HanziLevelUp"
+version = "0.5.0"
+description = """
+A Hanzi learning suite, with levels based on Hanzi Level Project, aka. \
+nother attempt to clone WaniKani.com for Chinese.\
+"""
+authors = ["Pacharapol Withayasakpunt <patarapolw@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/patarapolw/HanziLevelUp"
+homepage = "https://github.com/patarapolw/HanziLevelUp"
+keywords = ['wanikani', 'chinese', 'mandarin', 'hanzi']
+
+[tool.poetry.dependencies]
+python = ">=3"
+flask = "^1.0"
+flask-sqlalchemy = "^2.3"
+wordfreq = "^2.1"
+requests = "^2.19"
+bs4 = "^0.0.1"
+jieba = "^0.39.0"
+regex = "=2018.02.21"
+
+[tool.poetry.dev-dependencies]
+pyopenssl = "^18.0"

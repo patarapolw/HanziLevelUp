@@ -14,8 +14,8 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 
 - Install [Python](https://www.python.org/downloads/) first, if you don't have one.
 - Clone the project from GitHub.
-- Change the directory to the project folder, in the terminal.
-- `pip install pipenv`, `pipenv --three`, `pipenv shell` and `pipenv install`.
+- Change the directory to the project folder, in the terminal and create a virtual environment.
+- `pip install poetry` and `poetry install`. For more information, please see [poetry](https://github.com/sdispater/poetry).
 - Run `app.py`.
 - Go to `https://localhost:8080` on your browser.
 
