@@ -12,3 +12,8 @@ def show(page):
 @blueprint.route('/exploreHanzi')
 def learn_hanzi():
     return redirect('/progress')
+
+
+@blueprint.route('/recent')
+def recent_items():
+    return redirect('/clipboard')
