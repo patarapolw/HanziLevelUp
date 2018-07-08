@@ -1,16 +1,10 @@
 import jieba
 import regex
 from datetime import datetime, timedelta
-import csv
-import os
 
-from HanziLevelUp.hanzi import get_hanzi_level
 from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.sentence import SpoonFed, jukuu
 from webapp.databases import Sentence, Vocab
-
-cedict = Cedict()
-spoon_fed = SpoonFed()
 
 
 def get_extra_vocab():
@@ -32,18 +26,26 @@ def get_all_vocab_plus():
     return [[vocab.id, vocab.vocab] for vocab in Vocab.query] + get_extra_vocab_with_id()
 
 
-def get_vocab_array_info(vocab_list):
-    for vocab in vocab_list:
-        for entry in cedict.search_vocab(vocab):
-            yield entry
+class VocabInfo:
+    def __init__(self):
+        self.cedict = Cedict()
+
+    def get_iter(self, vocab_list: list):
+        for vocab in vocab_list:
+            for entry in self.cedict.search_vocab(vocab):
+                yield entry
 
 
-def vocab_to_sentences(vocab, online=True):
-    sentences = list(spoon_fed.get_sentence(vocab))[:10]
-    if len(sentences) == 0 and online:
-        sentences = list(jukuu(vocab))
+class VocabToSentence:
+    def __init__(self):
+        self.spoon_fed = SpoonFed()
 
-    return sentences
+    def convert(self, vocab, online=True):
+        sentences = list(self.spoon_fed.get_sentence(vocab))[:10]
+        if len(sentences) == 0 and online:
+            sentences = list(jukuu(vocab))
+
+        return sentences
 
 
 def sentence_to_vocab(sentence):
@@ -56,38 +58,3 @@ def get_last_day_vocab():
     for vocab in Vocab.query[::-1]:
         if datetime.utcnow() - vocab.modified < timedelta(days=1):
             yield [vocab.id, vocab.vocab, vocab.modified, 'vocab']
-
-
-def format_vocab_entry(entry, entry_id=''):
-    print(entry)
-
-    dict_result = list(cedict.search_vocab(entry))
-    traditional = ', '.join([item[0] for item in dict_result])
-    pinyin = ', '.join([item[2] for item in dict_result])
-    english = ', '.join([item[3] for item in dict_result])
-    level = max([get_hanzi_level(hanzi) for hanzi in entry])
-    tags = [
-        'Level{:02d}'.format(level)
-    ]
-
-    return [
-        entry,
-        traditional,
-        pinyin,
-        english,
-        entry_id,
-        '',
-        '',
-        '',
-        level,
-        '',
-        '\n'.join(['\n'.join(x) for x in vocab_to_sentences(entry, online=False)]),
-        ' '.join(tags)
-    ]
-
-
-def vocab_to_csv():
-    with open(os.path.join('tmp', 'vocab.csv'), 'w') as f:
-        writer = csv.writer(f)
-        for entry_id, entry in get_all_vocab_plus():
-            writer.writerow(format_vocab_entry(entry, entry_id))

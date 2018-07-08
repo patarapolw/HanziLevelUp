@@ -11,7 +11,7 @@ from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.frequency import ChineseFrequency
 from CJKhyperradicals.variant import Variant
 
-from HanziLevelUp.vocab import vocab_to_sentences
+from HanziLevelUp.vocab import VocabToSentence
 
 decompose = Decompose()
 variant = Variant()
@@ -40,7 +40,7 @@ def from_hanzi_get_sentences():
         current_char = request.form.get('character')
 
         if not current_char.isdigit():
-            sentences = list(vocab_to_sentences(current_char))
+            sentences = list(VocabToSentence().convert(current_char))
         else:
             sentences = []
 

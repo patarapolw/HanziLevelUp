@@ -1,23 +1,26 @@
 import regex
 
 from HanziLevelUp.dir import database_path
+from webapp.databases import Sentence, Vocab
 
 
-def generate_hanzi_level_dict():
-    entries = dict()
-    level = 0
-    with open(database_path('hanzi_level.txt')) as f:
-        for row in f:
-            if regex.match(r'[\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]', row):
-                level += 1
-                for char in row.strip():
-                    entries[char] = level
+class HanziLevel:
+    def __init__(self):
+        self.level_dict = dict()
+        level = 0
+        with open(database_path('hanzi_level.txt')) as f:
+            for row in f:
+                if regex.match(r'\p{IsHan}', row):
+                    level += 1
+                    for char in row.strip():
+                        self.level_dict[char] = level
 
-    return entries
+    def get_hanzi_level(self, hanzi):
+        return self.level_dict.get(hanzi, 0)
 
 
-hanzi_level_dict = generate_hanzi_level_dict()
+def get_all_hanzi():
+    sentences = [sentence.sentence for sentence in Sentence.query]
+    vocabs = [vocab.vocab for vocab in Vocab.query]
 
-
-def get_hanzi_level(hanzi):
-    return hanzi_level_dict.get(hanzi, 0)
+    return set(regex.findall(r'\p{IsHan}', ''.join(sentences) + ''.join(vocabs)))

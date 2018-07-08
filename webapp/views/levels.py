@@ -3,7 +3,7 @@ from flask import send_file, request, jsonify
 from HanziLevelUp.dir import database_path
 from HanziLevelUp.vocab import get_all_vocab_plus
 from webapp import app
-from webapp.databases import Vocab, Sentence
+from webapp.databases import Sentence
 
 
 @app.route('/post/file/getLevels', methods=['POST'])

@@ -1,4 +1,5 @@
 import regex
+import csv
 
 from CJKhyperradicals.dir import chinese_path
 
@@ -28,3 +29,12 @@ class Cedict:
                     #                           entry[3])
             ):
                 yield entry
+
+
+class HanziDict:
+    def __init__(self):
+        self.entries = dict()
+        with open(chinese_path('hanzi_dict.csv'), newline='') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                self.entries[row['Character']] = row

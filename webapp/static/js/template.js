@@ -17,9 +17,9 @@ $(document).ready(function() {
     doSync('kitsun');
   });
 
-  $('#export-csv').click(function(event) {
+  $('#export-excel').click(function(event) {
     event.preventDefault();
-    doExport('csv');
+    doExport('excel');
   });
 });
 
@@ -58,13 +58,14 @@ function doExport(exportType){
     } else {
       let filename;
       switch (exportType) {
-        case 'csv':
-          filename = 'Chinese.zip';
+        case 'excel':
+          filename = 'HanziLevelUp.xlsx';
           break;
         default:
-          filename = 'Chinese.zip';
+          filename = 'HanziLevelUp.zip';
       }
-      downloadURI('/get/export/' + filename);
+      console.log('Exporting completed. Please view the file in \'user/' + filename + '\'.')
+      // downloadURI('/get/export/' + filename);
     }
     $spinner_sync.show();
     $spinner_export.hide();

@@ -2,7 +2,7 @@ import json
 
 from flask import request, jsonify
 
-from HanziLevelUp.vocab import (get_all_vocab_plus, get_vocab_array_info, vocab_to_sentences, sentence_to_vocab,
+from HanziLevelUp.vocab import (get_all_vocab_plus, VocabInfo, VocabToSentence, sentence_to_vocab,
                                 get_last_day_vocab)
 from webapp import app, db
 from webapp.databases import Vocab
@@ -53,7 +53,7 @@ def delete_vocab():
 @app.route('/post/vocab/getListInfo', methods=['POST'])
 def get_array_info():
     if request.method == 'POST':
-        return jsonify(list(get_vocab_array_info(json.loads(request.form.get('list')))))
+        return jsonify(list(VocabInfo().get_iter(json.loads(request.form.get('list')))))
 
     return '0'
 
@@ -61,7 +61,7 @@ def get_array_info():
 @app.route('/post/vocab/getSentences', methods=['POST'])
 def get_sentences():
     if request.method == 'POST':
-        return jsonify(list(vocab_to_sentences(request.form.get('vocab'))))
+        return jsonify(list(VocabToSentence().convert(request.form.get('vocab'))))
 
     return '0'
 
