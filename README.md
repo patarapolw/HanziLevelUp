@@ -32,3 +32,4 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 ## Related Projects
 
 - [CJKhyperradicals](https://github.com/patarapolw/CJKhyperradicals)
+- [ChineseViewer](https://github.com/patarapolw/ChineseViewer)
