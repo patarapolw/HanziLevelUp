@@ -34,9 +34,9 @@ class ExcelExport:
 
         except FileNotFoundError:
             self.data = OrderedDict([
-                ('Hanzi', list()),
-                ('Vocab', list()),
-                ('sentences', list())
+                ('Hanzi', [HANZI_HEADER]),
+                ('Vocab', [VOCAB_HEADER]),
+                ('sentences', [SENTENCE_HEADER])
             ])
             self.meta = pyexcel_export.get_meta()
 
@@ -48,19 +48,16 @@ class ExcelExport:
 
     def from_db(self):
         ws = self.data['Hanzi']
-        ws.append(HANZI_HEADER)
         for hanzi in get_all_hanzi():
             if hanzi not in self.pre_existing['Hanzi']:
                 ws.append(self.hanzi_formatter.format(hanzi))
 
         ws = self.data['Vocab']
-        ws.append(VOCAB_HEADER)
         for _, vocab in get_all_vocab_plus():
             if vocab not in self.pre_existing['Vocab']:
                 ws.append(self.vocab_formatter.format(vocab))
 
         ws = self.data['sentences']
-        ws.append(SENTENCE_HEADER)
         for sent_query in Sentence.query:
             sentence = sent_query.sentence
             if sentence not in self.pre_existing['sentences']:
