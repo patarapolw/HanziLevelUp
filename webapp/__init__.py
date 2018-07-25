@@ -1,11 +1,15 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from webapp.blueprints import blueprint
+from flask_migrate import Migrate
+
+from .blueprints import blueprint
+from .config import Config
 
 app = Flask(__name__)
 app.register_blueprint(blueprint)
+app.config.from_object(Config)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-from webapp.views import hanzi, learning, levels, sentence, utils, vocab, item, export
+from .views import hanzi, learning, levels, sentence, utils, vocab, item, export
