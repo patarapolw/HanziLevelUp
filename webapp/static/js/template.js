@@ -1,49 +1,51 @@
 $(document).ready(function() {
-  setTextSync();
+  // setTextSync();
 
   $('#sync-default').click(function(event) {
-    doSync();
-  });
-
-  $('#sync-anki').click(function(event) {
-    event.preventDefault();
-    setTextSync('anki');
-    doSync('anki');
-  });
-
-  $('#sync-kitsun').click(function(event) {
-    event.preventDefault();
-    setTextSync('kitsun');
-    doSync('kitsun');
-  });
-
-  $('#export-excel').click(function(event) {
-    event.preventDefault();
+    // doSync();
     doExport('excel');
   });
+
+  // $('#sync-anki').click(function(event) {
+  //   event.preventDefault();
+  //   setTextSync('anki');
+  //   doSync('anki');
+  // });
+  //
+  // $('#sync-kitsun').click(function(event) {
+  //   event.preventDefault();
+  //   setTextSync('kitsun');
+  //   doSync('kitsun');
+  // });
+  //
+  // $('#export-excel').click(function(event) {
+  //   event.preventDefault();
+  //   doExport('excel');
+  // });
 });
 
-function setTextSync(syncType){
-  if(syncType === undefined){
-    syncType = localStorage.getItem('syncType') || 'anki';
-  }
-  localStorage.setItem('syncType', syncType);
+// function setTextSync(syncType){
+//   if(syncType === undefined){
+//     syncType = localStorage.getItem('syncType') || 'anki';
+//   }
+//   localStorage.setItem('syncType', syncType);
+//
+//   $('#text-sync').text($('#sync-' + syncType).text());
+// }
 
-  $('#text-sync').text($('#sync-' + syncType).text());
-}
-
-function doSync(){
-  const syncType = localStorage.getItem('syncType') || 'anki';
-  const $spinner = $('#spinner-sync');
-
-  $spinner.addClass('fa-spin');
-  $.post('/post/sync/' + syncType, function(data, textStatus, xhr) {
-    if(data === '0'){
-      alert('Syncing failed');
-    }
-    $spinner.removeClass('fa-spin');
-  });
-}
+// function doSync(){
+//   // const syncType = localStorage.getItem('syncType') || 'excel';
+//   const syncType = 'excel';
+//   const $spinner = $('#spinner-sync');
+//
+//   $spinner.addClass('fa-spin');
+//   $.post('/post/sync/' + syncType, function(data, textStatus, xhr) {
+//     if(data === '0'){
+//       alert('Syncing failed');
+//     }
+//     $spinner.removeClass('fa-spin');
+//   });
+// }
 
 function doExport(exportType){
   const $spinner_sync = $('#spinner-sync');
@@ -64,7 +66,7 @@ function doExport(exportType){
         default:
           filename = 'HanziLevelUp.zip';
       }
-      console.log('Exporting completed. Please view the file in \'user/' + filename + '\'.')
+      alert('Exporting completed. Please view the file in \'user/' + filename + '\'.')
       // downloadURI('/get/export/' + filename);
     }
     $spinner_sync.show();

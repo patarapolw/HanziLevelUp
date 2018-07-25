@@ -1,5 +1,6 @@
-import openpyxl as px
+import pyexcel_export
 import regex
+from collections import OrderedDict
 
 from CJKhyperradicals.sentence import SpoonFed
 from CJKhyperradicals.dict import HanziDict, Cedict
@@ -23,77 +24,52 @@ class ExcelExport:
         self.sentence_formatter = SentenceFormatter()
 
         try:
-            self.workbook = px.load_workbook(self.filename)
-            if not self.verify():
-                print('Invalid file.')
-                self.filename += '_'
-                self.workbook = self.create()
+            self.data, self.meta = pyexcel_export.get_data(self.filename)
+
+            self.pre_existing = {
+                'Hanzi': set([row[0] for row in self.data['Hanzi'][1:]]),
+                'Vocab': set([row[0] for row in self.data['Vocab'][1:]]),
+                'sentences': set([row[0] for row in self.data['sentences'][1:]]),
+            }
+
         except FileNotFoundError:
-            self.workbook = self.create()
+            self.data = OrderedDict([
+                ('Hanzi', list()),
+                ('Vocab', list()),
+                ('sentences', list())
+            ])
+            self.meta = pyexcel_export.get_meta()
 
-        self.pre_existing = {
-            'Hanzi': set([cell.value for cell in next(self.workbook['Hanzi'].iter_cols())[1:]]),
-            'Vocab': set([cell.value for cell in next(self.workbook['Vocab'].iter_cols())[1:]]),
-            'Sentence': set([cell.value for cell in next(self.workbook['Sentence'].iter_cols())[1:]])
-        }
-
-    @staticmethod
-    def create():
-        wb = px.Workbook()
-
-        wb.create_sheet('Hanzi')
-        ws = wb['Hanzi']
-        ws.append(HANZI_HEADER)
-
-        wb.create_sheet('Vocab')
-        ws = wb['Vocab']
-        ws.append(VOCAB_HEADER)
-
-        wb.create_sheet('Sentence')
-        ws = wb['Sentence']
-        ws.append(SENTENCE_HEADER)
-
-        return wb
-
-    def verify(self):
-        if not all([sheet in self.workbook.sheetnames for sheet in ['Hanzi', 'Vocab', 'Sentence']]):
-            return False
-
-        first_row = [cell.value for cell in next(self.workbook['Hanzi'].iter_rows())]
-        if first_row != HANZI_HEADER:
-            return False
-
-        first_row = [cell.value for cell in next(self.workbook['Vocab'].iter_rows())]
-        if first_row != VOCAB_HEADER:
-            return False
-
-        first_row = [cell.value for cell in next(self.workbook['Sentence'].iter_rows())]
-        if first_row != SENTENCE_HEADER:
-            return False
-
-        return True
+            self.pre_existing = {
+                'Hanzi': set(),
+                'Vocab': set(),
+                'sentences': set(),
+            }
 
     def from_db(self):
-        ws = self.workbook['Hanzi']
+        ws = self.data['Hanzi']
+        ws.append(HANZI_HEADER)
         for hanzi in get_all_hanzi():
             if hanzi not in self.pre_existing['Hanzi']:
                 ws.append(self.hanzi_formatter.format(hanzi))
 
-        ws = self.workbook['Vocab']
+        ws = self.data['Vocab']
+        ws.append(VOCAB_HEADER)
         for _, vocab in get_all_vocab_plus():
             if vocab not in self.pre_existing['Vocab']:
                 ws.append(self.vocab_formatter.format(vocab))
 
-        ws = self.workbook['Sentence']
+        ws = self.data['sentences']
+        ws.append(SENTENCE_HEADER)
         for sent_query in Sentence.query:
             sentence = sent_query.sentence
-            if sentence not in self.pre_existing['Sentence']:
+            if sentence not in self.pre_existing['sentences']:
                 ws.append(self.sentence_formatter.format(sentence))
 
         self.save()
 
     def save(self):
-        self.workbook.save(self.filename)
+        pyexcel_export.save_data(self.filename, data=self.data, meta=self.meta)
 
 
 class HanziFormatter:

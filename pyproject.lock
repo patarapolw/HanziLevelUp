@@ -210,6 +210,15 @@ marisa-trie = "*"
 
 [[package]]
 category = "main"
+description = "Load me later. A lazy loading plugin management system."
+name = "lml"
+optional = false
+platform = "UNKNOWN"
+python-versions = "*"
+version = "0.0.1"
+
+[[package]]
+category = "main"
 description = "A super-fast templating language that borrows the  best ideas from the existing templating languages."
 name = "mako"
 optional = false
@@ -261,6 +270,18 @@ et_xmlfile = "*"
 jdcal = "*"
 
 [[package]]
+category = "main"
+description = "Ordered YAML: drop-in replacement for PyYAML which preserves dict ordering"
+name = "oyaml"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "0.5"
+
+[package.dependencies]
+pyyaml = "*"
+
+[[package]]
 category = "dev"
 description = "C parser in Python"
 name = "pycparser"
@@ -268,6 +289,60 @@ optional = false
 platform = "Cross Platform"
 python-versions = "*"
 version = "2.18"
+
+[[package]]
+category = "main"
+description = "A wrapper library that provides one API to read, manipulate and writedata in different excel formats"
+name = "pyexcel"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "0.5.8"
+
+[package.dependencies]
+lml = "0.0.1"
+pyexcel-io = ">=0.5.6"
+texttable = ">=0.8.1"
+
+[[package]]
+category = "main"
+description = "Keep good formatting when exporting to *.xlsx, *.yaml and *.json and when updating data."
+name = "pyexcel-export"
+optional = false
+platform = "*"
+python-versions = ">=3.5"
+version = "0.3.1"
+
+[package.dependencies]
+openpyxl = ">=2.5,<3.0"
+oyaml = ">=0.5.0,<0.6.0"
+pyexcel = ">=0.5.8,<0.6.0"
+pyexcel-xlsx = ">=0.5.6,<0.6.0"
+
+[[package]]
+category = "main"
+description = "A python library to read and write structured data in csv, zipped csvformat and to/from databases"
+name = "pyexcel-io"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "0.5.7"
+
+[package.dependencies]
+lml = "0.0.1"
+
+[[package]]
+category = "main"
+description = "A wrapper library to read, manipulate and write data in xlsx and xlsmformat"
+name = "pyexcel-xlsx"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "0.5.6"
+
+[package.dependencies]
+openpyxl = ">=2.5.0"
+pyexcel-io = ">=0.5.3"
 
 [[package]]
 category = "dev"
@@ -302,6 +377,15 @@ optional = false
 platform = "*"
 python-versions = "*"
 version = "1.0.3"
+
+[[package]]
+category = "main"
+description = "YAML parser and emitter for Python"
+name = "pyyaml"
+optional = false
+platform = "Any"
+python-versions = "*"
+version = "3.13"
 
 [[package]]
 category = "main"
@@ -347,6 +431,15 @@ version = "1.2.10"
 
 [[package]]
 category = "main"
+description = "module for creating simple ASCII tables"
+name = "texttable"
+optional = false
+platform = "any"
+python-versions = "*"
+version = "1.4.0"
+
+[[package]]
+category = "main"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
@@ -378,7 +471,7 @@ msgpack = "*"
 regex = "2018.02.21"
 
 [metadata]
-content-hash = "c5d63d4056059ab9151f8cf4d05c2f7faf1e0aad2e60b5d595456bac3c45a8aa"
+content-hash = "659d1b1d3398848f2d5651c448f86c08ebe57dc5cea73c6ad3cef18a05ce7346"
 platform = "*"
 python-versions = ">=3"
 
@@ -402,19 +495,27 @@ jdcal = ["948fb8d079e63b4be7a69dd5f0cd618a0a57e80753de8248fd786a8a20658a07", "ea
 jieba = ["de385e48582a4862e55a9167334d0fbe91d479026e5dac40e59e22c08b8e883e"]
 jinja2 = ["74c935a1b8bb9a3947c50a54766a969d4846290e1e788ea44c1392163723c3bd", "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"]
 langcodes = ["22cff103b6c0f3c9907d9a51c2d634177a50a189672ad16d959a3e2cd48eadab"]
+lml = ["12783c8851bb1b1aacf6d139aa41fb529e1723bff863e71034af07a55bf1e5a3", "58a11170ecb0ce5e4680ad8971f1e353b795d58953217d65c9a56e0d774261d6"]
 mako = ["4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae"]
 marisa-trie = ["4419abb6b603c97e863fad994abe57ed247fb12491f4bbacb2d762bd2e8958b6", "c73bc25d868e8c4ea7aa7f1e19892db07bba2463351269b05340ccfa06eb2baf"]
 markupsafe = ["a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"]
 msgpack = ["0b3b1773d2693c70598585a34ca2715873ba899565f0a7c9a1545baef7e7fbdc", "0bae5d1538c5c6a75642f75a1781f3ac2275d744a92af1a453c150da3446138b", "0ee8c8c85aa651be3aa0cd005b5931769eaa658c948ce79428766f1bd46ae2c3", "1369f9edba9500c7a6489b70fdfac773e925342f4531f1e3d4c20ac3173b1ae0", "22d9c929d1d539f37da3d1b0e16270fa9d46107beab8c0d4d2bddffffe895cee", "2ff43e3247a1e11d544017bb26f580a68306cec7a6257d8818893c1fda665f42", "31a98047355d34d047fcdb55b09cb19f633cf214c705a765bd745456c142130c", "8767eb0032732c3a0da92cbec5ac186ef89a3258c6edca09161472ca0206c45f", "8acc8910218555044e23826980b950e96685dc48124a290c86f6f41a296ea172", "ab189a6365be1860a5ecf8159c248f12d33f79ea799ae9695fa6a29896dcf1d4", "cfd6535feb0f1cf1c7cdb25773e965cc9f92928244a8c3ef6f8f8a8e1f7ae5c4", "e274cd4480d8c76ec467a85a9c6635bbf2258f0649040560382ab58cabb44bcf", "f86642d60dca13e93260187d56c2bef2487aa4d574a669e8ceefcf9f4c26fd00", "f8a57cbda46a94ed0db55b73e6ab0c15e78b4ede8690fa491a0e55128d552bb0", "fcea97a352416afcbccd7af9625159d80704a25c519c251c734527329bb20d0e"]
 openpyxl = ["9239b74faf175dc4276a5fc277655fc53c2f704ded39e680d35e6a39e1913f69"]
+oyaml = ["46510c036d202ae683c9fd78f8cac164f404b2b1a6d369ec0edcbd47fb40db3c", "5f0072546a46ae2c77c03406838d55015646f4025ac99b78f5c05801727ad220"]
 pycparser = ["99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"]
+pyexcel = ["4c470a7059d54e1c24112008a3410d1ff16d65fc47fa32a87d9581f1d92db11e", "7554b140729eaa679c0d627d5a44c787cd7216a917fa61f3da9f6b91438c9d43"]
+pyexcel-export = ["619d117832c1af8411070a8fcf1f0102c863fedca56ba94abb073bb966764ab9", "cd29292dbd2740ccdcf543ab1452e3f6b74bca6cdbad71879b959a5dde745b6d"]
+pyexcel-io = ["5cf5ccf7750ca130640277f31178b6284a4f9f0f0d1d41f28f419b67ce26132b", "d0639851fce803c772ccf0b8ec975f212cb64b6681b63d67e89a2ea238c0afdb"]
+pyexcel-xlsx = ["4b406c0ec64c577a171335ab3bca8acd3bc845b5c99691c3600d11c284091435", "4e1f953427ac5073ee7e42d30e7108f24fde475e58e24822033fdc90a6131291"]
 pyopenssl = ["26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854", "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"]
 python-dateutil = ["1adb80e7a782c12e52ef9a8182bebeb73f1d7e24e374397af06fb4956c8dc5c0", "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8"]
 python-editor = ["a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565"]
+pyyaml = ["3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b", "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf", "40c71b8e076d0550b2e6380bada1f1cd1017b882f7e16f09a65be98e017f211a", "558dd60b890ba8fd982e05941927a3911dc409a63dcb8b634feaa0cda69330d3", "a7c28b45d9f99102fa092bb213aa12e0aaf9a6a1f5e395d36166639c1f96c3a1", "aa7dd4a6a427aed7df6fb7f08a580d68d9b118d90310374716ae90b710280af1", "bc558586e6045763782014934bfaf39d48b8ae85a2713117d16c39864085c613", "d46d7982b62e0729ad0175a9bc7e10a566fc07b224d2c79fafb5e032727eaa04", "d5eef459e30b09f5a098b9cea68bebfeb268697f78d647bd255a085371ac7f3f", "e01d3203230e1786cd91ccfdc8f8454c8069c91bee3962ad93b87a4b2860f537", "e170a9e6fcfd19021dd29845af83bb79236068bf5fd4df3327c1be18182b2531"]
 regex = ["1b428a296531ea1642a7da48562746309c5c06471a97bd0c02dd6a82e9cecee8", "27d72bb42dffb32516c28d218bb054ce128afd3e18464f30837166346758af67", "32cf4743debee9ea12d3626ee21eae83052763740e04086304e7a74778bf58c9", "32f6408dbca35040bc65f9f4ae1444d5546411fde989cb71443a182dd643305e", "333687d9a44738c486735955993f83bd22061a416c48f5a5f9e765e90cf1b0c9", "35eeccf17af3b017a54d754e160af597036435c58eceae60f1dd1364ae1250c7", "361a1fd703a35580a4714ec28d85e29780081a4c399a99bbfb2aee695d72aedb", "494bed6396a20d3aa6376bdf2d3fbb1005b8f4339558d8ac7b53256755f80303", "5b9c0ddd5b4afa08c9074170a2ea9b34ea296e32aeea522faaaaeeeb2fe0af2e", "a50532f61b23d4ab9d216a6214f359dd05c911c1a1ad20986b6738a782926c1a", "a9243d7b359b72c681a2c32eaa7ace8d346b7e8ce09d172a683acf6853161d9c", "b44624a38d07d3c954c84ad302c29f7930f4bf01443beef5589e9157b14e2a29", "be42a601aaaeb7a317f818490a39d153952a97c40c6e9beeb2a1103616405348", "eee4d94b1a626490fc8170ffd788883f8c641b576e11ba9b4a29c9f6623371e0", "f69d1201a4750f763971ea8364ed95ee888fc128968b39d38883a72a4d005895"]
 requests = ["63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1", "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"]
 six = ["70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9", "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"]
 sqlalchemy = ["72325e67fb85f6e9ad304c603d83626d1df684fdf0c7ab1f0352e71feeab69d8"]
+texttable = ["95e8cfe85f8395a7eacdfbc8f09d885b9ef3a6ac6ead0364ea721de1127aa36b"]
 urllib3 = ["a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf", "b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"]
 werkzeug = ["c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c", "d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b"]
 wordfreq = ["29fc02ee145f243ea7facc52c737603bf67c18f3c8c8e0e0d7066037e12539a1"]

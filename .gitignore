@@ -198,3 +198,4 @@ venv.bak/
 
 */user.*
 *.pem
+migrations/*
