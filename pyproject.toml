@@ -22,7 +22,8 @@ requests = "^2.19"
 bs4 = "^0.0.1"
 jieba = "^0.39.0"
 regex = "=2018.02.21"
-pyexcel-export = "^0.3.1"
+pyexcel-export = {path = "../pyexcel-export"}
+#pyexcel-export = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 pyopenssl = "^18.0"

@@ -306,18 +306,23 @@ texttable = ">=0.8.1"
 
 [[package]]
 category = "main"
-description = "Keep good formatting when exporting to *.xlsx, *.yaml and *.json and when updating data."
+description = ""
 name = "pyexcel-export"
 optional = false
 platform = "*"
 python-versions = ">=3.5"
-version = "0.3.1"
+version = "0.3.2"
 
 [package.dependencies]
-openpyxl = ">=2.5,<3.0"
-oyaml = ">=0.5.0,<0.6.0"
-pyexcel = ">=0.5.8,<0.6.0"
-pyexcel-xlsx = ">=0.5.6,<0.6.0"
+openpyxl = "^2.5"
+oyaml = "^0.5.0"
+pyexcel = "^0.5.8"
+pyexcel-xlsx = "^0.5.6"
+
+[package.source]
+reference = ""
+type = "directory"
+url = "../pyexcel-export"
 
 [[package]]
 category = "main"
@@ -471,7 +476,7 @@ msgpack = "*"
 regex = "2018.02.21"
 
 [metadata]
-content-hash = "659d1b1d3398848f2d5651c448f86c08ebe57dc5cea73c6ad3cef18a05ce7346"
+content-hash = "e173185fe884edd84f6c90276ebb5f2415bc50bb9a33409d964cc28b34f31070"
 platform = "*"
 python-versions = ">=3"
 
@@ -504,7 +509,7 @@ openpyxl = ["9239b74faf175dc4276a5fc277655fc53c2f704ded39e680d35e6a39e1913f69"]
 oyaml = ["46510c036d202ae683c9fd78f8cac164f404b2b1a6d369ec0edcbd47fb40db3c", "5f0072546a46ae2c77c03406838d55015646f4025ac99b78f5c05801727ad220"]
 pycparser = ["99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"]
 pyexcel = ["4c470a7059d54e1c24112008a3410d1ff16d65fc47fa32a87d9581f1d92db11e", "7554b140729eaa679c0d627d5a44c787cd7216a917fa61f3da9f6b91438c9d43"]
-pyexcel-export = ["619d117832c1af8411070a8fcf1f0102c863fedca56ba94abb073bb966764ab9", "cd29292dbd2740ccdcf543ab1452e3f6b74bca6cdbad71879b959a5dde745b6d"]
+pyexcel-export = []
 pyexcel-io = ["5cf5ccf7750ca130640277f31178b6284a4f9f0f0d1d41f28f419b67ce26132b", "d0639851fce803c772ccf0b8ec975f212cb64b6681b63d67e89a2ea238c0afdb"]
 pyexcel-xlsx = ["4b406c0ec64c577a171335ab3bca8acd3bc845b5c99691c3600d11c284091435", "4e1f953427ac5073ee7e42d30e7108f24fde475e58e24822033fdc90a6131291"]
 pyopenssl = ["26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854", "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"]
