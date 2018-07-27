@@ -9,6 +9,7 @@ A Hanzi learning suite, with levels based on [Hanzi Level Project](https://hanzi
 - Show Hanzi decomposition and super-decomposition (powered by [CJKhyperradicals](http://cjkhyperradicals.herokuapp.com/)).
 - 60 major Hanzi levels -- learn or review in each levels, based on [Hanzi Level Project](https://hanzilevelproject.blogspot.com).
 - Breakdown sentences into vocab, for learning, with audio -- powered by [jieba](https://github.com/fxsjy/jieba).
+- Export to Excel file. Planning on exporting to Anki.
 
 ## Installation and Get-it-running
 
