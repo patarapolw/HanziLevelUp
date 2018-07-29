@@ -19,11 +19,11 @@ def get_extra_vocab():
 
 
 def get_extra_vocab_with_id():
-    return [[-i, vocab] for i, vocab in enumerate(get_extra_vocab())]
+    return [[-i, vocab, 'jieba'] for i, vocab in enumerate(get_extra_vocab())]
 
 
 def get_all_vocab_plus():
-    return [[vocab.id, vocab.vocab] for vocab in Vocab.query] + get_extra_vocab_with_id()
+    return [[vocab.id, vocab.vocab, 'user'] for vocab in Vocab.query] + get_extra_vocab_with_id()
 
 
 class VocabInfo:

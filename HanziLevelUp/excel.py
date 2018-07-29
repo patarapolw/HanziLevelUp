@@ -1,6 +1,8 @@
 import pyexcel_export
 import regex
 from collections import OrderedDict
+import namedlist as nl
+from datetime import datetime
 
 from CJKhyperradicals.sentence import SpoonFed
 from CJKhyperradicals.dict import HanziDict, Cedict
@@ -8,12 +10,25 @@ from HanziLevelUp.hanzi import get_all_hanzi, HanziLevel
 from HanziLevelUp.vocab import get_all_vocab_plus, VocabToSentence
 from webapp.databases import Sentence
 
-HANZI_HEADER = ['Hanzi', 'Pinyin', 'English', 'Heisig', 'Variant', 'Kanji',
-                'Level', 'Note', 'Tags']
-VOCAB_HEADER = ['Entry', 'Simplified', 'Traditional', 'Pinyin', 'English', 'Sentence',
-                'Level', 'Note', 'Tags']
-SENTENCE_HEADER = ['Sentence', 'Pinyin', 'English',
-                   'Level', 'Note', 'Tags']
+
+HanziRecord = nl.namedlist('HanziRecord', [
+    'Hanzi', 'Pinyin', 'English', 'Heisig', 'Variant', 'Kanji',
+    'Level', 'Note', 'Tags',
+    ('Modified', datetime.now().isoformat())
+], default='')
+
+VocabRecord = nl.namedlist('VocabRecord', [
+    'Entry', 'Simplified', 'Traditional', 'Pinyin', 'English', 'Sentence',
+    'Level', 'Note', 'Tags',
+    'Source',
+    ('Modified', datetime.now().isoformat())
+], default='')
+
+SentenceRecord = nl.namedlist('SentenceRecord', [
+    'Sentence', 'Pinyin', 'English',
+    'Levels', 'Note', 'Tags',
+    ('Modified', datetime.now().isoformat())
+], default='')
 
 
 class ExcelExport:
@@ -27,16 +42,26 @@ class ExcelExport:
             self.data, self.meta = pyexcel_export.get_data(self.filename)
 
             self.pre_existing = {
-                'Hanzi': set([row[0] for row in self.data['Hanzi'][1:]]),
-                'Vocab': set([row[0] for row in self.data['Vocab'][1:]]),
-                'sentences': set([row[0] for row in self.data['sentences'][1:]]),
+                'Hanzi': set([HanziRecord(*row).Hanzi for row in self.data['Hanzi'][1:]]),
+                'Vocab': set(),
+                'sentences': set([SentenceRecord(*row).Sentence for row in self.data['sentences'][1:]]),
             }
+
+            to_pop = set()
+            for i, row in enumerate(self.data['Vocab'][1:]):
+                record = VocabRecord(*row)
+                if record.Source == 'user':
+                    self.pre_existing['Vocab'].add(record.Entry)
+                else:
+                    to_pop.add(i + 1)
+
+            self.data['Vocab'] = [row for i, row in enumerate(self.data['Vocab']) if i not in to_pop]
 
         except FileNotFoundError:
             self.data = OrderedDict([
-                ('Hanzi', [HANZI_HEADER]),
-                ('Vocab', [VOCAB_HEADER]),
-                ('sentences', [SENTENCE_HEADER])
+                ('Hanzi', [HanziRecord._fields]),
+                ('Vocab', [VocabRecord._fields]),
+                ('sentences', [SentenceRecord._fields])
             ])
             self.meta = pyexcel_export.get_meta()
 
@@ -53,9 +78,9 @@ class ExcelExport:
                 ws.append(self.hanzi_formatter.format(hanzi))
 
         ws = self.data['Vocab']
-        for _, vocab in get_all_vocab_plus():
+        for _, vocab, source in get_all_vocab_plus():
             if vocab not in self.pre_existing['Vocab']:
-                ws.append(self.vocab_formatter.format(vocab))
+                ws.append(self.vocab_formatter.format(vocab, source))
 
         ws = self.data['sentences']
         for sent_query in Sentence.query:
@@ -66,7 +91,8 @@ class ExcelExport:
         self.save()
 
     def save(self):
-        pyexcel_export.save_data(self.filename, data=self.data, meta=self.meta)
+        pyexcel_export.save_data(self.filename, data=self.data, meta=self.meta,
+                                 reset_height=True)
 
 
 class HanziFormatter:
@@ -78,18 +104,15 @@ class HanziFormatter:
         print(hanzi)
 
         entry = self.hanzi_dict.entries.get(hanzi, dict())
-        result = [
-            hanzi,
-            entry.get('Pin1Yin1', ''),
-            entry.get('Meaning', ''),
-            entry.get('Heisig', ''),
-            entry.get('Variant', ''),
-            entry.get('Kanji', ''),
-            self.hanzi_level.get_hanzi_level(hanzi),
-            '',
-            ''
-        ]
-        assert len(result) == len(HANZI_HEADER), 'Invalid HanziFormatter'
+        result = HanziRecord(
+            Hanzi=hanzi,
+            Pinyin=entry.get('Pin1Yin1', ''),
+            English=entry.get('Meaning', ''),
+            Heisig=entry.get('Heisig', ''),
+            Variant=entry.get('Variant', ''),
+            Kanji=entry.get('Kanji', ''),
+            Level=self.hanzi_level.get_hanzi_level(hanzi)
+        )
 
         return result
 
@@ -100,8 +123,8 @@ class VocabFormatter:
         self.hanzi_level = HanziLevel()
         self.vocab_to_sentence = VocabToSentence()
 
-    def format(self, entry):
-        print(entry)
+    def format(self, entry, source):
+        print(entry, source)
 
         dict_result = list(self.cedict.search_vocab(entry))
         simplified = ', '.join([item[1] for item in dict_result])
@@ -113,18 +136,16 @@ class VocabFormatter:
 
         level = max([self.hanzi_level.get_hanzi_level(hanzi) for hanzi in entry])
 
-        result = [
-            entry,
-            simplified,
-            traditional,
-            pinyin,
-            english,
-            '\n'.join(['\n'.join(pair) for pair in sentences]),
-            level,
-            '',
-            ''
-        ]
-        assert len(result) == len(VOCAB_HEADER), 'Invalid VocabFormatter'
+        result = VocabRecord(
+            Entry=entry,
+            Simplified=simplified,
+            Traditional=traditional,
+            Pinyin=pinyin,
+            English=english,
+            Sentence='\n'.join(['\n'.join(pair) for pair in sentences]),
+            Level=level,
+            Source=source
+        )
 
         return result
 
@@ -147,15 +168,12 @@ class SentenceFormatter:
         else:
             english = pinyin = ''
 
-        result = [
-            sentence,
-            pinyin,
-            english,
-            ', '.join([str(self.hanzi_level.get_hanzi_level(char)) for char in sentence
-                       if regex.match(r'\p{IsHan}', char)]),
-            '',
-            ''
-        ]
-        assert len(result) == len(SENTENCE_HEADER), 'Invalid SentenceFormatter'
+        result = SentenceRecord(
+            Sentence=sentence,
+            Pinyin=pinyin,
+            English=english,
+            Levels=', '.join([str(self.hanzi_level.get_hanzi_level(char)) for char in sentence
+                              if regex.match(r'\p{IsHan}', char)])
+        )
 
         return result
