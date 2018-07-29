@@ -142,3 +142,30 @@
 .inline {
   display: inline-block;
 }
+
+.navbar-nav div > .dropdown-menu {
+  display: block;
+  visibility: hidden;
+  transition-delay: 0.2s;
+}
+
+.navbar-nav div:hover > .dropdown-menu {
+  visibility: visible;
+  transition-delay: 0s;  /* This one doesn't seem to work. */
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+}
+
+/* rotate caret on hover */
+.dropdown-menu > div > a::after {
+  text-decoration: underline;
+  transform: rotate(-90deg);
+}

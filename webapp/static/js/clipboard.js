@@ -83,7 +83,7 @@ async function itemLoader(){
 
       const width = $item.children('.entry-content').width() - $flair.width();
       $item.children('.entry-content').width(width);
-      
+
       recent[items[i][3]].push(removeAscii(items[i][1]));
     }
 
@@ -140,7 +140,8 @@ async function viewItem(itemValue){
         $line = $('<div />');
       } else {
         if(hasHanzi(data[i])){
-          $line.append('<div class="entry inline"><div onclick="speak(\'{0}\')">{1}</div>'.format(stripHtml(data[i]), data[i]));
+          $line.append('<div class="entry inline"><div onclick="speak(\'{0}\')">{1}</div>'
+            .format(stripHtml(data[i]), data[i]));
         } else {
           $line.append(data[i]);
         }
