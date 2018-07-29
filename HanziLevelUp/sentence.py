@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import jieba
 
 from webapp.databases import Sentence
 
@@ -10,18 +11,18 @@ def get_last_day_sentences():
 
 
 def cut_sentence(item):
-    sentence = ''
-    for char in item:
-        if char == '\n':
-            yield char
-        else:
-            if char in '》—':
-                yield sentence
-                sentence = ''
+    segments = jieba.cut(item)
 
-            sentence += char
+    sentence_segments = []
+    for segment in segments:
+        if segment in ('《', ):
+            yield ''.join(sentence_segments)
+            sentence_segments = []
 
-            if char in '。？！.?! 《：':
-                yield sentence
-                sentence = ''
-    yield sentence
+        sentence_segments.append(segment)
+
+        if segment in ('。', '：', '》'):
+            yield ''.join(sentence_segments)
+            sentence_segments = []
+
+    yield ''.join(sentence_segments)
