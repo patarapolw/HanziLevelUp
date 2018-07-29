@@ -14,20 +14,20 @@ from webapp.databases import Sentence
 HanziRecord = nl.namedlist('HanziRecord', [
     'Hanzi', 'Pinyin', 'English', 'Heisig', 'Variant', 'Kanji',
     'Level', 'Note', 'Tags',
-    ('Modified', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
+    ('Created', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
 ], default='')
 
 VocabRecord = nl.namedlist('VocabRecord', [
     'Entry', 'Simplified', 'Traditional', 'Pinyin', 'English', 'Sentence',
     'Level', 'Note', 'Tags',
     'Source',
-    ('Modified', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
+    ('Created', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
 ], default='')
 
 SentenceRecord = nl.namedlist('SentenceRecord', [
     'Sentence', 'Pinyin', 'English',
     'Levels', 'Note', 'Tags',
-    ('Modified', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
+    ('Created', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
 ], default='')
 
 

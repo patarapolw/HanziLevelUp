@@ -49,9 +49,12 @@ class VocabToSentence:
 
 
 def sentence_to_vocab(sentence):
+    used_vocab = set()
     for vocab in jieba.cut_for_search(sentence):
         if regex.match(r'[\p{IsHan}\p{InCJK_Radicals_Supplement}\p{InKangxi_Radicals}]', vocab):
-            yield vocab
+            if vocab not in used_vocab:
+                yield vocab
+            used_vocab.add(vocab)
 
 
 def get_last_day_vocab():

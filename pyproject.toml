@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "HanziLevelUp"
-version = "0.6.1"
+version = "0.6.2"
 description = """
 A Hanzi learning suite, with levels based on Hanzi Level Project, aka. \
 nother attempt to clone WaniKani.com for Chinese.\
