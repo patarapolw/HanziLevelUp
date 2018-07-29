@@ -15,8 +15,13 @@ def cut_sentence(item):
         if char == '\n':
             yield char
         else:
+            if char in '》—':
+                yield sentence
+                sentence = ''
+
             sentence += char
-            if char in '。？！.?! ':
+
+            if char in '。？！.?! 《：':
                 yield sentence
                 sentence = ''
     yield sentence
