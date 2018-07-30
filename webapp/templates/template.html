@@ -6,9 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.contextMenu.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.all.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.structure.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui-1.12.1/jquery-ui.theme.min.css') }}">
 
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
@@ -48,6 +52,26 @@
           </div>
         </div>
         <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/quizReview" id="quizDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Quiz
+            <span class="badge badge-danger pendingReview">0</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="quizDropdownLink">
+            <div class="dropdown-submenu">
+              <a class="dropdown-item dropdown-toggle" href="#" id="quizAddDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add</a>
+              <div class="dropdown-menu" aria-labelledby="quizAddDropdownLink">
+                <a class="dropdown-item" href="/quizAddHanzi">Hanzi</a>
+                <a class="dropdown-item" href="/quizAddVocab">Vocab</a>
+                <a class="dropdown-item" href="/quizAddSentences">Sentences</a>
+              </div>
+            </div>
+            <a class="dropdown-item" href="/quizReview">
+              Review
+              <span class="badge badge-danger pendingReview">0</span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="toolsDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tools</a>
           <div class="dropdown-menu" aria-labelledby="toolsDropdownLink">
             <a class="dropdown-item" href="/clipboard">Clipboard viewer</a>
@@ -60,26 +84,6 @@
             <a class="dropdown-item" href="/progress">Hanzi progress</a>
           </div>
         </div>
-        <!-- <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="/quizReview" id="quizDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Quiz
-            <span class="badge badge-danger pendingReview">0</span>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="quizDropdownLink">
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" href="#" id="quizAddDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add</a>
-              <div class="dropdown-menu" aria-labelledby="quizAddDropdownLink">
-                <a class="dropdown-item" href="/quizAdd/hanzi">Hanzi</a>
-                <a class="dropdown-item" href="/quizAdd/vocab">Vocab</a>
-                <a class="dropdown-item" href="/quizAdd/sentences">Sentences</a>
-              </div>
-            </div>
-            <a class="dropdown-item" href="/quizReview">
-              Review
-              <span class="badge badge-danger pendingReview">0</span>
-            </a>
-          </div>
-        </div> -->
         <a class="nav-item nav-link disabled" href="#">Settings</a>
       </div>
 
@@ -101,10 +105,12 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js' ) }}"></script>
   <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/jquery.ui.position.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='jquery-ui-1.12.1//jquery-ui.min.js') }}"></script>
+
   <script src="{{ url_for('static', filename='js/jquery.contextMenu.min.js') }}"></script>
 
   <script src="{{ url_for('static', filename='js/common.js') }}"></script>

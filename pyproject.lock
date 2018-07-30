@@ -332,24 +332,19 @@ texttable = ">=0.8.1"
 
 [[package]]
 category = "main"
-description = ""
+description = "Keep good formatting when exporting to *.xlsx, *.yaml and *.json and when updating data."
 name = "pyexcel-export"
 optional = false
 platform = "*"
 python-versions = ">=3.5"
-version = "0.3.5-dev1"
+version = "0.3.5"
 
 [package.dependencies]
-importlib_resources = "^1.0"
-openpyxl = "^2.5"
-oyaml = "^0.5.0"
-pyexcel = "^0.5.8"
-pyexcel-xlsx = "^0.5.6"
-
-[package.source]
-reference = ""
-type = "directory"
-url = "../pyexcel-export"
+importlib_resources = ">=1.0,<2.0"
+openpyxl = ">=2.5,<3.0"
+oyaml = ">=0.5.0,<0.6.0"
+pyexcel = ">=0.5.8,<0.6.0"
+pyexcel-xlsx = ">=0.5.6,<0.6.0"
 
 [[package]]
 category = "main"
@@ -511,6 +506,15 @@ version = "0.31.1"
 
 [[package]]
 category = "main"
+description = "Fast, pure-Python full text indexing, search, and spell checking library."
+name = "whoosh"
+optional = false
+platform = "UNKNOWN"
+python-versions = "*"
+version = "2.7.4"
+
+[[package]]
+category = "main"
 description = "wordfreq is a Python library for looking up the frequencies of words in many"
 name = "wordfreq"
 optional = false
@@ -524,7 +528,7 @@ msgpack = "*"
 regex = "2018.02.21"
 
 [metadata]
-content-hash = "0a02939b1fd908b946bc4b0c3845b921ba22c5f76e5a902ed6bea6e83f6790a9"
+content-hash = "601d36751a5a556acfe617bfcb12814e2aa90912c706e05a21fab85fcd9fa9eb"
 platform = "*"
 python-versions = ">=3"
 
@@ -559,7 +563,7 @@ openpyxl = ["9239b74faf175dc4276a5fc277655fc53c2f704ded39e680d35e6a39e1913f69"]
 oyaml = ["46510c036d202ae683c9fd78f8cac164f404b2b1a6d369ec0edcbd47fb40db3c", "5f0072546a46ae2c77c03406838d55015646f4025ac99b78f5c05801727ad220"]
 pycparser = ["99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"]
 pyexcel = ["4c470a7059d54e1c24112008a3410d1ff16d65fc47fa32a87d9581f1d92db11e", "7554b140729eaa679c0d627d5a44c787cd7216a917fa61f3da9f6b91438c9d43"]
-pyexcel-export = []
+pyexcel-export = ["430668b102ed5f3c35ae2b0d966489ed395cd55baaba39899c21b75a0ac02fa9", "e86fb14dd20a83731994b939d6dcf64d5319fee5266248cc1aa01a7c01209589"]
 pyexcel-io = ["5cf5ccf7750ca130640277f31178b6284a4f9f0f0d1d41f28f419b67ce26132b", "d0639851fce803c772ccf0b8ec975f212cb64b6681b63d67e89a2ea238c0afdb"]
 pyexcel-xlsx = ["4b406c0ec64c577a171335ab3bca8acd3bc845b5c99691c3600d11c284091435", "4e1f953427ac5073ee7e42d30e7108f24fde475e58e24822033fdc90a6131291"]
 pyopenssl = ["26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854", "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"]
@@ -575,4 +579,5 @@ typing = ["3a887b021a77b292e151afb75323dea88a7bc1b3dfa92176cff8e44c8b68bddf", "b
 urllib3 = ["a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf", "b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"]
 werkzeug = ["c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c", "d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b"]
 wheel = ["0a2e54558a0628f2145d2fc822137e322412115173e8a2ddbe1c9024338ae83c", "80044e51ec5bbf6c894ba0bc48d26a8c20a9ba629f4ca19ea26ecfcf87685f5f"]
+whoosh = ["7ca5633dbfa9e0e0fa400d3151a8a0c4bec53bd2ecedc0a67705b17565c31a83", "aa39c3c3426e3fd107dcb4bde64ca1e276a65a889d9085a6e4b54ba82420a852", "e0857375f63e9041e03fedd5b7541f97cf78917ac1b6b06c1fcc9b45375dda69"]
 wordfreq = ["29fc02ee145f243ea7facc52c737603bf67c18f3c8c8e0e0d7066037e12539a1"]

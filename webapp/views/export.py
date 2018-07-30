@@ -1,4 +1,4 @@
-from flask import request, send_from_directory
+from flask import send_from_directory
 
 from HanziLevelUp.excel import ExcelExport
 
@@ -7,10 +7,9 @@ from webapp import app
 
 @app.route('/post/export/<export_type>', methods=['POST'])
 def do_export(export_type):
-    if request.method == 'POST':
-        if export_type == 'excel':
-            ExcelExport('user/HanziLevelUp.xlsx').from_db()
-            return '1'
+    if export_type == 'excel':
+        ExcelExport('user/HanziLevelUp.xlsx').from_db()
+        return '1'
 
     return '0'
 

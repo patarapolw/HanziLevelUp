@@ -11,13 +11,12 @@ def speak():
     resp = make_response()
     resp.headers['Access-Control-Allow-Origin'] = '*'
 
-    if request.method == 'POST':
-        global speak_processes
+    global speak_processes
 
-        for process in speak_processes:
-            process.kill()
-        speak_processes = list()
-        item = request.form.get('item')
-        speak_processes.append(do_speak(item))
+    for process in speak_processes:
+        process.kill()
+    speak_processes = list()
+    item = request.form.get('item')
+    speak_processes.append(do_speak(item))
 
     return resp

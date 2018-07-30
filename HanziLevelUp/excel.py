@@ -12,7 +12,7 @@ from webapp.databases import Sentence
 
 
 HanziRecord = nl.namedlist('HanziRecord', [
-    'Hanzi', 'Pinyin', 'English', 'Heisig', 'Variant', 'Kanji',
+    'Hanzi', 'Pinyin', 'English', 'Heisig', 'Variants', 'Kanji',
     'Level', 'Note', 'Tags',
     ('Created', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
 ], default='')
@@ -42,8 +42,8 @@ class ExcelExport:
             self.data, self.meta = pyexcel_export.get_data(self.filename)
 
             self.pre_existing = {
-                'Hanzi': set([HanziRecord(*row).Hanzi for row in self.data['Hanzi'][1:]]),
-                'Vocab': set(),
+                'hanzi': set([HanziRecord(*row).Hanzi for row in self.data['Hanzi'][1:]]),
+                'vocab': set(),
                 'sentences': set([SentenceRecord(*row).Sentence for row in self.data['sentences'][1:]]),
             }
 
@@ -59,25 +59,25 @@ class ExcelExport:
 
         except FileNotFoundError:
             self.data = OrderedDict([
-                ('Hanzi', [HanziRecord._fields]),
-                ('Vocab', [VocabRecord._fields]),
+                ('hanzi', [HanziRecord._fields]),
+                ('vocab', [VocabRecord._fields]),
                 ('sentences', [SentenceRecord._fields])
             ])
             self.meta = pyexcel_export.get_meta()
 
             self.pre_existing = {
-                'Hanzi': set(),
-                'Vocab': set(),
+                'hanzi': set(),
+                'vocab': set(),
                 'sentences': set(),
             }
 
     def from_db(self):
-        ws = self.data['Hanzi']
+        ws = self.data['hanzi']
         for hanzi in get_all_hanzi():
             if hanzi not in self.pre_existing['Hanzi']:
                 ws.append(self.hanzi_formatter.format(hanzi))
 
-        ws = self.data['Vocab']
+        ws = self.data['vocab']
         for _, vocab, source in get_all_vocab_plus():
             if vocab not in self.pre_existing['Vocab']:
                 ws.append(self.vocab_formatter.format(vocab, source))

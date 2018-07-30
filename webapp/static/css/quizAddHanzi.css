@@ -1,0 +1,26 @@
+#input-max-level {
+  width: 3.5em;
+  text-align: center;
+}
+
+#input-created {
+  width: 10.5em;
+  text-align: center;
+}
+
+#entry-container {
+  text-align: center;
+}
+
+#entry div {
+  font-size: 200px;
+  height: 1.5em;
+}
+
+.chooseButton {
+  width: 100px;
+}
+
+.text-display {
+  display: inline-block;
+}

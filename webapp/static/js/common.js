@@ -372,7 +372,7 @@ function setCharacterHoverListener($showPanel){
   });
 
   $showPanel.contextMenu({
-    selector: '.hoverElement',
+    selector: '.hoverElement, .big-character',
     items: {
       viewHanzi: {
         name: 'View Hanzi info',
@@ -392,7 +392,10 @@ function setCharacterHoverListener($showPanel){
     },
     events: {
       hide: function(options){
-        $(this).remove();
+        if($(this).hasClass('hoverElement')){
+          $(this).remove();
+        }
+        
         return true;
       }
     }

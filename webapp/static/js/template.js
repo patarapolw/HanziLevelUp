@@ -14,6 +14,8 @@ $(document).ready(function() {
         $('.dropdown-menu', this).css('transition-delay', '0.2s');
       });
     });
+
+  $('.pendingReview').hide();
 });
 
 function doExport(exportType){

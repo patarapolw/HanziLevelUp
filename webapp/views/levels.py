@@ -27,14 +27,11 @@ def get_level_vocab():
                         yield result_to_examine
                     break
 
-    if request.method == 'POST':
-        current_level_hanzi = request.form.get('currentLevelHanzi')
-        up_to_current_level_hanzi = request.form.get('previousLevelsHanzi') + current_level_hanzi
+    current_level_hanzi = request.form.get('currentLevelHanzi')
+    up_to_current_level_hanzi = request.form.get('previousLevelsHanzi') + current_level_hanzi
 
-        result = list(get_vocab())
-        return jsonify(result)
-
-    return '0'
+    result = list(get_vocab())
+    return jsonify(result)
 
 
 @app.route('/post/sentence/getLevel', methods=['POST'])
@@ -46,10 +43,7 @@ def get_level_sentences():
                     yield [sentence.id, sentence.sentence]
                     break
 
-    if request.method == 'POST':
-        current_level_hanzi = request.form.get('currentLevelHanzi')
+    current_level_hanzi = request.form.get('currentLevelHanzi')
 
-        result = list(get_sentence())
-        return jsonify(result)
-
-    return '0'
+    result = list(get_sentence())
+    return jsonify(result)
