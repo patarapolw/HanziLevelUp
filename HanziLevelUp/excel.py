@@ -18,7 +18,7 @@ HanziRecord = nl.namedlist('HanziRecord', [
 ], default='')
 
 VocabRecord = nl.namedlist('VocabRecord', [
-    'Entry', 'Simplified', 'Traditional', 'Pinyin', 'English', 'Sentence',
+    'Vocab', 'Simplified', 'Traditional', 'Pinyin', 'English', 'Sentence',
     'Level', 'Note', 'Tags',
     'Source',
     ('Created', datetime.now(datetime.now().astimezone().tzinfo).isoformat())
