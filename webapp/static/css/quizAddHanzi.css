@@ -6,6 +6,7 @@
 #input-created {
   width: 10.5em;
   text-align: center;
+  background-color: white !important;
 }
 
 #entry-container {

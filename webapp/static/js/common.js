@@ -395,7 +395,7 @@ function setCharacterHoverListener($showPanel){
         if($(this).hasClass('hoverElement')){
           $(this).remove();
         }
-        
+
         return true;
       }
     }

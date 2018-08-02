@@ -17,17 +17,17 @@ python = ">=3"
 flask = "^1.0"
 flask-sqlalchemy = "^2.3"
 flask-migrate = "^2.2"
+flask-whooshalchemy = "^0.56.0"
 wordfreq = "^2.1"
 requests = "^2.19"
 bs4 = "^0.0.1"
 jieba = "^0.39.0"
 regex = "=2018.02.21"
-#pyexcel-export = {path = "../pyexcel-export"}
 namedlist = "^1.7"
-pyexcel = "^0.5.8"
 pyexcel-export = "^0.3.5"
+#pyexcel-export = {path = "../pyexcel-export"}
 python-dateutil = "^2.7"
-whoosh = "^2.7"
 
 [tool.poetry.dev-dependencies]
-pyopenssl = "^18.0"
+#pyopenssl = "^18.0"
+sqlite-web = {git = "https://github.com/patarapolw/sqlite-web.git", branch = "master"}

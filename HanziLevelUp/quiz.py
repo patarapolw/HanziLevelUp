@@ -54,6 +54,11 @@ def search(data_type: str, search_query: str, level, created: str):
         else:
             return True
 
+    if not level.isdigit():
+        level = 100
+    else:
+        level = int(level)
+
     ix = searchers[data_type]
     with ix.searcher() as searcher:
         search_query += ' *'

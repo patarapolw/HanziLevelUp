@@ -1,8 +1,7 @@
 {% extends 'template.html' %}
 
 {% block css %}
-  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/tempusdominus-bootstrap-4.min.css') }}"/> -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='flatpickr/flatpickr.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.bootstrap-touchspin.min.css') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/quizAddHanzi.css') }}"/>
 {% endblock %}
@@ -20,7 +19,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="max-level-label">Max Level</span>
         </div>
-        <input type="text" class="form-control" aria-describedby="max-level-label" id="input-max-level">
+        <input type="text" class="form-control" aria-describedby="max-level-label" id="input-max-level" placeholder="any">
       </div>
     </div>
     <div class="col-sm-auto">
@@ -28,7 +27,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="created-label">Created</span>
         </div>
-        <input type="text" class="form-control datetimepicker-input" aria-describedby="created-label" id="input-created" data-toggle="datetimepicker" data-target="#input-created">
+        <input type="text" class="form-control" aria-describedby="created-label" id="input-created">
       </div>
     </div>
   </div>
@@ -88,9 +87,7 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="{{ url_for('static', filename='js/moment.js' ) }}"></script>
-  <!-- <script src="{{ url_for('static', filename='js/tempusdominus-bootstrap-4.min.js' ) }}"></script> -->
-  <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='flatpickr/flatpickr.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery.bootstrap-touchspin.min.js' ) }}"></script>
   <script src="{{ url_for('static', filename='js/quizAddHanzi.js' ) }}"></script>
 {% endblock %}

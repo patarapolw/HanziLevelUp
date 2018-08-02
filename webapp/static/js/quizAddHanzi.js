@@ -20,21 +20,14 @@ $(document).ready(function(){
   });
 
   $('#input-created')
-    // .datetimepicker({
-    //   date: moment().subtract(1, 'days'),
-    //   format: 'YYYY-MM-DD HH:00'
-    // });
-    .val(moment().subtract(1, 'days').format('YYYY-MM-DD HH:00'))
-    .datetimepicker({
-      format: 'yyyy-mm-dd hh:00',
-      todayBtn: true,
-      todayHighlight: true,
-      autoclose: true,
-      minView: 'day',
-      showMeridian: true
-    })
-    .change(function(){
-      doSubmit();
+    .flatpickr({
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i',
+      defaultDate: (function(d){ d.setDate(d.getDate()-1); d.setMinutes(0); return d})(new Date),
+      defaultMinute: 0,
+      onChange: function(){
+        doSubmit();
+      }
     });
 
   $('#previousChar').click(function(){

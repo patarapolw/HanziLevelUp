@@ -14,15 +14,6 @@ python-dateutil = "*"
 python-editor = ">=0.3"
 
 [[package]]
-category = "dev"
-description = "Fast ASN.1 parser and serializer with definitions for private keys, public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8, PKCS#12, PKCS#5, X.509 and TSP"
-name = "asn1crypto"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "0.24.0"
-
-[[package]]
 category = "main"
 description = "Screen-scraping library"
 name = "beautifulsoup4"
@@ -30,6 +21,15 @@ optional = false
 platform = "*"
 python-versions = "*"
 version = "4.6.1"
+
+[[package]]
+category = "main"
+description = "Fast, simple object-to-object and broadcast signaling"
+name = "blinker"
+optional = false
+platform = "UNKNOWN"
+python-versions = "*"
+version = "1.4"
 
 [[package]]
 category = "main"
@@ -53,18 +53,6 @@ python-versions = "*"
 version = "2018.4.16"
 
 [[package]]
-category = "dev"
-description = "Foreign Function Interface for Python calling C code."
-name = "cffi"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "1.11.5"
-
-[package.dependencies]
-pycparser = "*"
-
-[[package]]
 category = "main"
 description = "Universal encoding detector for Python 2 and 3"
 name = "chardet"
@@ -81,21 +69,6 @@ optional = false
 platform = "*"
 python-versions = "*"
 version = "6.7"
-
-[[package]]
-category = "dev"
-description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
-name = "cryptography"
-optional = false
-platform = "*"
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-version = "2.3"
-
-[package.dependencies]
-asn1crypto = ">=0.21.0"
-cffi = ">=1.7,<1.11.3 || >1.11.3"
-idna = ">=2.1"
-six = ">=1.4.1"
 
 [[package]]
 category = "main"
@@ -147,6 +120,21 @@ version = "2.3.2"
 [package.dependencies]
 Flask = ">=0.10"
 SQLAlchemy = ">=0.8.0"
+
+[[package]]
+category = "main"
+description = "Whoosh extension to Flask/SQLAlchemy"
+name = "flask-whooshalchemy"
+optional = false
+platform = "any"
+python-versions = "*"
+version = "0.56"
+
+[package.dependencies]
+Flask-SQLAlchemy = "*"
+SQLAlchemy = "*"
+Whoosh = "*"
+blinker = "*"
 
 [[package]]
 category = "main"
@@ -308,13 +296,13 @@ version = "0.5"
 pyyaml = "*"
 
 [[package]]
-category = "dev"
-description = "C parser in Python"
-name = "pycparser"
+category = "main"
+description = "a little orm"
+name = "peewee"
 optional = false
-platform = "Cross Platform"
+platform = "*"
 python-versions = "*"
-version = "2.18"
+version = "3.6.4"
 
 [[package]]
 category = "main"
@@ -372,17 +360,13 @@ openpyxl = ">=2.5.0"
 pyexcel-io = ">=0.5.3"
 
 [[package]]
-category = "dev"
-description = "Python wrapper module around the OpenSSL library"
-name = "pyopenssl"
+category = "main"
+description = "Pygments is a syntax highlighting package written in Python."
+name = "pygments"
 optional = false
-platform = "*"
+platform = "any"
 python-versions = "*"
-version = "18.0.0"
-
-[package.dependencies]
-cryptography = ">=2.2.1"
-six = ">=1.5.2"
+version = "2.2.0"
 
 [[package]]
 category = "main"
@@ -458,6 +442,25 @@ version = "1.2.10"
 
 [[package]]
 category = "main"
+description = ""
+name = "sqlite-web"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "0.3.3.1.dev3"
+
+[package.dependencies]
+flask = "*"
+peewee = ">=3.0.0"
+pygments = "*"
+
+[package.source]
+reference = "a3e707b4e168b7c8b93d793c8ba6f3db50d44100"
+type = "git"
+url = "https://github.com/patarapolw/sqlite-web.git"
+
+[[package]]
+category = "main"
 description = "module for creating simple ASCII tables"
 name = "texttable"
 optional = false
@@ -528,24 +531,23 @@ msgpack = "*"
 regex = "2018.02.21"
 
 [metadata]
-content-hash = "601d36751a5a556acfe617bfcb12814e2aa90912c706e05a21fab85fcd9fa9eb"
+content-hash = "248ac69ea4b8fe5c501d3759dedc050947a03ab1ee100c83e25dd667489322d1"
 platform = "*"
 python-versions = ">=3"
 
 [metadata.hashes]
 alembic = ["52d73b1d750f1414fa90c25a08da47b87de1e4ad883935718a8f36396e19e78e", "eb7db9b4510562ec37c91d00b00d95fde076c1030d3f661aea882eec532b3565"]
-asn1crypto = ["2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87", "9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49"]
 beautifulsoup4 = ["2545357585a6cc7d050d3c43a86eba2c0b91b9e7ac8a3965e64a6ead6a1a9a3d", "272081ad78c5495ba67083a0e50920163701fa6fe67fbb5eefeb21b5dd88c40b", "4ddc90ad88bccc005a71d8ef32f7b1cd8f935475cd561c4122b2f87de45d28ab", "5a3d659840960a4107047b6328d6d4cdaaee69939bf11adc07466a1856c99a80", "bd43a3b26d2886acd63070c43da821b60dea603eb6d45bab0294aac6129adbfa"]
+blinker = ["471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"]
 bs4 = ["36ecea1fd7cc5c0c6e4a1ff075df26d50da647b75376626cc186e2212886dd3a"]
 certifi = ["13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7", "9fa520c1bacfb634fa7af20a76bcbd3d5fb390481724c597da32c719a7dca4b0"]
-cffi = ["151b7eefd035c56b2b2e1eb9963c90c6302dc15fbd8c1c0a83a163ff2c7d7743", "1553d1e99f035ace1c0544050622b7bc963374a00c467edafac50ad7bd276aef", "1b0493c091a1898f1136e3f4f991a784437fac3673780ff9de3bcf46c80b6b50", "2ba8a45822b7aee805ab49abfe7eec16b90587f7f26df20c71dd89e45a97076f", "3bb6bd7266598f318063e584378b8e27c67de998a43362e8fce664c54ee52d30", "3c85641778460581c42924384f5e68076d724ceac0f267d66c757f7535069c93", "3eb6434197633b7748cea30bf0ba9f66727cdce45117a712b29a443943733257", "495c5c2d43bf6cebe0178eb3e88f9c4aa48d8934aa6e3cddb865c058da76756b", "4c91af6e967c2015729d3e69c2e51d92f9898c330d6a851bf8f121236f3defd3", "57b2533356cb2d8fac1555815929f7f5f14d68ac77b085d2326b571310f34f6e", "770f3782b31f50b68627e22f91cb182c48c47c02eb405fd689472aa7b7aa16dc", "79f9b6f7c46ae1f8ded75f68cf8ad50e5729ed4d590c74840471fc2823457d04", "7a33145e04d44ce95bcd71e522b478d282ad0eafaf34fe1ec5bbd73e662f22b6", "857959354ae3a6fa3da6651b966d13b0a8bed6bbc87a0de7b38a549db1d2a359", "87f37fe5130574ff76c17cab61e7d2538a16f843bb7bca8ebbc4b12de3078596", "95d5251e4b5ca00061f9d9f3d6fe537247e145a8524ae9fd30a2f8fbce993b5b", "9d1d3e63a4afdc29bd76ce6aa9d58c771cd1599fbba8cf5057e7860b203710dd", "a36c5c154f9d42ec176e6e620cb0dd275744aa1d804786a71ac37dc3661a5e95", "a6a5cb8809091ec9ac03edde9304b3ad82ad4466333432b16d78ef40e0cce0d5", "ae5e35a2c189d397b91034642cb0eab0e346f776ec2eb44a49a459e6615d6e2e", "b0f7d4a3df8f06cf49f9f121bead236e328074de6449866515cea4907bbc63d6", "b75110fb114fa366b29a027d0c9be3709579602ae111ff61674d28c93606acca", "ba5e697569f84b13640c9e193170e89c13c6244c24400fc57e88724ef610cd31", "be2a9b390f77fd7676d80bc3cdc4f8edb940d8c198ed2d8c0be1319018c778e1", "ca1bd81f40adc59011f58159e4aa6445fc585a32bb8ac9badf7a2c1aa23822f2", "d5d8555d9bfc3f02385c1c37e9f998e2011f0db4f90e250e5bc0c0a85a813085", "e55e22ac0a30023426564b1059b035973ec82186ddddbac867078435801c7801", "e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4", "ecbb7b01409e9b782df5ded849c178a0aa7c906cf8c5a67368047daab282b184", "ed01918d545a38998bfa5902c7c00e0fee90e957ce036a4000a88e3fe2264917", "edabd457cd23a02965166026fd9bfd196f4324fe6032e866d0f3bd0301cd486f", "fdf1c1dc5bafc32bc5d08b054f94d659422b05aba244d6be4ddc1c72d9aa70fb"]
 chardet = ["84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae", "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"]
 click = ["29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d", "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b"]
-cryptography = ["21af753934f2f6d1a10fe8f4c0a64315af209ef6adeaee63ca349797d747d687", "27bb401a20a838d6d0ea380f08c6ead3ccd8c9d8a0232dc9adcc0e4994576a66", "29720c4253263cff9aea64585adbbe85013ba647f6e98367efff9db2d7193ded", "2a35b7570d8f247889784010aac8b384fd2e4a47b33e15c4a60b45a7c1944120", "42c531a6a354407f42ee07fda5c2c0dc822cf6d52744949c182f2b295fbd4183", "5eb86f03f9c4f0ac2336ac5431271072ddf7ecc76b338e26366732cfac58aa19", "67f7f57eae8dede577f3f7775957f5bec93edd6bdb6ce597bb5b28e1bdf3d4fb", "6ec84edcbc966ae460560a51a90046503ff0b5b66157a9efc61515c68059f6c8", "7ba834564daef87557e7fcd35c3c3183a4147b0b3a57314e53317360b9b201b3", "7d7f084cbe1fdb82be5a0545062b59b1ad3637bc5a48612ac2eb428ff31b31ea", "82409f5150e529d699e5c33fa8fd85e965104db03bc564f5f4b6a9199e591f7c", "87d092a7c2a44e5f7414ab02fb4145723ebba411425e1a99773531dd4c0e9b8d", "8c56ef989342e42b9fcaba7c74b446f0cc9bed546dd00034fa7ad66fc00307ef", "9449f5d4d7c516a6118fa9210c4a00f34384cb1d2028672100ee0c6cce49d7f6", "bc2301170986ad82d9349a91eb8884e0e191209c45f5541b16aa7c0cfb135978", "c132bab45d4bd0fff1d3fe294d92b0a6eb8404e93337b3127bdec9f21de117e6", "c3d945b7b577f07a477700f618f46cbc287af3a9222cd73035c6ef527ef2c363", "cee18beb4c807b5c0b178f4fa2fae03cef9d51821a358c6890f8b23465b7e5d2", "d01dfc5c2b3495184f683574e03c70022674ca9a7be88589c5aba130d835ea90"]
 et-xmlfile = ["614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"]
 flask = ["2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48", "a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05"]
 flask-migrate = ["83ebc105f87357ddd3968f83510d2b1092f006660b1c6ba07a4efce036ca567d", "cd1b4e6cb829eeb41c02ad9202d83bef5f4b7a036dd9fad72ce96ad1e22efb07"]
 flask-sqlalchemy = ["3bc0fac969dd8c0ace01b32060f0c729565293302f0c4269beed154b46bec50b", "5971b9852b5888655f11db634e87725a9031e170f37c0ce7851cf83497f56e53"]
+flask-whooshalchemy = ["8320ba75040bd37c2810d5ab9a4bd9f3ccadebbef93c805fe0578403f8785baa"]
 idna = ["156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e", "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"]
 importlib-resources = ["73f454e062ac149bafd262b18c1f9ebc91f53bd6474e028d1bf1c59ebd152efb"]
 itsdangerous = ["cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519"]
@@ -561,12 +563,12 @@ msgpack = ["0b3b1773d2693c70598585a34ca2715873ba899565f0a7c9a1545baef7e7fbdc", "
 namedlist = ["190b39ceaf1d6b59999811259e61beb1b26aaa482fb8c95538294d551461c986"]
 openpyxl = ["9239b74faf175dc4276a5fc277655fc53c2f704ded39e680d35e6a39e1913f69"]
 oyaml = ["46510c036d202ae683c9fd78f8cac164f404b2b1a6d369ec0edcbd47fb40db3c", "5f0072546a46ae2c77c03406838d55015646f4025ac99b78f5c05801727ad220"]
-pycparser = ["99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"]
+peewee = ["538d7b7f892e59ecbef6eeefb867fd37f20ac77e602b4ee94b2766836cfa24ba"]
 pyexcel = ["4c470a7059d54e1c24112008a3410d1ff16d65fc47fa32a87d9581f1d92db11e", "7554b140729eaa679c0d627d5a44c787cd7216a917fa61f3da9f6b91438c9d43"]
 pyexcel-export = ["430668b102ed5f3c35ae2b0d966489ed395cd55baaba39899c21b75a0ac02fa9", "e86fb14dd20a83731994b939d6dcf64d5319fee5266248cc1aa01a7c01209589"]
 pyexcel-io = ["5cf5ccf7750ca130640277f31178b6284a4f9f0f0d1d41f28f419b67ce26132b", "d0639851fce803c772ccf0b8ec975f212cb64b6681b63d67e89a2ea238c0afdb"]
 pyexcel-xlsx = ["4b406c0ec64c577a171335ab3bca8acd3bc845b5c99691c3600d11c284091435", "4e1f953427ac5073ee7e42d30e7108f24fde475e58e24822033fdc90a6131291"]
-pyopenssl = ["26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854", "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"]
+pygments = ["78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d", "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"]
 python-dateutil = ["1adb80e7a782c12e52ef9a8182bebeb73f1d7e24e374397af06fb4956c8dc5c0", "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8"]
 python-editor = ["a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565"]
 pyyaml = ["3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b", "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf", "40c71b8e076d0550b2e6380bada1f1cd1017b882f7e16f09a65be98e017f211a", "558dd60b890ba8fd982e05941927a3911dc409a63dcb8b634feaa0cda69330d3", "a7c28b45d9f99102fa092bb213aa12e0aaf9a6a1f5e395d36166639c1f96c3a1", "aa7dd4a6a427aed7df6fb7f08a580d68d9b118d90310374716ae90b710280af1", "bc558586e6045763782014934bfaf39d48b8ae85a2713117d16c39864085c613", "d46d7982b62e0729ad0175a9bc7e10a566fc07b224d2c79fafb5e032727eaa04", "d5eef459e30b09f5a098b9cea68bebfeb268697f78d647bd255a085371ac7f3f", "e01d3203230e1786cd91ccfdc8f8454c8069c91bee3962ad93b87a4b2860f537", "e170a9e6fcfd19021dd29845af83bb79236068bf5fd4df3327c1be18182b2531"]
@@ -574,6 +576,7 @@ regex = ["1b428a296531ea1642a7da48562746309c5c06471a97bd0c02dd6a82e9cecee8", "27
 requests = ["63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1", "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"]
 six = ["70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9", "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"]
 sqlalchemy = ["72325e67fb85f6e9ad304c603d83626d1df684fdf0c7ab1f0352e71feeab69d8"]
+sqlite-web = []
 texttable = ["95e8cfe85f8395a7eacdfbc8f09d885b9ef3a6ac6ead0364ea721de1127aa36b"]
 typing = ["3a887b021a77b292e151afb75323dea88a7bc1b3dfa92176cff8e44c8b68bddf", "b2c689d54e1144bbcfd191b0832980a21c2dbcf7b5ff7a66248a60c90e951eb8", "d400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2"]
 urllib3 = ["a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf", "b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"]
