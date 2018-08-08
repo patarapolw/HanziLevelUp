@@ -1,11 +1,12 @@
 import json
+from datetime import datetime
 
-from flask import request, jsonify
+from flask import request, jsonify, Response
 
 from HanziLevelUp.vocab import (get_all_vocab_plus, VocabInfo, VocabToSentence, sentence_to_vocab,
                                 get_last_day_vocab)
 from webapp import app, db
-from webapp.databases import Vocab
+from webapp.databases import Vocab, Hanzi
 
 
 @app.route('/post/vocab/getAll', methods=['POST'])
@@ -24,18 +25,36 @@ def get_recent_vocab():
 
 @app.route('/post/vocab/add', methods=['POST'])
 def add_vocab():
-    new_vocab = Vocab(vocab=request.form.get('item'))
-    db.session.add(new_vocab)
+    vocab = request.form.get('item')
+
+    previous_entry = Vocab.query.filter_by(vocab=vocab).first()
+    if previous_entry is None:
+        vocab_query = Vocab(entry=vocab)
+        vocab_id = str(vocab_query.id)
+        db.session.add(vocab_query)
+    else:
+        previous_entry.modified = datetime.now()
+        vocab_id = str(previous_entry.id)
+
+    for hanzi in set(vocab):
+        previous_entry = Hanzi.query.filter_by(hanzi=hanzi).first()
+        if previous_entry is None:
+            pass
+            hanzi_query = Hanzi(entry=hanzi)
+            db.session.add(hanzi_query)
+        else:
+            previous_entry.modified = datetime.now()
+
     db.session.commit()
 
-    return str(new_vocab.id)
+    return vocab_id
 
 
 @app.route('/post/vocab/delete', methods=['POST'])
 def delete_vocab():
     Vocab.query.filter_by(id=int(request.form.get('id'))).delete()
     db.session.commit()
-    return '1'
+    return Response(status=303)
 
 
 @app.route('/post/vocab/getListInfo', methods=['POST'])

@@ -299,14 +299,14 @@ function contextMenuBuilder($trigger, e, itemType, dataOrSelector) {
         name: "Add to learning",
         visible: false,
         callback: function(key, opt){
-          $.post('/post/{0}/addToLearning'.format(itemType), postJson);
+          $.post('/post/{0}/add'.format(itemType), postJson);
         }
       },
       removeFromLearning: {
         name: "Remove from learning",
         visible: false,
         callback: function(key, opt){
-          $.post('/post/{0}/removeFromLearning'.format(itemType), postJson);
+          $.post('/post/{0}/delete'.format(itemType), postJson);
         }
       },
       viewHanzi: {
@@ -338,11 +338,12 @@ function contextMenuBuilder($trigger, e, itemType, dataOrSelector) {
 async function loadVocabFromItem(itemType, item){
   let allVocab;
 
-  if(itemType === 'vocab'){
-    allVocab = [item];
-  } else {
-    allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
-  }
+  allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
+  // if(itemType === 'vocab'){
+  //   allVocab = [item];
+  // } else {
+  //   allVocab = await $.post('/post/vocab/fromSentence', {sentence: item});
+  // }
 
   localStorage.setObject('allVocab', allVocab);
 }

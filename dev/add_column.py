@@ -1,5 +1,6 @@
 import sqlite3
 import dateutil.parser
+from datetime import datetime
 
 import pyexcel
 
@@ -10,8 +11,8 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker
 
 from CJKhyperradicals.decompose import Decompose
-from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.frequency import ChineseFrequency
+from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.variant import Variant
 from CJKhyperradicals.sentence import SpoonFed, jukuu
 
@@ -20,9 +21,9 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
 decompose = Decompose()
+sorter = ChineseFrequency()
 variant = Variant()
 cedict = Cedict()
-sorter = ChineseFrequency()
 
 
 class OldReader:
@@ -49,6 +50,37 @@ class OldReader:
         else:
             header = [description[0] for description in cursor.description]
             return dict(zip(header, row))
+
+    def get_earliest_modified(self, hanzi):
+        def _get_modified(table_name):
+            if table_name == 'sentences':
+                item_name = 'sentence'
+            else:
+                item_name = table_name
+
+            cursor = self.conn.execute('SELECT * FROM {} WHERE {} LIKE ?'.format(table_name, item_name),
+                                       ('%{}%'.format(hanzi),))
+            row = cursor.fetchone()
+
+            if row is None:
+                return None
+            else:
+                return row[0]
+
+        sentence_modified = _get_modified('sentences')
+        vocab_modified = _get_modified('vocab')
+
+        print(type(sentence_modified), type(vocab_modified))
+
+        if sentence_modified is None:
+            if vocab_modified is None:
+                return datetime.now().timestamp()
+        elif vocab_modified is None:
+            return sentence_modified
+        elif sentence_modified < vocab_modified:
+            return sentence_modified
+        else:
+            return vocab_modified
 
 
 class ExcelReader:
@@ -86,10 +118,13 @@ class Sentence(Base):
     note = Column(String(10000))
     _tags = Column(String(250))
 
-    created = Column(DateTime)
+    created = Column(DateTime, nullable=False)
 
     # Moved columns
     modified = Column(DateTime, nullable=False)
+
+    srs_level = Column(Integer)
+    next_review = Column(DateTime)
 
     @property
     def levels(self):
@@ -126,8 +161,14 @@ class Vocab(Base):
     _tags = Column(String(250))
 
     is_user = Column(Boolean)
-    created = Column(DateTime)
+
+    created = Column(DateTime, nullable=False)
+
+    # Moved columns
     modified = Column(DateTime)
+
+    srs_level = Column(Integer)
+    next_review = Column(DateTime)
 
     # @property
     # def simplified(self):
@@ -189,8 +230,11 @@ class Hanzi(Base):
     note = Column(String(10000))
     _tags = Column(String(250))
 
-    created = Column(DateTime)
+    created = Column(DateTime, nullable=False)
     modified = Column(DateTime)
+
+    srs_level = Column(Integer)
+    next_review = Column(DateTime)
 
     @property
     def tags(self):
@@ -229,7 +273,7 @@ def create():
         print(record['hanzi'])
 
         record['id'] = i
-        record['created'] = record['modified'] = dateutil.parser.parse(excel_record['Created']).replace(tzinfo=None)
+        record['created'] = record['modified'] = old_reader.get_earliest_modified(record['hanzi'])
 
         record['compositions'] = ''.join(decompose.get_sub(record['hanzi']))
         record['supercompositions'] = ''.join(sorter.sort_char(decompose.get_super(record['hanzi'])))
@@ -309,33 +353,10 @@ def update():
 
     table_name = 'hanzi'
     for i, excel_record in enumerate(ExcelReader().get_data(table_name)):
+        print(excel_record['Hanzi'])
+        mod = old_reader.get_earliest_modified(excel_record['Hanzi'])
         session.query().filter(Hanzi.hanzi == excel_record['Hanzi'])\
-            .update({'compositions':''.join(decompose.get_sub(excel_record['Hanzi']))})
-
-    table_name = 'sentences'
-    for i, excel_record in enumerate(ExcelReader().get_data(table_name)):
-        record = old_reader.fetch_one(table_name, excel_record['Sentence'])
-        if record is None:
-            record = dict()
-            record['id'] = i
-            record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('Created')) \
-                .replace(tzinfo=None)
-        else:
-            record['created'] = record['modified'] = dateutil.parser.parse(record['modified']) \
-                .replace(tzinfo=None)
-            excel_record.pop('Created')
-
-            record['note'] = record.pop('notes')
-
-        for k, v in excel_record.items():
-            record[k.lower()] = v
-
-        print(record['sentence'])
-
-        for item_name in ('levels',):
-            record[item_name] = [int(level) for level in record[item_name].split(', ') if level != '']
-
-        session.add(Sentence(**record))
+            .update({'created': mod, 'modified': mod})
 
     session.commit()
 

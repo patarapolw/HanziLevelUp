@@ -1,4 +1,4 @@
-import pyexcel_export
+import pyexcel_xlsxwx
 import regex
 from collections import OrderedDict
 import namedlist as nl

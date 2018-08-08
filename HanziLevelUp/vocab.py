@@ -4,10 +4,11 @@ from datetime import datetime, timedelta
 
 from CJKhyperradicals.dict import Cedict
 from CJKhyperradicals.sentence import SpoonFed, jukuu
-from webapp.databases import Sentence, Vocab
 
 
 def get_extra_vocab():
+    from webapp.databases import Sentence, Vocab
+
     pre_extra_vocab = set(sum([list(jieba.cut_for_search(sentence.sentence)) for sentence in Sentence.query], []))
     extra_vocab = set()
     for vocab in pre_extra_vocab:
@@ -23,6 +24,8 @@ def get_extra_vocab_with_id():
 
 
 def get_all_vocab_plus():
+    from webapp.databases import Vocab
+
     return [[vocab.id, vocab.vocab, 'user'] for vocab in Vocab.query] + get_extra_vocab_with_id()
 
 
@@ -58,6 +61,8 @@ def sentence_to_vocab(sentence):
 
 
 def get_last_day_vocab():
+    from webapp.databases import Vocab
+
     for vocab in Vocab.query[::-1]:
         if datetime.utcnow() - vocab.modified < timedelta(days=1):
             yield [vocab.id, vocab.vocab, vocab.modified, 'vocab']

@@ -1,7 +1,6 @@
 import regex
 
 from HanziLevelUp.dir import database_path
-from webapp.databases import Sentence, Vocab
 
 
 class HanziLevel:
@@ -20,6 +19,8 @@ class HanziLevel:
 
 
 def get_all_hanzi():
+    from webapp.databases import Sentence, Vocab
+
     sentences = [sentence.sentence for sentence in Sentence.query]
     vocabs = [vocab.vocab for vocab in Vocab.query]
 
