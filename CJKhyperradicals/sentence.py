@@ -15,7 +15,7 @@ def jukuu(vocab):
     for c, e in  zip([c.text for c in soup.find_all('tr', {'class': 'c'})],
                      [e.text for e in soup.find_all('tr', {'class': 'e'})]):
         yield {
-            'chinese': c,
+            'sentence': c,
             'english': e
         }
 
