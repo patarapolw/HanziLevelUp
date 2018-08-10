@@ -1,7 +1,23 @@
 from datetime import datetime
+import json
 
 from webapp.databases import Hanzi, Vocab, Sentence
 from webapp import db
+
+from CJKhyperradicals.sentence import SpoonFed
+from CJKhyperradicals.dict import HanziDict, Cedict
+from CJKhyperradicals.decompose import Decompose
+from CJKhyperradicals.frequency import ChineseFrequency
+from HanziLevelUp.hanzi import HanziLevel
+from HanziLevelUp.vocab import VocabToSentence
+
+spoon_fed = SpoonFed()
+hanzi_level = HanziLevel()
+cedict = Cedict()
+hanzi_dict = HanziDict()
+vocab_to_sentence = VocabToSentence()
+decompose = Decompose()
+sorter = ChineseFrequency()
 
 
 def get_earliest_modified(hanzi):
@@ -22,8 +38,10 @@ def get_earliest_modified(hanzi):
 
 
 if __name__ == '__main__':
-    for hanzi in Hanzi.query:
-        hanzi.modified = get_earliest_modified(hanzi.hanzi)
-        hanzi.created = get_earliest_modified(hanzi.hanzi)
+    for record in Vocab.query:
+        vocab = record.vocab
+        print(vocab)
+        is_user = record.is_user
+        record.is_user = not record.is_user
 
     db.session.commit()

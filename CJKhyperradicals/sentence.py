@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 from CJKhyperradicals.dir import chinese_path
 
@@ -11,19 +12,23 @@ def jukuu(vocab):
     r = requests.get('http://www.jukuu.com/search.php', params=params)
     soup = BeautifulSoup(r.text, 'html.parser')
 
-    return zip([c.text for c in soup.find_all('tr', {'class': 'c'})],
-               [e.text for e in soup.find_all('tr', {'class': 'e'})])
+    for c, e in  zip([c.text for c in soup.find_all('tr', {'class': 'c'})],
+                     [e.text for e in soup.find_all('tr', {'class': 'e'})]):
+        yield {
+            'chinese': c,
+            'english': e
+        }
 
 
 class SpoonFed:
     def __init__(self):
-        self.sentences = list()
+        self.sentences = dict()
         with open(chinese_path('SpoonFed.tsv')) as f:
-            for row in f:
-                contents = row.split('\t')
-                self.sentences.append((contents[2], contents[0], contents[1]))
+            reader = csv.DictReader(f, delimiter='\t')
+            for i, entry in enumerate(reader):
+                self.sentences[i] = entry
 
     def get_sentence(self, vocab):
-        for sentence in self.sentences:
-            if vocab in sentence[0]:
+        for sentence in self.sentences.values():
+            if vocab in sentence['sentence']:
                 yield sentence

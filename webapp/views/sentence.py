@@ -40,7 +40,7 @@ def add_sentence():
     for vocab in set((x for x in jieba.cut_for_search(sentence) if regex.search(r'\p{IsHan}', x))):
         previous_entry = Vocab.query.filter_by(vocab=vocab).first()
         if previous_entry is None:
-            vocab_query = Vocab(entry=vocab)
+            vocab_query = Vocab(entry=vocab, is_user=False)
             db.session.add(vocab_query)
         else:
             previous_entry.modified = datetime.now()
@@ -60,6 +60,6 @@ def add_sentence():
 
 @app.route('/post/sentence/delete', methods=['POST'])
 def delete_sentence():
-    Sentence.query.filter_by(id=int(request.form.get('id'))).delete()
+    Sentence.query.filter_by(sentence=request.form.get('sentence')).delete()
     db.session.commit()
     return Response(status=303)

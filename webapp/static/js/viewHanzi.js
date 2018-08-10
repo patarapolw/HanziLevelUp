@@ -73,6 +73,8 @@ function renderChar(){
   }
 
   $.post('/post/hanzi/getInfo', {character: currentChar}, function(content) {
+    console.log(content);
+
     renderContent('#compositions', content.compositions);
     renderContent('#supercompositions', content.supercompositions);
     renderContent('#variants', content.variants);
@@ -82,10 +84,10 @@ function renderChar(){
     for(let i=0; i<content.vocab.length; i++){
       $vocab.append(
         "<div class='entry container'><a href='#' onclick='speak(\"{3}\"); return false;' title='{1}'>{0}</a> {2}</div>"
-        .format(content.vocab[i][1],
-          content.vocab[i][2],
-          content.vocab[i][3],
-          content.vocab[i][1].addSlashes()));
+        .format(content.vocab[i].simplified,
+          content.vocab[i].pinyin,
+          content.vocab[i].english,
+          content.vocab[i].simplified.addSlashes()));
     }
   });
 
@@ -95,9 +97,9 @@ function renderChar(){
     for(let i=0; i<content.sentences.length; i++){
       $sentences.append(
         "<div class='entry container'><a href='#' onclick='speak(\"{2}\"); return false;'>{0}</a> {1}</div>"
-        .format(content.sentences[i][0],
-          content.sentences[i][1],
-          stripHtml(content.sentences[i][0]).addSlashes()));
+        .format(content.sentences[i].sentence,
+          content.sentences[i].english,
+          stripHtml(content.sentences[i].sentence).addSlashes()));
     }
   });
 

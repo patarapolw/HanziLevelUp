@@ -1,6 +1,7 @@
 import sqlite3
 import dateutil.parser
 from datetime import datetime
+import regex
 
 import pyexcel
 
@@ -10,25 +11,29 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker
 
+from CJKhyperradicals.sentence import SpoonFed
+from CJKhyperradicals.dict import HanziDict, Cedict
 from CJKhyperradicals.decompose import Decompose
 from CJKhyperradicals.frequency import ChineseFrequency
-from CJKhyperradicals.dict import Cedict
-from CJKhyperradicals.variant import Variant
-from CJKhyperradicals.sentence import SpoonFed, jukuu
+from HanziLevelUp.hanzi import HanziLevel
+from HanziLevelUp.vocab import VocabToSentence
 
-engine = create_engine('sqlite:///user_new.db')
+engine = create_engine('sqlite:///user.db')
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
+spoon_fed = SpoonFed()
+hanzi_level = HanziLevel()
+cedict = Cedict()
+hanzi_dict = HanziDict()
+vocab_to_sentence = VocabToSentence()
 decompose = Decompose()
 sorter = ChineseFrequency()
-variant = Variant()
-cedict = Cedict()
 
 
 class OldReader:
     def __init__(self):
-        self.conn = sqlite3.connect('../webapp/user.db')
+        self.conn = sqlite3.connect('../webapp/_user.db')
 
     def load(self, table_name):
         cursor = self.conn.execute('SELECT * FROM {}'.format(table_name))
@@ -70,11 +75,9 @@ class OldReader:
         sentence_modified = _get_modified('sentences')
         vocab_modified = _get_modified('vocab')
 
-        print(type(sentence_modified), type(vocab_modified))
-
         if sentence_modified is None:
             if vocab_modified is None:
-                return datetime.now().timestamp()
+                return datetime.now()
         elif vocab_modified is None:
             return sentence_modified
         elif sentence_modified < vocab_modified:
@@ -112,27 +115,13 @@ class Sentence(Base):
     sentence = Column(String(250), nullable=False)
 
     # New columns
-    pinyin = Column(String(250))
-    english = Column(String(250))
-    _levels = Column(String(250))
-    note = Column(String(10000))
+    data = Column(String(10000))
     _tags = Column(String(250))
 
     created = Column(DateTime, nullable=False)
 
     # Moved columns
     modified = Column(DateTime, nullable=False)
-
-    srs_level = Column(Integer)
-    next_review = Column(DateTime)
-
-    @property
-    def levels(self):
-        return json.loads(self._levels)
-
-    @levels.setter
-    def levels(self, value):
-        self._levels = json.dumps(value, ensure_ascii=False)
 
     @property
     def tags(self):
@@ -151,13 +140,7 @@ class Vocab(Base):
     vocab = Column(String(250), nullable=False)
 
     # New columns
-    simplified = Column(String(250))
-    traditional = Column(String(250))
-    pinyin = Column(String(250))
-    english = Column(String(250))
-    sentences = Column(String(10000))
-    level = Column(Integer)
-    note = Column(String(10000))
+    data = Column(String(10000))
     _tags = Column(String(250))
 
     is_user = Column(Boolean)
@@ -166,41 +149,6 @@ class Vocab(Base):
 
     # Moved columns
     modified = Column(DateTime)
-
-    srs_level = Column(Integer)
-    next_review = Column(DateTime)
-
-    # @property
-    # def simplified(self):
-    #     return json.loads(self._simplified)
-    #
-    # @simplified.setter
-    # def simplified(self, value):
-    #     self._simplified = json.dumps(value, ensure_ascii=False)
-    #
-    # @property
-    # def traditional(self):
-    #     return json.loads(self._traditional)
-    #
-    # @traditional.setter
-    # def traditional(self, value):
-    #     self._traditional = json.dumps(value, ensure_ascii=False)
-    #
-    # @property
-    # def pinyin(self):
-    #     return json.loads(self._pinyin)
-    #
-    # @pinyin.setter
-    # def pinyin(self, value):
-    #     self._pinyin = json.dumps(value, ensure_ascii=False)
-    #
-    # @property
-    # def english(self):
-    #     return json.loads(self._english)
-    #
-    # @english.setter
-    # def english(self, value):
-    #     self._english = json.dumps(value, ensure_ascii=False)
 
     @property
     def tags(self):
@@ -217,24 +165,11 @@ class Hanzi(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     hanzi = Column(String(20), nullable=False)
-    pinyin = Column(String(250))
-    english = Column(String(10000))
-    heisig = Column(String(250))
-    compositions = Column(String(250))
-    supercompositions = Column(String(250))
-    variants = Column(String(250))
-    kanji = Column(String(250))
-    vocab = Column(String(10000))
-    sentences = Column(String(10000))
-    level = Column(Integer)
-    note = Column(String(10000))
+    data = Column(String(10000))
     _tags = Column(String(250))
 
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime)
-
-    srs_level = Column(Integer)
-    next_review = Column(DateTime)
 
     @property
     def tags(self):
@@ -245,22 +180,9 @@ class Hanzi(Base):
         self._tags = json.dumps(value)
 
 
-class VocabToSentence:
-    def __init__(self):
-        self.spoon_fed = SpoonFed()
-
-    def convert(self, vocab, online=True):
-        sentences = list(self.spoon_fed.get_sentence(vocab))[:10]
-        if len(sentences) == 0 and online:
-            sentences = list(jukuu(vocab))
-
-        return sentences
-
-
 def create():
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
     session = Session()
-    vocab_to_sentence = VocabToSentence()
 
     old_reader = OldReader()
 
@@ -273,76 +195,95 @@ def create():
         print(record['hanzi'])
 
         record['id'] = i
-        record['created'] = record['modified'] = old_reader.get_earliest_modified(record['hanzi'])
+        record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('created')) \
+            .replace(tzinfo=None)
+        # record['created'] = record['modified'] = old_reader.get_earliest_modified(record['hanzi'])
 
-        record['compositions'] = ''.join(decompose.get_sub(record['hanzi']))
-        record['supercompositions'] = ''.join(sorter.sort_char(decompose.get_super(record['hanzi'])))
-        record['vocab'] = json.dumps(sorter.sort_vocab([list(item)
-                                                        for item in cedict.search_hanzi(record['hanzi'])])[:10],
-                                     ensure_ascii=False)
-        record['sentences'] = json.dumps(list(vocab_to_sentence.convert(record['hanzi'])),
-                                         ensure_ascii=False)
+        record['data'] = json.dumps({
+            'compositions': decompose.get_sub(record['hanzi']),
+            'supercompositions': sorter.sort_char(decompose.get_super(record['hanzi'])),
+            'vocab': sorter.sort_vocab(list(cedict.search_hanzi(record['hanzi'])))[:10],
+            'sentences': list(vocab_to_sentence.convert(record['hanzi']))
+        }, ensure_ascii=False)
+        print(len(record['data']))
 
-        session.add(Hanzi(**record))
+        session.add(Hanzi(**dict([(k, v) for k, v in record.items() if k in Hanzi.__table__.columns.keys()])))
+
+    session.commit()
 
     # Pre-existing tables
     table_name = 'vocab'
     for i, excel_record in enumerate(ExcelReader().get_data(table_name)):
-        record = old_reader.fetch_one(table_name, excel_record['Vocab'])
+        # if session.query(Vocab).filter_by(vocab=excel_record['vocab']).one_or_none() is not None:
+        #     continue
+
+        record = old_reader.fetch_one(table_name, excel_record['vocab'])
         if record is None:
             record = dict()
             record['id'] = i
-            record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('Created'))\
+            record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('created'))\
                 .replace(tzinfo=None)
         else:
             record['created'] = record['modified'] = dateutil.parser.parse(record['modified'])\
                 .replace(tzinfo=None)
-            excel_record.pop('Created')
 
             record['note'] = record.pop('notes')
 
         for k, v in excel_record.items():
-            record[k.lower()] = v
+            if k not in ('created', 'modified'):
+                record[k.lower()] = v
 
         print(record['vocab'])
 
-        for item_name in ('simplified', 'traditional', 'pinyin', 'english'):
-            record[item_name] = json.dumps([x for x in record[item_name].split(', ') if x != ''],
-                                           ensure_ascii=False)
+        dict_result = list(cedict.search_vocab(record['vocab']))
+        record['data'] = json.dumps({
+            'dictionary': dict_result,
+            'sentences': vocab_to_sentence.convert(record['vocab']),
+            'level': max([hanzi_level.get_hanzi_level(hanzi) for hanzi in record['vocab']])
+        }, ensure_ascii=False)
+        print(len(record['data']))
 
-        if record.pop('source') == 'user':
-            record['is_user'] = False
-        else:
-            record['is_user'] = True
+        session.add(Vocab(**dict([(k, v) for k, v in record.items() if k in Vocab.__table__.columns.keys()])))
 
-        record['sentences'] = json.dumps(list(vocab_to_sentence.convert(record['vocab'])), ensure_ascii=False)
-
-        session.add(Vocab(**record))
+        session.commit()
 
     table_name = 'sentences'
     for i, excel_record in enumerate(ExcelReader().get_data(table_name)):
-        record = old_reader.fetch_one(table_name, excel_record['Sentence'])
-        if record is None:
-            record = dict()
-            record['id'] = i
-            record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('Created')) \
-                .replace(tzinfo=None)
-        else:
-            record['created'] = record['modified'] = dateutil.parser.parse(record['modified']) \
-                .replace(tzinfo=None)
-            excel_record.pop('Created')
-
-            record['note'] = record.pop('notes')
-
+        record = dict()
         for k, v in excel_record.items():
             record[k.lower()] = v
 
         print(record['sentence'])
 
-        for item_name in ('levels', ):
-            record[item_name] = [int(level) for level in record[item_name].split(', ') if level != '']
+        record = old_reader.fetch_one(table_name, excel_record['sentence'])
+        if record is None:
+            record['id'] = i
+            record['created'] = record['modified'] = dateutil.parser.parse(excel_record.pop('created')) \
+                .replace(tzinfo=None)
+        else:
+            record['created'] = record['modified'] = dateutil.parser.parse(record['modified']) \
+                .replace(tzinfo=None)
 
-        session.add(Sentence(**record))
+            record['note'] = record.pop('notes')
+
+        lookup = list(spoon_fed.get_sentence(record['sentence']))
+        if len(lookup) > 0:
+            english = lookup[0]['english']
+            try:
+                pinyin = lookup[0]['pinyin']
+            except IndexError:
+                pinyin = ''
+        else:
+            english = pinyin = ''
+
+        record['data'] = json.dumps({
+            'pinyin': pinyin,
+            'english': english,
+            'levels': [hanzi_level.get_hanzi_level(char) for char in record['sentence'] if regex.match(r'\p{IsHan}', char)]
+        }, ensure_ascii=False)
+        print(len(record['data']))
+
+        session.add(Sentence(**dict([(k, v) for k, v in record.items() if k in Sentence.__table__.columns.keys()])))
 
     session.commit()
 

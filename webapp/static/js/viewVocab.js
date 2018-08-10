@@ -29,10 +29,10 @@ async function initVocab(){
 async function loadVocabInfo(){
   const currentVocab = vocabInfoArray[vocabNumber];
 
-  $('#traditional > div').first().text(currentVocab[0]);
-  $('#simplified > div').first().text(currentVocab[1]);
-  $('#reading').text(currentVocab[2]);
-  $('#meaning').text(currentVocab[3]);
+  $('#traditional > div').first().text(currentVocab.traditional);
+  $('#simplified > div').first().text(currentVocab.simplified);
+  $('#reading').text(currentVocab.pinyin);
+  $('#meaning').text(currentVocab.english);
 
   if(vocabNumber > 0){
     $('#previous-button').removeAttr('disabled');
@@ -45,16 +45,16 @@ async function loadVocabInfo(){
     $('#next-button').attr('disabled', true);
   }
 
-  if(currentVocab[0] !== previousVocab){
-    $.post('/post/vocab/getSentences', { vocab: currentVocab[1] }, function(sentences) {
+  if(currentVocab.simplified !== previousVocab){
+    $.post('/post/vocab/getSentences', { vocab: currentVocab.simplified }, function(sentences) {
       const $sentences = $('#sentences');
       $sentences.text('');
       for(let i=0; i<sentences.length; i++){
         $sentences.append(
           "<div class='entry container'><a href='#' onclick='speak(\"{2}\"); return false;'>{0}</a> {1}</div>"
-          .format(sentences[i][0],
-            sentences[i][1],
-            stripHtml(sentences[i][0]).addSlashes()));
+          .format(sentences[i].sentence,
+            sentences[i].english,
+            stripHtml(sentences[i].sentence).addSlashes()));
       }
 
       $('#sentences').contextMenu({
@@ -95,7 +95,7 @@ async function loadVocabInfo(){
     speak($(this).text());
   });
 
-  previousVocab = currentVocab[0];
+  previousVocab = currentVocab.simplified;
 }
 
 function loadPrev(){

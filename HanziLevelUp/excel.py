@@ -106,7 +106,7 @@ class HanziFormatter:
         entry = self.hanzi_dict.entries.get(hanzi, dict())
         result = HanziRecord(
             Hanzi=hanzi,
-            Pinyin=entry.get('Pin1Yin1', ''),
+            Pinyin=entry.get('Pinyin', ''),
             English=entry.get('Meaning', ''),
             Heisig=entry.get('Heisig', ''),
             Variant=entry.get('Variant', ''),
@@ -127,10 +127,10 @@ class VocabFormatter:
         print(entry, source)
 
         dict_result = list(self.cedict.search_vocab(entry))
-        simplified = ', '.join([item[1] for item in dict_result])
-        traditional = ', '.join([item[0] for item in dict_result])
-        pinyin = ', '.join([item[2] for item in dict_result])
-        english = ', '.join([item[3] for item in dict_result])
+        simplified = ', '.join([item['simplified'] for item in dict_result])
+        traditional = ', '.join([item['traditional'] for item in dict_result])
+        pinyin = ', '.join([item['pinyin'] for item in dict_result])
+        english = ', '.join([item['english'] for item in dict_result])
         sentences = self.vocab_to_sentence.convert(entry, online=False)
         # traditional = pinyin = english = ''
 
@@ -160,9 +160,9 @@ class SentenceFormatter:
 
         lookup = list(self.spoon_fed.get_sentence(sentence))
         if len(lookup) > 0:
-            english = lookup[0][1]
+            english = lookup[0]['english']
             try:
-                pinyin = lookup[0][2]
+                pinyin = lookup[0]['pinyin']
             except IndexError:
                 pinyin = ''
         else:

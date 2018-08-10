@@ -27,7 +27,7 @@ def get_info():
         'compositions': decompose.get_sub(current_char),
         'supercompositions': sorter.sort_char(decompose.get_super(current_char)),
         'variants': variant.get(current_char),
-        'vocab': sorter.sort_vocab([list(item) for item in cedict.search_hanzi(current_char)])[:10]
+        'vocab': sorter.sort_vocab(list(cedict.search_hanzi(current_char)))[:10]
     })
 
 

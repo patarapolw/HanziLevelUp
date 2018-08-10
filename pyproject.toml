@@ -24,9 +24,8 @@ bs4 = "^0.0.1"
 jieba = "^0.39.0"
 regex = "=2018.02.21"
 namedlist = "^1.7"
-#pyexcel-export = "^0.3.5"
-#pyexcel-export = {path = "../pyexcel-export"}
 python-dateutil = "^2.7"
+pyexcel = "^0.5.8"
 #pyexcel-xlsxwx = "^0.1.7"
 pyexcel-xlsxwx = {path = "../pyexcel-xlsxwx"}
 
@@ -35,3 +34,5 @@ pyexcel-xlsxwx = {path = "../pyexcel-xlsxwx"}
 sqlite-web = {git = "https://github.com/patarapolw/sqlite-web.git", branch = "master"}
 jupyter = "^1.0"
 notebook = "^5.6"
+simplecel = {path = "../simplecel"}
+pyexcel-xls = "^0.5.7"

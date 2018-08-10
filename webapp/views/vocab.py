@@ -29,10 +29,11 @@ def add_vocab():
 
     previous_entry = Vocab.query.filter_by(vocab=vocab).first()
     if previous_entry is None:
-        vocab_query = Vocab(entry=vocab)
+        vocab_query = Vocab(entry=vocab, is_user=True)
         vocab_id = str(vocab_query.id)
         db.session.add(vocab_query)
     else:
+        previous_entry.is_user = True
         previous_entry.modified = datetime.now()
         vocab_id = str(previous_entry.id)
 
@@ -52,7 +53,7 @@ def add_vocab():
 
 @app.route('/post/vocab/delete', methods=['POST'])
 def delete_vocab():
-    Vocab.query.filter_by(id=int(request.form.get('id'))).delete()
+    Vocab.query.filter_by(vocab=request.form.get('item')).delete()
     db.session.commit()
     return Response(status=303)
 
