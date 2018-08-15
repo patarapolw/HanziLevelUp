@@ -17,3 +17,20 @@ def learn_hanzi():
 @blueprint.route('/recent')
 def recent_items():
     return redirect('/clipboard')
+
+
+@blueprint.route('/editor/<item_type>')
+def editor(item_type):
+    from webapp.databases import SrsTuple
+
+    config = {
+        'colHeaders': SrsTuple.__slots__,
+        'renderers': {
+            'front': 'markdownRenderer',
+            'back': 'markdownRenderer'
+        },
+        'colWidths': [210, 579, 155, 85, 220]
+    }
+
+    return render_template('editor.html',
+                           title=item_type, itemType=item_type, config=config)

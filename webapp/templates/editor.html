@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable-pro/dist/handsontable.full.min.css">
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}"/>
+
+  <title>Edit {{ title }}</title>
+</head>
+<body>
+  <div id="nav-area">
+    <div id="nav-page-button">
+      <button id="previous-all" class="page-button">&lt;&lt;</button>
+      <button id="previous" class="page-button">&lt;</button>
+      <div id="page-label">
+        <div id="page-label-current">1</div>
+        <div id="page-label-of">of</div>
+        <div id="page-label-total">1</div>
+      </div>
+      <button id="next" class="page-button">&gt;</button>
+      <button id="next-all" class="page-button">&gt;&gt;</button>
+    </div>
+    <div class="nav-right">
+      <input id="search-bar" type="text" placeholder="Type here to search"></input>
+    </div>
+  </div>
+
+  <div id="handsontable-container">
+    <div id="handsontable-area"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/handsontable-pro/dist/handsontable.full.min.js"></script>
+  <script src="https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js"></script>
+  <script src="{{ url_for('static', filename='sprintf/sprintf.min.js') }}"></script>
+
+  <script>var itemType = '{{ itemType }}'</script>
+  <script>var config = {{ config|tojson }}</script>
+  <script src="{{ url_for('static', filename='js/converter.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/handsontable.js') }}"></script>
+  <!-- <script src="{{ url_for('static', filename=javascript) }}"></script> -->
+</body>
+</html>

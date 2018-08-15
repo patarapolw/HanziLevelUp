@@ -30,7 +30,7 @@ def add_sentence():
 
     previous_entry = Sentence.query.filter_by(sentence=sentence).first()
     if previous_entry is None:
-        sentence_query = Sentence(sentence=sentence)
+        sentence_query = Sentence(entry=sentence)
         sentence_id = str(sentence_query.id)
         db.session.add(sentence_query)
     else:

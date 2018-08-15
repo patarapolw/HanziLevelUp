@@ -1,0 +1,73 @@
+* {
+  margin: 0px;
+}
+
+body {
+  width: 100%;
+  min-width: 100%;
+}
+
+#nav-area {
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  display: inline-table;
+  width: 100%;
+}
+
+/* Style the buttons that are used to open the tab content */
+#new-record, .page-button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+  margin: 0px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.page-button:disabled {
+  color: white;
+}
+
+#nav-page-button, #nav-page-button > *, #page-label > * {
+  display: inherit;
+}
+
+#page-label > * {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.nav-right {
+  float: right;
+  z-index: 100;
+}
+
+#search-bar {
+  font-size: 15px;
+  margin-right: 20px;
+  transform: translateY(50%);
+}
+
+#handsontable-container {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+td p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+td ul {
+  margin-top: -1em;
+  margin-bottom: -1em;
+}
+
+td li {
+  margin: -0.5em;
+}

@@ -12,4 +12,5 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from .views import hanzi, learning, levels, sentence, utils, vocab, item, export, quiz
+from .views import (hanzi, vocab, sentence,
+                    learning, levels, utils, item, export, quiz, editor)

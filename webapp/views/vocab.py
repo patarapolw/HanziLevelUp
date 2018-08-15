@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import regex
 
 from flask import request, jsonify, Response
 
@@ -16,7 +17,7 @@ def get_all_vocab():
 
 @app.route('/post/vocab/getRecent', methods=['POST'])
 def get_recent_vocab():
-    entries = list(get_last_day_vocab())
+    entries = list(get_last_day_vocab(user_only=True))
     if len(entries) < 10:
         entries = list(reversed([[vocab.id, vocab.vocab] for vocab in Vocab.query[-10:]]))
 
@@ -37,7 +38,7 @@ def add_vocab():
         previous_entry.modified = datetime.now()
         vocab_id = str(previous_entry.id)
 
-    for hanzi in set(vocab):
+    for hanzi in set(regex.findall(r'\p{IsHan}', vocab)):
         previous_entry = Hanzi.query.filter_by(hanzi=hanzi).first()
         if previous_entry is None:
             pass

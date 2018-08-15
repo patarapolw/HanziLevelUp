@@ -1,5 +1,6 @@
 from time import time
 from datetime import datetime
+import dateutil.parser
 import json
 import regex
 from collections import OrderedDict
@@ -25,26 +26,19 @@ sorter = ChineseFrequency()
 class Sentence(db.Model):
     __tablename__ = 'sentences'
 
-    # Old columns
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     sentence = db.Column(db.String(250), nullable=False)
 
-    # New columns
     data = db.Column(db.String(10000))
-    _tags = db.Column(db.String(250))
+    tags = db.Column(db.String(250))
 
     created = db.Column(db.DateTime, default=datetime.now)
-
-    # Moved columns
     modified = db.Column(db.DateTime, default=datetime.now)
 
-    @property
-    def tags(self):
-        return json.loads(self._tags)
-
-    @tags.setter
-    def tags(self, value):
-        self._tags = json.dumps(value, ensure_ascii=False)
+    front = db.Column(db.String(250))
+    back = db.Column(db.String(250))
+    srs_level = db.Column(db.Integer)
+    next_review = db.Column(db.DateTime)
 
     @property
     def entry(self):
@@ -82,22 +76,17 @@ class Vocab(db.Model):
 
     # New columns
     data = db.Column(db.String(10000))
-    _tags = db.Column(db.String(250))
+    tags = db.Column(db.String(250))
 
     is_user = db.Column(db.Boolean, nullable=False)
 
     created = db.Column(db.DateTime, default=datetime.now)
-
-    # Moved columns
     modified = db.Column(db.DateTime, default=datetime.now)
 
-    @property
-    def tags(self):
-        return json.loads(self._tags)
-
-    @tags.setter
-    def tags(self, value):
-        self._tags = json.dumps(value, ensure_ascii=False)
+    front = db.Column(db.String(250))
+    back = db.Column(db.String(250))
+    srs_level = db.Column(db.Integer)
+    next_review = db.Column(db.DateTime)
 
     @property
     def entry(self):
@@ -123,18 +112,15 @@ class Hanzi(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     hanzi = db.Column(db.String(20), nullable=False)
     data = db.Column(db.String(10000))
-    _tags = db.Column(db.String(250))
+    tags = db.Column(db.String(250))
 
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime, default=datetime.now)
 
-    @property
-    def tags(self):
-        return json.loads(self._tags)
-
-    @tags.setter
-    def tags(self, value):
-        self._tags = json.dumps(value)
+    front = db.Column(db.String(250))
+    back = db.Column(db.String(250))
+    srs_level = db.Column(db.Integer)
+    next_review = db.Column(db.DateTime)
 
     @property
     def entry(self):
@@ -149,7 +135,8 @@ class Hanzi(db.Model):
             'compositions': decompose.get_sub(value),
             'supercompositions': sorter.sort_char(decompose.get_super(value)),
             'vocab': sorter.sort_vocab(list(cedict.search_hanzi(value)))[:10],
-            'sentences': list(vocab_to_sentence.convert(value))
+            'sentences': list(vocab_to_sentence.convert(value)),
+            'level': hanzi_level.get_hanzi_level(value)
         }, ensure_ascii=False)
 
 
@@ -159,3 +146,31 @@ def row2dict(row):
         d[column.name] = getattr(row, column.name)
 
     return d
+
+
+class SrsTuple:
+    __slots__ = ('front', 'back', 'tags', 'srs_level', 'next_review')
+
+    def __init__(self, *args):
+        for i, arg in enumerate(args):
+            setattr(self, self.__slots__[i], arg)
+
+    def to_db(self):
+        entry = dict()
+        for key in self.__slots__:
+            entry[key] = getattr(self, key, None)
+
+        if entry['next_review'] is not None:
+            entry['next_review'] = dateutil.parser.parse(entry['next_review'])
+
+        return entry
+
+    @staticmethod
+    def from_db(srs_record):
+        result = srs_record.entry
+
+        for k, v in result.items():
+            if isinstance(v, datetime):
+                result[k] = v.isoformat()
+
+        return result

@@ -8,7 +8,7 @@ from webapp.databases import Sentence, Vocab
 
 @app.route('/post/item/getRecent', methods=['POST'])
 def get_recent_items():
-    entries = sorted(list(get_last_day_sentences()) + list(get_last_day_vocab()), key=lambda x: x[2], reverse=True)
+    entries = sorted(list(get_last_day_sentences()) + list(get_last_day_vocab(user_only=True)), key=lambda x: x[2], reverse=True)
 
     if len(entries) < 10:
         entries = sorted([[sentence.id, sentence.sentence, sentence.modified, 'sentence']

@@ -60,9 +60,11 @@ def sentence_to_vocab(sentence):
             used_vocab.add(vocab)
 
 
-def get_last_day_vocab():
+def get_last_day_vocab(user_only=True):
     from webapp.databases import Vocab
 
     for vocab in Vocab.query[::-1]:
         if datetime.utcnow() - vocab.modified < timedelta(days=1):
+            if user_only and not vocab.is_user:
+                continue
             yield [vocab.id, vocab.vocab, vocab.modified, 'vocab']
