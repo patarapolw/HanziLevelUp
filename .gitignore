@@ -200,3 +200,4 @@ venv.bak/
 */*user.*
 *.pem
 migrations/*
+*.ipynb

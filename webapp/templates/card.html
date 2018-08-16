@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}"/>
+
+<div id="show-area"></div>
+
+<script src="{{ url_for('static', filename='jquery/jquery-3.3.1.min.js' ) }}"></script>
+<script src="https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js"></script>
+<script src="{{ url_for('static', filename='sprintf/sprintf.min.js') }}"></script>
+<script>var card = {{ card|tojson }}</script>
+<script>var show = {{ show|tojson }}</script>
+
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/converter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/card.js') }}"></script>

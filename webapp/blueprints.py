@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, Response
 
 blueprint = Blueprint('blueprint', __name__, template_folder='templates')
 
@@ -34,3 +34,37 @@ def editor(item_type):
 
     return render_template('editor.html',
                            title=item_type, itemType=item_type, config=config)
+
+
+@blueprint.route('/card/<item_type>/<int:card_id>')
+def card(item_type, card_id):
+    from webapp.databases import Hanzi, Vocab, Sentence, SrsTuple
+
+    if item_type == 'hanzi':
+        SrsRecord = Hanzi
+    elif item_type == 'vocab':
+        SrsRecord = Vocab
+    elif item_type == 'sentences':
+        SrsRecord = Sentence
+    else:
+        return Response(status=404)
+
+    record = SrsRecord.query.filter_by(id=card_id).first()
+    return render_template('card.html', card=SrsTuple.from_db(record), show=False)
+
+
+@blueprint.route('/card/<item_type>/<int:card_id>/show')
+def card_show(item_type, card_id):
+    from webapp.databases import Hanzi, Vocab, Sentence, SrsTuple
+
+    if item_type == 'hanzi':
+        SrsRecord = Hanzi
+    elif item_type == 'vocab':
+        SrsRecord = Vocab
+    elif item_type == 'sentences':
+        SrsRecord = Sentence
+    else:
+        return Response(status=404)
+
+    record = SrsRecord.query.filter_by(id=card_id).first()
+    return render_template('card.html', card=SrsTuple.from_db(record), show=True)

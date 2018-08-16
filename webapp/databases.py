@@ -1,9 +1,12 @@
 from time import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import dateutil.parser
 import json
 import regex
 from collections import OrderedDict
+import os
+from IPython.display import IFrame
+import random
 
 from CJKhyperradicals.sentence import SpoonFed
 from CJKhyperradicals.dict import HanziDict, Cedict
@@ -13,6 +16,8 @@ from HanziLevelUp.hanzi import HanziLevel
 from HanziLevelUp.vocab import VocabToSentence
 
 from webapp import db
+from webapp.utils import to_raw_tags, tag_reader, SRS
+
 
 spoon_fed = SpoonFed()
 hanzi_level = HanziLevel()
@@ -23,7 +28,89 @@ decompose = Decompose()
 sorter = ChineseFrequency()
 
 
-class Sentence(db.Model):
+class SrsRecord:
+    __tablename__ = NotImplemented
+    id = NotImplemented
+    tags = NotImplemented
+    modified = NotImplemented
+    srs_level = NotImplemented
+    next_review = NotImplemented
+
+    def hide(self):
+        return IFrame('http://{}:{}/card/{}/{}'.format(os.getenv('HOST', 'localhost'),
+                                                       os.getenv('PORT', 8080),
+                                                       self.__tablename__,
+                                                       self.id),
+                      width=800, height=100)
+
+    def show(self):
+        return IFrame('http://{}:{}/card/{}/{}/show'.format(os.getenv('HOST', 'localhost'),
+                                                            os.getenv('PORT', 8080),
+                                                            self.__tablename__,
+                                                            self.id),
+                      width=800, height=200)
+
+    def next_srs(self):
+        if not self.srs_level:
+            self.srs_level = 1
+        else:
+            self.srs_level = self.srs_level + 1
+
+        self.next_review = (datetime.now()
+                            + SRS.get(int(self.srs_level), timedelta(weeks=4)))
+        self.modified = datetime.now()
+
+    correct = right = next_srs
+
+    def previous_srs(self, duration=timedelta(hours=4)):
+        if self.srs_level and self.srs_level > 1:
+            self.srs_level = self.srs_level - 1
+
+        self.bury(duration)
+
+    incorrect = wrong = previous_srs
+
+    def bury(self, duration=timedelta(hours=4)):
+        self.next_review = datetime.now() + duration
+        self.modified = datetime.now()
+
+    def mark(self, tag_name='marked'):
+        if self.tags is None:
+            self.tags = ''
+
+        all_tags = tag_reader(self.tags)
+        all_tags.add(tag_name)
+        self.tags = to_raw_tags(all_tags)
+
+    def unmark(self, tag_name='marked'):
+        if self.tags is None:
+            self.tags = ''
+
+        all_tags = tag_reader(self.tags)
+        if tag_name in all_tags:
+            all_tags.remove(tag_name)
+        self.tags = to_raw_tags(all_tags)
+
+    @classmethod
+    def iter_quiz(cls):
+        def _filter():
+            for srs_record in cls.query.order_by(cls.modified.desc()):
+                record_data = srs_record.data
+                if record_data:
+                    record_data = json.loads(record_data)
+                    if (record_data['level'] <= 5 and getattr(srs_record, 'is_user', True) and
+                            (not srs_record.next_review or srs_record.next_review < datetime.now())):
+                        yield srs_record
+                else:
+                    yield srs_record
+
+        all_records = list(_filter())
+        random.shuffle(all_records)
+
+        return iter(all_records)
+
+
+class Sentence(db.Model, SrsRecord):
     __tablename__ = 'sentences'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -67,7 +154,7 @@ class Sentence(db.Model):
         }, ensure_ascii=False)
 
 
-class Vocab(db.Model):
+class Vocab(db.Model, SrsRecord):
     __tablename__ = 'vocab'
 
     # Old columns
@@ -105,8 +192,7 @@ class Vocab(db.Model):
         }, ensure_ascii=False)
 
 
-# New table
-class Hanzi(db.Model):
+class Hanzi(db.Model, SrsRecord):
     __tablename__ = 'hanzi'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)

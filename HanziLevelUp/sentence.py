@@ -15,13 +15,13 @@ def cut_sentence(item):
 
     sentence_segments = []
     for segment in segments:
-        if segment in ('《', ):
+        if segment in ('《', '"', '\''):
             yield ''.join(sentence_segments)
             sentence_segments = []
 
         sentence_segments.append(segment)
 
-        if segment in ('。', '？', '！', '：', '》', ' ', '\n', '/'):
+        if segment in ('。', '？', '！', '：', '》', ' ', '\n', '/', '"', '\''):
             yield ''.join(sentence_segments)
             sentence_segments = []
 

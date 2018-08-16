@@ -13,4 +13,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from .views import (hanzi, vocab, sentence,
-                    learning, levels, utils, item, export, quiz, editor)
+                    learning, levels, utils, item, export, editor)
