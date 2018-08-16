@@ -6,7 +6,6 @@ if(!show){
 
 async function viewItem(itemValue){
   $.post('/post/item/cut', { item: itemValue }, function(data, textStatus, xhr) {
-    console.log(data);
     const $showarea = $('#show-area');
 
     $showarea.html('');
@@ -15,6 +14,8 @@ async function viewItem(itemValue){
       if(data[i] === '\n'){
         $showarea.append($line);
         $line = $('<div />');
+      } else if(data[i] === ' '){
+        $line.append('&nbsp;');
       } else {
         if(hasHanzi(data[i])){
           $line.append('<div class="entry inline"><div onclick="speak(\'{0}\')">{1}</div>'

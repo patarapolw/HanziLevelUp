@@ -5,6 +5,7 @@ function markdown2html(text, card){
 
   if(!('json' in card)){
     card.json = JSON.parse(card.data);
+    card.data = JSON.stringify(card.json, null, 2);
   }
 
   text = sprintf(text, card);
