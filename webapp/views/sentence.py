@@ -60,6 +60,10 @@ def add_sentence():
 
 @app.route('/post/sentence/delete', methods=['POST'])
 def delete_sentence():
-    Sentence.query.filter_by(sentence=request.form.get('sentence')).delete()
-    db.session.commit()
-    return Response(status=303)
+    sentence = Sentence.query.filter_by(sentence=request.form.get('item')).first()
+    if sentence is not None:
+        db.session.delete(sentence)
+        db.session.commit()
+        return Response(status=303)
+    else:
+        return Response(status=304)

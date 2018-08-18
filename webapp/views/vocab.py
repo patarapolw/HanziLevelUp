@@ -54,9 +54,13 @@ def add_vocab():
 
 @app.route('/post/vocab/delete', methods=['POST'])
 def delete_vocab():
-    Vocab.query.filter_by(vocab=request.form.get('item')).delete()
-    db.session.commit()
-    return Response(status=303)
+    vocab = Vocab.query.filter_by(vocab=request.form.get('item')).first()
+    if vocab is not None:
+        vocab.is_user = False
+        db.session.commit()
+        return Response(status=303)
+    else:
+        return Response(status=304)
 
 
 @app.route('/post/vocab/getListInfo', methods=['POST'])

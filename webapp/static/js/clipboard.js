@@ -11,7 +11,8 @@ $(document).ready(function() {
     const $item = $(this).parent();
     const params = {
       id: $item.attr('id'),
-      type: $item.data('type')
+      type: $item.data('type'),
+      item: $item.children('.entry-content').text().trim()
     };
 
     $.post('/post/{0}/delete'.format(params.type), params);
@@ -26,39 +27,6 @@ $(document).ready(function() {
       return contextMenuBuilder($trigger, e, 'sentence', 'div');
     }
   });
-
-  // $.contextMenu({
-  //   selector: '#itemShowarea',
-  //   trigger: 'none',
-  //   build: function($trigger, e) {
-  //     dataOrSelector = {
-  //       data: $trigger.data('value'),
-  //       selector: 'div'
-  //     };
-  //     console.log(dataOrSelector.data);
-  //
-  //     return contextMenuBuilder($trigger, e, 'sentence', dataOrSelector);
-  //   }
-  // })
-  //
-  // $('#itemShowarea').mouseover(function(event) {
-  //   let selectionText = getSelectionText();
-  //
-  //   if(selectionText !== ''){
-  //     setTimeout(function(){
-  //       console.log('hover')
-  //       selectionText = getSelectionText();
-  //
-  //       if(selectionText !== ''){
-  //         const position = {
-  //           x: event.clientX,
-  //           y: event.clientY
-  //         };
-  //         $('#itemShowarea').data('value', selectionText).contextMenu(position);
-  //       }
-  //     }, 2000);
-  //   }
-  // });
 });
 
 async function itemLoader(){
@@ -116,9 +84,16 @@ function setInputBoxListener(){
         itemType
       ));
       $item.data('type', itemType);
-      $recent.append($item);
+      // $recent.append($item);
 
-      $('#recent-sentences').prepend($item);
+      const $flair = $('<div class="flair {0} float-right">{0}</div>'.format(itemType));
+
+      $item.append($flair);
+      $('#recent-items').prepend($item);
+
+      const $entryContent = $item.children('.entry-content');
+      const width = $entryContent.width() - $flair.width();
+      $entryContent.width(width);
     });
   });
 
@@ -129,7 +104,6 @@ function setInputBoxListener(){
 
 async function viewItem(itemValue){
   $.post('/post/item/cut', { item: itemValue }, function(data, textStatus, xhr) {
-    console.log(data);
     const $showarea = $('#itemShowarea');
 
     $showarea.html('');
