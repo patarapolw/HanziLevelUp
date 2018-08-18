@@ -8,7 +8,7 @@ import os
 from IPython.display import IFrame
 import random
 
-from CJKhyperradicals.sentence import SpoonFed
+from CJKhyperradicals.sentence import SpoonFed, jukuu
 from CJKhyperradicals.dict import HanziDict, Cedict
 from CJKhyperradicals.decompose import Decompose
 from CJKhyperradicals.frequency import ChineseFrequency
@@ -35,6 +35,15 @@ class SrsRecord:
     modified = NotImplemented
     srs_level = NotImplemented
     next_review = NotImplemented
+    data = NotImplemented
+
+    @property
+    def json(self):
+        return json.loads(self.data)
+
+    @json.setter
+    def json(self, value):
+        self.data = json.dumps(value, ensure_ascii=False)
 
     def hide(self):
         return IFrame('http://{}:{}/card/{}/{}'.format(os.getenv('HOST', 'localhost'),
@@ -62,7 +71,7 @@ class SrsRecord:
 
     correct = right = next_srs
 
-    def previous_srs(self, duration=timedelta(hours=4)):
+    def previous_srs(self, duration=timedelta(minutes=1)):
         if self.srs_level and self.srs_level > 1:
             self.srs_level = self.srs_level - 1
 
@@ -70,7 +79,7 @@ class SrsRecord:
 
     incorrect = wrong = previous_srs
 
-    def bury(self, duration=timedelta(hours=4)):
+    def bury(self, duration=timedelta(minutes=1)):
         self.next_review = datetime.now() + duration
         self.modified = datetime.now()
 
@@ -92,15 +101,26 @@ class SrsRecord:
         self.tags = to_raw_tags(all_tags)
 
     @classmethod
-    def iter_quiz(cls):
+    def iter_quiz(cls, level=5, is_due=True, tag=None):
+        def _filter_tag(srs_record):
+            if not tag or tag in tag_reader(srs_record.tags):
+                yield srs_record
+
         def _filter():
             for srs_record in cls.query.order_by(cls.modified.desc()):
                 record_data = srs_record.data
                 if record_data:
                     record_data = json.loads(record_data)
-                    if (record_data['level'] <= 5 and getattr(srs_record, 'is_user', True) and
-                            (not srs_record.next_review or srs_record.next_review < datetime.now())):
-                        yield srs_record
+                    if ((not level or record_data['level'] <= level)
+                            and getattr(srs_record, 'is_user', True)):
+                        if is_due is None:
+                            yield from _filter_tag(srs_record)
+                        elif is_due is True:
+                            if not srs_record.next_review or srs_record.next_review < datetime.now():
+                                yield from _filter_tag(srs_record)
+                        else:
+                            if srs_record.next_review is None:
+                                yield from _filter_tag(srs_record)
                 else:
                     yield srs_record
 
@@ -108,6 +128,15 @@ class SrsRecord:
         random.shuffle(all_records)
 
         return iter(all_records)
+
+    def _get_more_sentences(self, vocab_or_hanzi):
+        data_dict = self.json
+        if 'sentences' in data_dict.keys() \
+                and not any([sentence['english'].startswith('1. ') for sentence in data_dict['sentences']]):
+            data_dict['sentences'].extend(list(jukuu(vocab_or_hanzi)))
+            self.json = data_dict
+
+            db.session.commit()
 
 
 class Sentence(db.Model, SrsRecord):
@@ -191,6 +220,9 @@ class Vocab(db.Model, SrsRecord):
             'level': max([hanzi_level.get_hanzi_level(hanzi) for hanzi in value])
         }, ensure_ascii=False)
 
+    def get_more_sentences(self):
+        self._get_more_sentences(self.vocab)
+
 
 class Hanzi(db.Model, SrsRecord):
     __tablename__ = 'hanzi'
@@ -224,6 +256,9 @@ class Hanzi(db.Model, SrsRecord):
             'sentences': list(vocab_to_sentence.convert(value)),
             'level': hanzi_level.get_hanzi_level(value)
         }, ensure_ascii=False)
+
+    def get_more_sentences(self):
+        self._get_more_sentences(self.hanzi)
 
 
 def row2dict(row):

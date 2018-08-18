@@ -10,21 +10,21 @@ async function viewItem(itemValue){
 
     $showarea.html('');
     let $line = $('<div />');
-    for(let i=0; i<data.length; i++){
-      if(data[i] === '\n'){
+    data.forEach((item, index)=>{
+      if(item === '\n'){
         $showarea.append($line);
         $line = $('<div />');
-      } else if(data[i] === ' '){
+      } else if(item === ' '){
         $line.append('&nbsp;');
       } else {
-        if(hasHanzi(data[i])){
+        if(hasHanzi(item)){
           $line.append('<div class="entry inline"><div onclick="speak(\'{0}\')">{1}</div>'
-            .format(stripHtml(data[i]), data[i]));
+            .format(stripHtml(item), item));
         } else {
-          $line.append(data[i]);
+          $line.append(item);
         }
       }
-    }
+    });
     $showarea.append($line);
   });
 }
