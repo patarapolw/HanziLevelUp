@@ -22,14 +22,13 @@ requests = "^2.19"
 bs4 = "^0.0.1"
 jieba = "^0.39.0"
 regex = "=2018.02.21"
-namedlist = "^1.7"
 python-dateutil = "^2.7"
 pyexcel = "^0.5.8"
 #pyexcel-xlsxwx = "^0.1.7"
 pyexcel-xlsxwx = {path = "../pyexcel-xlsxwx"}
+"ruamel.yaml" = "=0.15.59"
 
 [tool.poetry.dev-dependencies]
 #pyopenssl = "^18.0"
-sqlite-web = {git = "https://github.com/patarapolw/sqlite-web.git", branch = "master"}
 jupyter = "^1.0"
 notebook = "^5.6"
