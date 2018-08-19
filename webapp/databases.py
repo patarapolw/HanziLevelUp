@@ -101,26 +101,59 @@ class SrsRecord:
         self.tags = to_raw_tags(all_tags)
 
     @classmethod
-    def iter_quiz(cls, level=5, is_due=True, tag=None):
+    def iter_quiz(cls, level=(None, 5), is_due=True, tag=None, is_user=True):
+        def _filter_level(record_level):
+            if not level:
+                return True
+            elif isinstance(level, int):
+                if record_level == level:
+                    return True
+            elif isinstance(level, (list, tuple)):
+                level_min, level_max = level
+                if isinstance(level_max, int):
+                    level_max += 1
+                if record_level in range(0, 101)[level_min:level_max]:
+                    return True
+
+            return False
+
+        def _filter_is_user(srs_record):
+            if not is_user:
+                return True
+            elif getattr(srs_record, 'is_user', True):
+                return True
+            else:
+                return False
+
+        def _filter_is_due(srs_record):
+            if is_due is None:
+                return True
+            elif is_due is True:
+                if not srs_record.next_review or srs_record.next_review < datetime.now():
+                    return True
+            else:
+                if srs_record.next_review is None:
+                    return True
+            return False
+
         def _filter_tag(srs_record):
-            if not tag or tag in tag_reader(srs_record.tags):
-                yield srs_record
+            if not tag:
+                return True
+            elif tag in tag_reader(srs_record.tags):
+                return True
+            else:
+                return False
 
         def _filter():
             for srs_record in cls.query.order_by(cls.modified.desc()):
                 record_data = srs_record.data
                 if record_data:
                     record_data = json.loads(record_data)
-                    if ((not level or record_data['level'] <= level)
-                            and getattr(srs_record, 'is_user', True)):
-                        if is_due is None:
-                            yield from _filter_tag(srs_record)
-                        elif is_due is True:
-                            if not srs_record.next_review or srs_record.next_review < datetime.now():
-                                yield from _filter_tag(srs_record)
-                        else:
-                            if srs_record.next_review is None:
-                                yield from _filter_tag(srs_record)
+                    if all((_filter_level(record_data['level']),
+                            _filter_is_user(srs_record),
+                            _filter_is_due(srs_record),
+                            _filter_tag(srs_record))):
+                        yield srs_record
                 else:
                     yield srs_record
 

@@ -31,9 +31,9 @@ The app server has to be running first. In Jupyter Notebook:
 >>> iter_quiz = Vocab.iter_quiz(tag='col1', is_due=True)
 >>> card = next(iter_quiz)
 >>> card.hide()
-A HTML-rendered front of the card is shown.
+An HTML-rendered front of the card is shown.
 >>> card.show()
-A HTML-rendered back of the card is shown.
+An HTML-rendered back of the card is shown.
 >>> card.get_more_sentences()
 Add more sentences to the card, if the number of example sentences is too few.
 >>> card.wrong()
