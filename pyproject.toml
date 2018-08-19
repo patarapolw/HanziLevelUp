@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "HanziLevelUp"
-version = "0.6.2"
+version = "0.7"
 description = """
 A Hanzi learning suite, with levels based on Hanzi Level Project, aka. \
 nother attempt to clone WaniKani.com for Chinese.\
@@ -16,7 +16,6 @@ keywords = ['wanikani', 'chinese', 'mandarin', 'hanzi']
 python = ">=3"
 flask = "^1.0"
 flask-sqlalchemy = "^2.3"
-flask-migrate = "^2.2"
 wordfreq = "^2.1"
 requests = "^2.19"
 bs4 = "^0.0.1"

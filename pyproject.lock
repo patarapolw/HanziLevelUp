@@ -1,19 +1,4 @@
 [[package]]
-category = "main"
-description = "A database migration tool for SQLAlchemy."
-name = "alembic"
-optional = false
-platform = "*"
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.0.0"
-
-[package.dependencies]
-Mako = "*"
-SQLAlchemy = ">=0.9.0"
-python-dateutil = "*"
-python-editor = ">=0.3"
-
-[[package]]
 category = "dev"
 description = "Disable App Nap on OS X 10.9"
 name = "appnope"
@@ -151,20 +136,6 @@ Jinja2 = ">=2.10"
 Werkzeug = ">=0.14"
 click = ">=5.1"
 itsdangerous = ">=0.24"
-
-[[package]]
-category = "main"
-description = "SQLAlchemy database migrations for Flask applications using Alembic"
-name = "flask-migrate"
-optional = false
-platform = "any"
-python-versions = "*"
-version = "2.2.1"
-
-[package.dependencies]
-Flask = ">=0.9"
-Flask-SQLAlchemy = ">=1.0"
-alembic = ">=0.7"
 
 [[package]]
 category = "main"
@@ -395,18 +366,6 @@ optional = false
 platform = "UNKNOWN"
 python-versions = "*"
 version = "0.0.1"
-
-[[package]]
-category = "main"
-description = "A super-fast templating language that borrows the  best ideas from the existing templating languages."
-name = "mako"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "1.0.7"
-
-[package.dependencies]
-MarkupSafe = ">=0.9.2"
 
 [[package]]
 category = "main"
@@ -669,15 +628,6 @@ version = "2.7.3"
 six = ">=1.5"
 
 [[package]]
-category = "main"
-description = "Programmatically open an editor, capture the result."
-name = "python-editor"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "1.0.3"
-
-[[package]]
 category = "dev"
 description = "Python bindings for the winpty library"
 name = "pywinpty"
@@ -929,12 +879,11 @@ python-versions = "*"
 version = "1.0.7"
 
 [metadata]
-content-hash = "77fb3337f8da32f2713b28eb52461aa22d2c4828a8849a9e18329dbdcb39e5e4"
+content-hash = "0872fefa235a9c1eb87adc1a28a6d0992048a48c8ab7589f0cf3737e9ab23eab"
 platform = "*"
 python-versions = ">=3"
 
 [metadata.hashes]
-alembic = ["52d73b1d750f1414fa90c25a08da47b87de1e4ad883935718a8f36396e19e78e", "eb7db9b4510562ec37c91d00b00d95fde076c1030d3f661aea882eec532b3565"]
 appnope = ["5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"]
 backcall = ["38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4", "bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2"]
 beautifulsoup4 = ["194ec62a25438adcb3fdb06378b26559eda1ea8a747367d34c33cef9c7f48d57", "90f8e61121d6ae58362ce3bed8cd997efb00c914eae0ff3d363c32f9a9822d10", "f0abd31228055d698bb392a826528ea08ebb9959e6bea17c606fd9c9009db938"]
@@ -948,7 +897,6 @@ decorator = ["2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82",
 entrypoints = ["10ad569bb245e7e2ba425285b9fa3e8178a0dc92fc53b1e1c553805e15a8825b", "d2d587dde06f99545fb13a383d2cd336a8ff1f359c5839ce3a64c917d10c029f"]
 enum34 = ["2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850", "644837f692e5f550741432dd3f223bbb9852018674981b1664e5dc339387588a", "6bd0f6ad48ec2aa117d3d141940d484deccda84d4fcd884f5c3d93c23ecd8c79", "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1"]
 flask = ["2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48", "a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05"]
-flask-migrate = ["83ebc105f87357ddd3968f83510d2b1092f006660b1c6ba07a4efce036ca567d", "cd1b4e6cb829eeb41c02ad9202d83bef5f4b7a036dd9fad72ce96ad1e22efb07"]
 flask-sqlalchemy = ["3bc0fac969dd8c0ace01b32060f0c729565293302f0c4269beed154b46bec50b", "5971b9852b5888655f11db634e87725a9031e170f37c0ce7851cf83497f56e53"]
 html5lib = ["20b159aa3badc9d5ee8f5c647e5efd02ed2a66ab8d354930bd9ff139fc1dc0a3", "66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736"]
 idna = ["156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e", "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16"]
@@ -966,7 +914,6 @@ jupyter-client = ["27befcf0446b01e29853014d6a902dd101ad7d7f94e2252b1adca17c3466b
 jupyter-core = ["927d713ffa616ea11972534411544589976b2493fc7e09ad946e010aa7eb9970", "ba70754aa680300306c699790128f6fbd8c306ee5927976cbe48adacf240c0b7"]
 langcodes = ["22cff103b6c0f3c9907d9a51c2d634177a50a189672ad16d959a3e2cd48eadab"]
 lml = ["12783c8851bb1b1aacf6d139aa41fb529e1723bff863e71034af07a55bf1e5a3", "58a11170ecb0ce5e4680ad8971f1e353b795d58953217d65c9a56e0d774261d6"]
-mako = ["4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae"]
 marisa-trie = ["4419abb6b603c97e863fad994abe57ed247fb12491f4bbacb2d762bd2e8958b6", "c73bc25d868e8c4ea7aa7f1e19892db07bba2463351269b05340ccfa06eb2baf"]
 markupsafe = ["a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"]
 mistune = ["b4c512ce2fc99e5a62eb95a4aba4b73e5f90264115c40b70a21e1f7d4e0eac91", "bc10c33bfdcaa4e749b779f62f60d6e12f8215c46a292d05e486b869ae306619"]
@@ -987,7 +934,6 @@ pyexcel-io = ["aefe409716993ca07bc59a8d63e1e91f4df60abcc510eb1d7c88486a5216a3e0"
 pyexcel-xlsxwx = []
 pygments = ["78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d", "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"]
 python-dateutil = ["1adb80e7a782c12e52ef9a8182bebeb73f1d7e24e374397af06fb4956c8dc5c0", "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8"]
-python-editor = ["a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565"]
 pywinpty = ["349eef36414b038426e65d96ecccfa581c437562cc164fb4faffe6f46963bc80", "4617637c38ae9099a99f73d8dbeb9c752743693bd1dca6ea3b1d520a7248ebf3", "4ee8193b19d77ab59097a000a2c52b36e768e92263812e0c0b40306be8927fb4", "4f6c850db79dd19b1d842d81a8c08fd7efad5e160a1effbba10ba738a5a35cb2", "4fd720b20bb69f1b7ca2060e84503ae843972fcb006ae6e8ddd6ab212fe8911c", "79f2b4584111e36826e587d33eb4e7416a12ae1d6c094cb554e873c5c162fa5f", "87ae1a2301fbce7a3005dac7cdf8ce8a4162f05130348234b87caef260771e96"]
 pyzmq = ["25a0715c8f69cf72f67cfe5a68a3f3ed391c67c063d2257bec0fe7fc2c7f08f8", "2bab63759632c6b9e0d5bf19cc63c3b01df267d660e0abcf230cf0afaa966349", "30ab49d99b24bf0908ebe1cdfa421720bfab6f93174e4883075b7ff38cc555ba", "32c7ca9fc547a91e3c26fc6080b6982e46e79819e706eb414dd78f635a65d946", "41219ae72b3cc86d97557fe5b1ef5d1adc1057292ec597b50050874a970a39cf", "4b8c48a9a13cea8f1f16622f9bd46127108af14cd26150461e3eab71e0de3e46", "55724997b4a929c0d01b43c95051318e26ddbae23565018e138ae2dc60187e59", "65f0a4afae59d4fc0aad54a917ab599162613a761b760ba167d66cc646ac3786", "6f88591a8b246f5c285ee6ce5c1bf4f6bd8464b7f090b1333a446b6240a68d40", "75022a4c60dcd8765bb9ca32f6de75a0ec83b0d96e0309dc479f4c7b21f26cb7", "76ea493bfab18dcb090d825f3662b5612e2def73dffc196d51a5194b0294a81d", "7b60c045b80709e4e3c085bab9b691e71761b44c2b42dbb047b8b498e7bc16b3", "8e6af2f736734aef8ed6f278f9f552ec7f37b1a6b98e59b887484a840757f67d", "9ac2298e486524331e26390eac14e4627effd3f8e001d4266ed9d8f1d2d31cce", "9ba650f493a9bc1f24feca1d90fce0e5dd41088a252ac9840131dfbdbf3815ca", "a02a4a385e394e46012dc83d2e8fd6523f039bb52997c1c34a2e0dd49ed839c1", "a3ceee84114d9f5711fa0f4db9c652af0e4636c89eabc9b7f03a3882569dd1ed", "a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf", "ab136ac51027e7c484c53138a0fab4a8a51e80d05162eb7b1585583bcfdbad27", "c095b224300bcac61e6c445e27f9046981b1ac20d891b2f1714da89d34c637c8", "c5cc52d16c06dc2521340d69adda78a8e1031705924e103c0eb8fc8af861d810", "d612e9833a89e8177f8c1dc68d7b4ff98d3186cd331acd616b01bbdab67d3a7b", "e828376a23c66c6fe90dcea24b4b72cd774f555a6ee94081670872918df87a19", "e9767c7ab2eb552796440168d5c6e23a99ecaade08dda16266d43ad461730192", "ebf8b800d42d217e4710d1582b0c8bff20cdcb4faad7c7213e52644034300924"]
 regex = ["1b428a296531ea1642a7da48562746309c5c06471a97bd0c02dd6a82e9cecee8", "27d72bb42dffb32516c28d218bb054ce128afd3e18464f30837166346758af67", "32cf4743debee9ea12d3626ee21eae83052763740e04086304e7a74778bf58c9", "32f6408dbca35040bc65f9f4ae1444d5546411fde989cb71443a182dd643305e", "333687d9a44738c486735955993f83bd22061a416c48f5a5f9e765e90cf1b0c9", "35eeccf17af3b017a54d754e160af597036435c58eceae60f1dd1364ae1250c7", "361a1fd703a35580a4714ec28d85e29780081a4c399a99bbfb2aee695d72aedb", "494bed6396a20d3aa6376bdf2d3fbb1005b8f4339558d8ac7b53256755f80303", "5b9c0ddd5b4afa08c9074170a2ea9b34ea296e32aeea522faaaaeeeb2fe0af2e", "a50532f61b23d4ab9d216a6214f359dd05c911c1a1ad20986b6738a782926c1a", "a9243d7b359b72c681a2c32eaa7ace8d346b7e8ce09d172a683acf6853161d9c", "b44624a38d07d3c954c84ad302c29f7930f4bf01443beef5589e9157b14e2a29", "be42a601aaaeb7a317f818490a39d153952a97c40c6e9beeb2a1103616405348", "eee4d94b1a626490fc8170ffd788883f8c641b576e11ba9b4a29c9f6623371e0", "f69d1201a4750f763971ea8364ed95ee888fc128968b39d38883a72a4d005895"]

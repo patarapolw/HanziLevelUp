@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 
-from webapp import app
+import os
+
+from webapp import app, db
+from webapp.config import database_url
 
 if __name__ == '__main__':
+    if not os.path.exists(database_url()):
+        db.create_all()
+
     app.run(
         host='localhost',
         # host='192.168.1.13',

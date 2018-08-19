@@ -182,6 +182,9 @@ class Sentence(db.Model, SrsRecord):
                        regex.match(r'\p{IsHan}', char)]
         }, ensure_ascii=False)
 
+        self.front = '%(sentence)s'
+        self.back = '%(data)s'
+
 
 class Vocab(db.Model, SrsRecord):
     __tablename__ = 'vocab'
@@ -214,11 +217,19 @@ class Vocab(db.Model, SrsRecord):
         self.vocab = value
 
         dict_result = list(cedict.search_vocab(value))
-        self.data = json.dumps({
+        data = {
             'dictionary': dict_result,
             'sentences': vocab_to_sentence.convert(value),
             'level': max([hanzi_level.get_hanzi_level(hanzi) for hanzi in value])
-        }, ensure_ascii=False)
+        }
+        self.data = json.dumps(data, ensure_ascii=False)
+
+        if len(data['dictionary']) > 0:
+            self.front = ', '.join([item['english'] for item in data['dictionary']])
+        else:
+            self.front = '%(vocab)s'
+
+        self.back = '%(data)s'
 
     def get_more_sentences(self):
         self._get_more_sentences(self.vocab)
@@ -256,6 +267,9 @@ class Hanzi(db.Model, SrsRecord):
             'sentences': list(vocab_to_sentence.convert(value)),
             'level': hanzi_level.get_hanzi_level(value)
         }, ensure_ascii=False)
+
+        self.front = '%(hanzi)s'
+        self.back = '%(data)s'
 
     def get_more_sentences(self):
         self._get_more_sentences(self.hanzi)

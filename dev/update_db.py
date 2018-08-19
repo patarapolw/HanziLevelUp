@@ -1,24 +1,8 @@
 from datetime import datetime
 import json
-import regex
 
 from webapp.databases import Hanzi, Vocab, Sentence
 from webapp import db
-
-from CJKhyperradicals.sentence import SpoonFed
-from CJKhyperradicals.dict import HanziDict, Cedict
-from CJKhyperradicals.decompose import Decompose
-from CJKhyperradicals.frequency import ChineseFrequency
-from HanziLevelUp.hanzi import HanziLevel
-from HanziLevelUp.vocab import VocabToSentence
-
-spoon_fed = SpoonFed()
-hanzi_level = HanziLevel()
-cedict = Cedict()
-hanzi_dict = HanziDict()
-vocab_to_sentence = VocabToSentence()
-decompose = Decompose()
-sorter = ChineseFrequency()
 
 
 def get_earliest_modified(hanzi):
@@ -39,45 +23,33 @@ def get_earliest_modified(hanzi):
 
 
 if __name__ == '__main__':
-    # for record in Hanzi.query:
-        # data = json.loads(record.data)
-        # data['level'] = hanzi_level.get_hanzi_level(record.hanzi)
-        # data['dictionary'] = hanzi_dict.entries.get(record.hanzi, dict())
-        # record.data = json.dumps(data, ensure_ascii=False)
+    for record in Hanzi.query:
+        print(record.entry)
 
-        # record.back = '%(data)s'
+        if record.front is None:
+            record.front = "%(hanzi)s"
+        if record.back is None:
+            record.back = '%(data)s'
 
-    # for record in Vocab.query:
-        # data = json.loads(record.data)
-        # if len(data['dictionary']) > 0:
-        #     record.front = ', '.join([item['english'] for item in data['dictionary']])
-        # else:
-        #     record.front = '%(data[0].pinyin)s'
-        # print(record.data)
+    for record in Vocab.query:
+        print(record.entry)
 
-        # record.back = '%(data)s'
-        # break
+        if record.front is None or '%(' in record.front:
+            data = json.loads(record.data)
+            if len(data['dictionary']) > 0:
+                record.front = ', '.join([item['english'] for item in data['dictionary']])
+            else:
+                record.front = '%(vocab)s'
+
+        if record.back is None:
+            record.back = '%(data)s'
 
     for record in Sentence.query:
-        # record.front = '%(sentence)s'
-        # record.back = '%(data)s'
-        # print(record.data)
-        # break
-        lookup = list(spoon_fed.get_sentence(record.sentence))
-        if len(lookup) > 0:
-            english = lookup[0]['english']
-            try:
-                pinyin = lookup[0]['pinyin']
-            except IndexError:
-                pinyin = ''
-        else:
-            english = pinyin = ''
+        print(record.entry)
 
-        record.data = json.dumps({
-            'pinyin': pinyin,
-            'english': english,
-            'levels': [hanzi_level.get_hanzi_level(char) for char in record.sentence if
-                       regex.match(r'\p{IsHan}', char)]
-        }, ensure_ascii=False)
+        if record.front is None:
+            record.front = '%(sentence)s'
+        if record.back is None:
+            record.back = '%(data)s'
 
     db.session.commit()
