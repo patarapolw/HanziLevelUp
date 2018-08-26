@@ -21,15 +21,15 @@ def all_records(item_type, page_number, page_size=10):
 
     def _filter():
         for srs_record in SrsRecord.query.order_by(SrsRecord.modified.desc()):
-            record_data = srs_record.data
-            if record_data:
-                record_data = json.loads(record_data)
-                if 'level' not in record_data.keys():
-                    record_data['level'] = max(record_data['levels'])
-
-                if record_data['level'] <= 5 and getattr(srs_record, 'is_user', True):
-                    yield srs_record
-            else:
+            # record_data = srs_record.data
+            # if record_data:
+            #     record_data = json.loads(record_data)
+            #     if 'level' not in record_data.keys():
+            #         record_data['level'] = max(record_data['levels'])
+            #
+            #     if record_data['level'] <= 5 and getattr(srs_record, 'is_user', True):
+            #         yield srs_record
+            # else:
                 yield srs_record
 
     page_number = int(page_number)

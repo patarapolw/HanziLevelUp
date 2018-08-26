@@ -71,7 +71,7 @@ class SrsRecord:
 
     correct = right = next_srs
 
-    def previous_srs(self, duration=timedelta(minutes=1)):
+    def previous_srs(self, duration=timedelta(0)):
         if self.srs_level and self.srs_level > 1:
             self.srs_level = self.srs_level - 1
 
@@ -79,7 +79,7 @@ class SrsRecord:
 
     incorrect = wrong = previous_srs
 
-    def bury(self, duration=timedelta(minutes=1)):
+    def bury(self, duration=timedelta(hours=4)):
         self.next_review = datetime.now() + duration
         self.modified = datetime.now()
 
@@ -101,7 +101,7 @@ class SrsRecord:
         self.tags = to_raw_tags(all_tags)
 
     @classmethod
-    def iter_quiz(cls, level=(None, 5), is_due=True, tag=None, is_user=True):
+    def iter_quiz(cls, level=None, is_due=True, tag=None, is_user=True):
         def _filter_level(record_level):
             if not level:
                 return True
