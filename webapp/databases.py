@@ -101,7 +101,9 @@ class SrsRecord:
         self.tags = to_raw_tags(all_tags)
 
     @classmethod
-    def iter_quiz(cls, level=None, is_due=True, tag=None, is_user=True):
+    def iter_quiz(cls,
+                  level=None, is_due=True, tag=None, is_user=True,
+                  offset=0, limit=None):
         def _filter_level(record_level):
             if not level:
                 return True
@@ -129,7 +131,7 @@ class SrsRecord:
             if is_due is None:
                 return True
             elif is_due is True:
-                if not srs_record.next_review or srs_record.next_review < datetime.now():
+                if srs_record.next_review and srs_record.next_review < datetime.now():
                     return True
             else:
                 if srs_record.next_review is None:
@@ -145,7 +147,7 @@ class SrsRecord:
                 return False
 
         def _filter():
-            for srs_record in cls.query.order_by(cls.modified.desc()):
+            for srs_record in cls.query.order_by(cls.modified):
                 record_data = srs_record.data
                 if record_data:
                     record_data = json.loads(record_data)
@@ -157,7 +159,17 @@ class SrsRecord:
                 else:
                     yield srs_record
 
-        all_records = list(_filter())
+        def _records():
+            for i, record in enumerate(_filter()):
+                if i < offset:
+                    continue
+                elif limit:
+                    if i >= offset + limit:
+                        break
+
+                yield record
+
+        all_records = list(_records())
         random.shuffle(all_records)
 
         return iter(all_records)
